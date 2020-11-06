@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="test" version="4">
+  <OBJECT>
+    <ID name="test" mc="Standard.Package" uid="076d5bc4-8795-40b9-bcbd-4404b2e80cf3"/>
+    <PID name="Test" mc="Standard.Project" uid="0773bd48-a3d2-47cb-aac5-aaa03ef2510d"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[test]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Student" mc="Standard.Class" uid="3d1bd8f8-c62d-4d31-8fbc-bd1c1158f5db"/>
+        <COMPID name="Module" mc="Standard.Class" uid="7c548889-d5c0-4e7c-8859-2356001f36d0"/>
+        <COMPID name="Department" mc="Standard.Class" uid="aa22de0f-f7c0-4add-bcf0-ea55946f6256"/>
+        <COMPID name="Degree" mc="Standard.Class" uid="fcf07a97-7320-4842-9ac7-8b5b06b34022"/>
+        <COMPID name="Registration" mc="Standard.Class" uid="8a45f765-d784-4128-a6ec-33bb655b8eb4"/>
+        <COMPID name="PeriodOfStudy" mc="Standard.Class" uid="01a360c9-9186-4a91-96f2-42a06d23a460"/>
+        <COMPID name="Grade" mc="Standard.Class" uid="6528b6c4-9922-4e8b-855e-70dfc246401b"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="test Class diagram" mc="Standard.ClassDiagram" uid="5f051c72-0f93-49f1-9f02-2a234e4a6f67"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

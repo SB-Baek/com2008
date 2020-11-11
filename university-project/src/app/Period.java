@@ -17,10 +17,12 @@ public class Period {
 
 	public boolean canProgress() {
 		//TODO
+		return true;
 	}
 	
 	public float weightedMean() {
 		//TODO
+		return 0f;
 	}
 	
 	

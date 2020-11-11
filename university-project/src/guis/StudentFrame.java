@@ -1,9 +1,12 @@
+package guis;
+
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.JToolBar;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -14,41 +17,42 @@ import javax.swing.SwingConstants;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import java.awt.FlowLayout;
-import javax.swing.JToolBar;
 
-public class TestApplicationWindow {
+/**
+ * 
+ * @author horn1
+ *
+ *
+ *	-
+ *
+ *
+ *
+ *	After every operation call revalidate() to update GUI elements
+ *
+ */
 
-	private JFrame frmLogin;
-	private JTextField name;
-	private JTextField code;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TestApplicationWindow window = new TestApplicationWindow();
-					window.frmLogin.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
+public class StudentFrame {
+
+	private static JFrame frmLogin;
+	private static JTextField searchField;
+	private static String searchQuery = "";
+	private static JPanel viewer;
+	private static JPanel genInfo;
+	
+	
 	/**
 	 * Create the application.
 	 */
-	public TestApplicationWindow() {
-		initialize();
+	public StudentFrame() {
+		initStudentFrame();
 	}
-
+	
 	/**
-	 * Initialize the contents of the frame.
+	 * Initialise the contents of the student frame.
 	 */
-	private void initialize() {
+	public static void initStudentFrame() {
 		frmLogin = new JFrame();
 		frmLogin.setTitle("University Project");
 		frmLogin.setBounds(100, 100, 1024, 768);
@@ -56,10 +60,10 @@ public class TestApplicationWindow {
 		frmLogin.getContentPane().setLayout(null);
 		
 		JScrollPane viewerScroll = new JScrollPane();
-		viewerScroll.setBounds(398, 58, 600, 404);
+		viewerScroll.setBounds(398, 11, 600, 707);
 		frmLogin.getContentPane().add(viewerScroll);
 		
-		JPanel viewer = new JPanel();
+		viewer = new JPanel();
 		viewerScroll.setViewportView(viewer);
 		viewer.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
@@ -85,37 +89,40 @@ public class TestApplicationWindow {
 		JButton exit = new JButton("Exit");
 		exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
 			}
 		});
 		exit.setBounds(281, 11, 89, 23);
 		info.add(exit);
 		
 		JPanel viewing = new JPanel();
-		viewing.setBounds(10, 88, 378, 129);
+		viewing.setBounds(10, 88, 378, 74);
 		frmLogin.getContentPane().add(viewing);
 		viewing.setLayout(null);
 		
-		name = new JTextField();
-		name.setToolTipText("Type here");
-		name.setBounds(10, 35, 270, 28);
-		viewing.add(name);
-		name.setColumns(10);
+		searchField = new JTextField();
+		searchField.setToolTipText("Type here");
+		searchField.setBounds(10, 33, 270, 28);
+		viewing.add(searchField);
+		searchField.setColumns(10);
 		
-		JButton searchBut = new JButton("Add");
-		searchBut.setIcon(new ImageIcon(TestApplicationWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/hardDrive.gif")));
+		JButton searchBut = new JButton("Search");
+		searchBut.setIcon(new ImageIcon(StudentFrame.class.getResource("/javax/swing/plaf/metal/icons/ocean/hardDrive.gif")));
 		searchBut.setBounds(283, 36, 85, 23);
+		searchBut.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				searchQuery = searchField.getText();
+			}
+			
+		});
 		viewing.add(searchBut);
 		
-		JLabel records = new JLabel("Add New Department");
+		JLabel records = new JLabel("View Student Records");
 		records.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		records.setBounds(10, 11, 170, 23);
 		viewing.add(records);
-		
-		code = new JTextField();
-		code.setToolTipText("Type here");
-		code.setColumns(10);
-		code.setBounds(10, 74, 270, 28);
-		viewing.add(code);
 		
 		JToolBar toolBar = new JToolBar();
 		toolBar.setBounds(398, 22, 600, 25);
@@ -130,7 +137,7 @@ public class TestApplicationWindow {
 		JButton department = new JButton("Department");
 		toolBar.add(department);
 		
-		JPanel genInfo = new JPanel();
+		genInfo = new JPanel();
 		genInfo.setBounds(398, 472, 600, 246);
 		frmLogin.getContentPane().add(genInfo);
 		genInfo.setLayout(null);
@@ -138,5 +145,51 @@ public class TestApplicationWindow {
 		JLabel Select = new JLabel("Information");
 		Select.setBounds(10, 11, 111, 25);
 		genInfo.add(Select);
+	}
+	
+	public static void display() {
+		frmLogin.setVisible(true);
+	}
+	
+	public static String getSearch() {
+		return searchQuery;
+	}
+	
+	public static void updateInformation() {
+			
+	}
+	
+	public static void generateInfo(String name, String email, String tutor) {
+		JLabel jname = new JLabel(name);
+		JLabel jemail = new JLabel(email);
+		JLabel jtutor = new JLabel(tutor);
+		genInfo.add(jname);
+		genInfo.add(jemail);
+		genInfo.add(jtutor);
+
+	}	
+		
+		
+	public static void appendStudent(String name, String email, String tutor) {
+		JPanel student = new JPanel();
+		JLabel jname = new JLabel(name);
+		JLabel jemail = new JLabel(email);
+		JLabel jtutor = new JLabel(tutor);
+		JButton jbutton = new JButton("info");
+		student.add(jname);
+		student.add(jemail);
+		student.add(jtutor);
+		student.add(jbutton);
+		jbutton.addActionListener(new ActionListener() {
+		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				generateInfo(name, email, tutor);
+			}	
+			
+		});
+		viewer.add(student);
+		frmLogin.repaint();
+		frmLogin.revalidate();
 	}
 }

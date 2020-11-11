@@ -5,6 +5,8 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
+import database.Database;
+
 /**
  * @author James Horn
  * 
@@ -12,20 +14,32 @@ import javax.swing.JFrame;
  * 
  * Handle all active frames
  * 
+ * 
+ * STARTUP
+ * 1) Supply login credentials
+ * 2) use permissions to generate proper frame options (displaying toolbar or not)
+ * 3) Add / remove widgets depending on permissions
+ * 4) 
+ * 
+ * 
+ * 
+ * 
  */
 
 public class ApplicationWindow  {
 
 	
 	public ApplicationWindow() {
-		
-	
-		
-	
+
 	}
 	
 	public static void main(String args[]) {
-		new LoginFrame().display();
+		new DegreeFrame().display();
+		
+		//new DepartmentFrame().display();
+		
+		//Database.testConnection();
+		//Database.viewStudent("James Horn");
 	}
 	
 	

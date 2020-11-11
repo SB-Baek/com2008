@@ -39,6 +39,20 @@ public class LoginFrame extends JFrame {
 	private JPasswordField passwordField;
 	
 	
+	public void authenticateUser() {
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+	
+	
+	
 	
 	public LoginFrame() {
 		

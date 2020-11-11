@@ -1,54 +1,31 @@
-import java.awt.EventQueue;
-import javax.swing.JFrame;
-import java.awt.GridLayout;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Font;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
+package guis;
+
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
-public class TestApplicationWindow {
+public class DegreeFrame {
+
 
 	private JFrame frmLogin;
 	private JTextField name;
 	private JTextField code;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TestApplicationWindow window = new TestApplicationWindow();
-					window.frmLogin.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	
+	public DegreeFrame() {
+		initDegree();
 	}
-
-	/**
-	 * Create the application.
-	 */
-	public TestApplicationWindow() {
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
+	
+	public void initDegree() {
 		frmLogin = new JFrame();
 		frmLogin.setTitle("University Project");
 		frmLogin.setBounds(100, 100, 1024, 768);
@@ -56,7 +33,7 @@ public class TestApplicationWindow {
 		frmLogin.getContentPane().setLayout(null);
 		
 		JScrollPane viewerScroll = new JScrollPane();
-		viewerScroll.setBounds(398, 58, 600, 404);
+		viewerScroll.setBounds(398, 58, 600, 660);
 		frmLogin.getContentPane().add(viewerScroll);
 		
 		JPanel viewer = new JPanel();
@@ -85,6 +62,7 @@ public class TestApplicationWindow {
 		JButton exit = new JButton("Exit");
 		exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
 			}
 		});
 		exit.setBounds(281, 11, 89, 23);
@@ -102,7 +80,7 @@ public class TestApplicationWindow {
 		name.setColumns(10);
 		
 		JButton searchBut = new JButton("Add");
-		searchBut.setIcon(new ImageIcon(TestApplicationWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/hardDrive.gif")));
+		searchBut.setIcon(new ImageIcon(DepartmentFrame.class.getResource("/javax/swing/plaf/metal/icons/ocean/hardDrive.gif")));
 		searchBut.setBounds(283, 36, 85, 23);
 		viewing.add(searchBut);
 		
@@ -129,14 +107,12 @@ public class TestApplicationWindow {
 		
 		JButton department = new JButton("Department");
 		toolBar.add(department);
-		
-		JPanel genInfo = new JPanel();
-		genInfo.setBounds(398, 472, 600, 246);
-		frmLogin.getContentPane().add(genInfo);
-		genInfo.setLayout(null);
-		
-		JLabel Select = new JLabel("Information");
-		Select.setBounds(10, 11, 111, 25);
-		genInfo.add(Select);
 	}
+	
+	public void display() {
+		frmLogin.setVisible(true);
+	}
+	
+	
+	
 }

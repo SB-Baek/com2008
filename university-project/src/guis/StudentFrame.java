@@ -46,6 +46,11 @@ public class StudentFrame {
 	private static JTextField searchField;
 	private static String searchQuery = "";
 	private static JPanel genInfo;
+	private static JLabel ireg = new JLabel("");
+	private static JLabel iname = new JLabel("");
+	private static JLabel iEmail = new JLabel("");
+	private static JLabel iTutor = new JLabel("");
+
 	private static String selected;
 
 	/**
@@ -100,17 +105,53 @@ public class StudentFrame {
 		DefaultListModel<String> listModel = new DefaultListModel<>();
 		JList<String> list = new JList<>(listModel);
 		list.setBounds(500, 63, 583, 398);
+
+		frmLogin.getContentPane().add(list);
 		
 		list.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
 				displayStudentInfo(Database.selectStudentInfo(list.getSelectedValue()));
+				frmLogin.revalidate();
+			
 			}
 		});
 		
+		genInfo = new JPanel();
+		genInfo.setBounds(398, 472, 600, 246);
+		frmLogin.getContentPane().add(genInfo);
+		genInfo.setLayout(null);
 		
-		frmLogin.getContentPane().add(list);
+		JLabel infoTitle = new JLabel("Information");
+		infoTitle.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		infoTitle.setBounds(10, 11, 111, 25);
+		genInfo.add(infoTitle);
+		
+		JLabel infoReg = new JLabel("Registration number: ");
+		
+		genInfo.add(ireg);
+		genInfo.add(infoReg);
+		
+		JLabel infoName = new JLabel("Name: ");
+		infoName.setBounds(10, 50, 46, 14);
+		iname.setBounds(60, 100, 46, 14);
+		genInfo.add(infoName);
+		genInfo.add(iname);
+		
+		JLabel infoEmail = new JLabel("Email:");
+		infoEmail.setBounds(10, 75, 46, 14);
+		iEmail.setBounds(80, 50, 46, 14);
+		genInfo.add(infoEmail);
+		genInfo.add(iEmail);
+		
+		JLabel infoTutor = new JLabel("Tutor:");
+		infoTutor.setBounds(10, 100, 46, 14);
+		genInfo.add(infoTutor);
+		genInfo.add(iTutor);
+		
+		
+		frmLogin.getContentPane().add(genInfo);
 		
 		JButton searchBut = new JButton("Search");
 		searchBut.setIcon(new ImageIcon(StudentFrame.class.getResource("/javax/swing/plaf/metal/icons/ocean/hardDrive.gif")));
@@ -123,7 +164,6 @@ public class StudentFrame {
 
 				for (String name : Database.studentSearch(searchQuery)) {
 					listModel.addElement(name);
-					System.out.println(name);
 				}
 				//refresh list model
 				list.setModel(listModel);	
@@ -153,42 +193,14 @@ public class StudentFrame {
 	}
 	
 	public static void displayStudentInfo(String i) {
+		System.out.println(i);
 		String[] info = i.split(" ");
-		genInfo = new JPanel();
-		genInfo.setBounds(398, 472, 600, 246);
-		frmLogin.getContentPane().add(genInfo);
-		genInfo.setLayout(null);
-		
-		JLabel infoTitle = new JLabel("Information");
-		infoTitle.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		infoTitle.setBounds(10, 11, 111, 25);
-		genInfo.add(infoTitle);
-		
-		JLabel ireg = new JLabel(info[0]);
-		JLabel infoReg = new JLabel("Registration number: ");
-		genInfo.add(ireg);
-		genInfo.add(infoReg);
-		
-		JLabel iname = new JLabel(info[1] + " " + info[2] + " " + info[3]);
-		JLabel infoName = new JLabel("Name: ");
-		infoName.setBounds(10, 50, 46, 14);
-		iname.setBounds(60, 100, 46, 14);
-		genInfo.add(infoName);
-		genInfo.add(iname);
-		
-		JLabel iEmail = new JLabel(info[4]);
-		JLabel infoEmail = new JLabel("Email:");
-		infoEmail.setBounds(10, 75, 46, 14);
-		iEmail.setBounds(80, 50, 46, 14);
-		genInfo.add(infoEmail);
-		genInfo.add(iEmail);
-		
-		JLabel iTutor = new JLabel(info[7]);
-		JLabel infoTutor = new JLabel("Tutor:");
-		infoTutor.setBounds(10, 100, 46, 14);
-		genInfo.add(infoTutor);
-		genInfo.add(iTutor);
+		ireg.setText(info[0]);
+		iname.setText(info[1]);
+		iEmail.setText(info[2]);
+		iTutor.setText(info[3]);
 
+		frmLogin.revalidate();
 	}
 	
 	

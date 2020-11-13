@@ -31,6 +31,8 @@ public class Database {
 	public static String selectStudentInfo(String name) {
 		String info = "";
 		String[] searchName = name.toLowerCase().split(" ");
+		System.out.println(searchName[0]);
+
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
@@ -39,33 +41,32 @@ public class Database {
 
 			ResultSet studentRes = null;
 			ResultSet tutorRes = null;
-			studentInfo = con.prepareStatement("SELECT * FROM Student WHERE forename=LOWER(?)");
-			studentInfo.setString(1, searchName[0]); // forename
-			studentInfo.setString(2, searchName[1]); // surname
+			studentInfo = con.prepareStatement("SELECT * FROM Student WHERE registrationNumber=?");
+			
+			studentInfo.setString(1, searchName[0]); // id
 			studentRes = studentInfo.executeQuery();
 
-			while (studentRes.next()) {
-				info += studentRes.getString(1) + " "; // regNumber
+			while (studentRes.next()) 
+			{
+				info += studentRes.getString(1) + " "; // reg number
 				info += studentRes.getString(2) + " "; // title
 				info += studentRes.getString(3) + " "; // forename
 				info += studentRes.getString(4) + " "; // surname
 				info += studentRes.getString(5) + " "; // email
-				info += studentRes.getString(6) + " "; // tutorId
-				info += studentRes.getString(7) + " "; // departmentId
 
+				
 			}
-
-			// find tutor for student
-			tutorInfo = con.prepareStatement("SELECT * FROM Student WHERE tutorId=?");
-			tutorInfo.setString(1, info.split(" ")[6]); // supply tutorId
-			tutorRes = tutorInfo.executeQuery();
-
 			
 
+			// find tutor for student
+			tutorInfo = con.prepareStatement("SELECT * FROM Tutor WHERE tutorId=?");
+			tutorInfo.setString(1, info.split(" ")[0]); // supply tutorId
+			tutorRes = tutorInfo.executeQuery();
+
+		
 			// point to tutor name
-			tutorRes.next();
-			tutorRes.next();
-			info += tutorRes.getString(2) + " ";
+			while (tutorRes.next()) info += tutorRes.getString(2); //tutor name
+			
 
 			
 
@@ -100,9 +101,11 @@ public class Database {
 					fres = forenameStmt.executeQuery();
 					while (fres.next()) {
 						String result = "";
+						result += " " + fres.getString(1); //registration number
 						result += " " + fres.getString(2); // title
 						result += " " + fres.getString(3); // forename
 						result += " " + fres.getString(4); // surname
+						result += " " + fres.getString(5); //email
 						names.add(result);
 					}
 					fres.close();
@@ -114,9 +117,12 @@ public class Database {
 					sres = surnameStmt.executeQuery();
 					while (sres.next()) {
 						String result = "";
+						result += " " + sres.getString(1); //registration number
 						result += " " + sres.getString(2); // title
 						result += " " + sres.getString(3); // forename
 						result += " " + sres.getString(4); // surname
+						result += " " + sres.getString(5); //email
+
 						names.add(result);
 					}
 					sres.close();

@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.JPasswordField;
@@ -14,7 +15,13 @@ import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import database.Database;
+
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import java.awt.FlowLayout;
 
@@ -38,17 +45,9 @@ public class StudentFrame {
 	private static JFrame frmLogin;
 	private static JTextField searchField;
 	private static String searchQuery = "";
-	private static JPanel viewer;
 	private static JPanel genInfo;
-	
-	
-	/**
-	 * Create the application.
-	 */
-	public StudentFrame() {
-		initStudentFrame();
-	}
-	
+	private static String selected;
+
 	/**
 	 * Initialise the contents of the student frame.
 	 */
@@ -58,14 +57,6 @@ public class StudentFrame {
 		frmLogin.setBounds(100, 100, 1024, 768);
 		frmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmLogin.getContentPane().setLayout(null);
-		
-		JScrollPane viewerScroll = new JScrollPane();
-		viewerScroll.setBounds(398, 11, 600, 707);
-		frmLogin.getContentPane().add(viewerScroll);
-		
-		viewer = new JPanel();
-		viewerScroll.setViewportView(viewer);
-		viewer.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JLabel logged = new JLabel("Logged in as");
 		logged.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -106,6 +97,21 @@ public class StudentFrame {
 		viewing.add(searchField);
 		searchField.setColumns(10);
 		
+		DefaultListModel<String> listModel = new DefaultListModel<>();
+		JList<String> list = new JList<>(listModel);
+		list.setBounds(500, 63, 583, 398);
+		
+		list.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				displayStudentInfo(Database.selectStudentInfo(list.getSelectedValue()));
+			}
+		});
+		
+		
+		frmLogin.getContentPane().add(list);
+		
 		JButton searchBut = new JButton("Search");
 		searchBut.setIcon(new ImageIcon(StudentFrame.class.getResource("/javax/swing/plaf/metal/icons/ocean/hardDrive.gif")));
 		searchBut.setBounds(283, 36, 85, 23);
@@ -114,6 +120,14 @@ public class StudentFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				searchQuery = searchField.getText();
+
+				for (String name : Database.studentSearch(searchQuery)) {
+					listModel.addElement(name);
+					System.out.println(name);
+				}
+				//refresh list model
+				list.setModel(listModel);	
+				frmLogin.revalidate();
 			}
 			
 		});
@@ -135,17 +149,48 @@ public class StudentFrame {
 		toolBar.add(degree);
 		
 		JButton department = new JButton("Department");
-		toolBar.add(department);
-		
+		toolBar.add(department);	
+	}
+	
+	public static void displayStudentInfo(String i) {
+		String[] info = i.split(" ");
 		genInfo = new JPanel();
 		genInfo.setBounds(398, 472, 600, 246);
 		frmLogin.getContentPane().add(genInfo);
 		genInfo.setLayout(null);
 		
-		JLabel Select = new JLabel("Information");
-		Select.setBounds(10, 11, 111, 25);
-		genInfo.add(Select);
+		JLabel infoTitle = new JLabel("Information");
+		infoTitle.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		infoTitle.setBounds(10, 11, 111, 25);
+		genInfo.add(infoTitle);
+		
+		JLabel ireg = new JLabel(info[0]);
+		JLabel infoReg = new JLabel("Registration number: ");
+		genInfo.add(ireg);
+		genInfo.add(infoReg);
+		
+		JLabel iname = new JLabel(info[1] + " " + info[2] + " " + info[3]);
+		JLabel infoName = new JLabel("Name: ");
+		infoName.setBounds(10, 50, 46, 14);
+		iname.setBounds(60, 100, 46, 14);
+		genInfo.add(infoName);
+		genInfo.add(iname);
+		
+		JLabel iEmail = new JLabel(info[4]);
+		JLabel infoEmail = new JLabel("Email:");
+		infoEmail.setBounds(10, 75, 46, 14);
+		iEmail.setBounds(80, 50, 46, 14);
+		genInfo.add(infoEmail);
+		genInfo.add(iEmail);
+		
+		JLabel iTutor = new JLabel(info[7]);
+		JLabel infoTutor = new JLabel("Tutor:");
+		infoTutor.setBounds(10, 100, 46, 14);
+		genInfo.add(infoTutor);
+		genInfo.add(iTutor);
+
 	}
+	
 	
 	public static void display() {
 		frmLogin.setVisible(true);
@@ -153,10 +198,6 @@ public class StudentFrame {
 	
 	public static String getSearch() {
 		return searchQuery;
-	}
-	
-	public static void updateInformation() {
-			
 	}
 	
 	public static void generateInfo(String name, String email, String tutor) {
@@ -188,8 +229,6 @@ public class StudentFrame {
 			}	
 			
 		});
-		viewer.add(student);
-		frmLogin.repaint();
 		frmLogin.revalidate();
 	}
 }

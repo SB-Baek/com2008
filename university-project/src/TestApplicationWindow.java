@@ -1,4 +1,5 @@
 import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
@@ -15,6 +16,14 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import java.awt.FlowLayout;
 import javax.swing.JToolBar;
+import java.awt.Color;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
+import java.awt.CardLayout;
+import javax.swing.ScrollPaneConstants;
+import java.awt.BorderLayout;
+import javax.swing.JList;
+import java.awt.List;
 
 public class TestApplicationWindow {
 
@@ -54,14 +63,6 @@ public class TestApplicationWindow {
 		frmLogin.setBounds(100, 100, 1024, 768);
 		frmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmLogin.getContentPane().setLayout(null);
-		
-		JScrollPane viewerScroll = new JScrollPane();
-		viewerScroll.setBounds(398, 58, 600, 404);
-		frmLogin.getContentPane().add(viewerScroll);
-		
-		JPanel viewer = new JPanel();
-		viewerScroll.setViewportView(viewer);
-		viewer.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JLabel logged = new JLabel("Logged in as");
 		logged.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -135,8 +136,33 @@ public class TestApplicationWindow {
 		frmLogin.getContentPane().add(genInfo);
 		genInfo.setLayout(null);
 		
-		JLabel Select = new JLabel("Information");
-		Select.setBounds(10, 11, 111, 25);
-		genInfo.add(Select);
+		JLabel infoTitle = new JLabel("Information");
+		infoTitle.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		infoTitle.setBounds(10, 11, 111, 25);
+		genInfo.add(infoTitle);
+		
+		JLabel infoName = new JLabel("Name: ");
+		infoName.setBounds(10, 50, 46, 14);
+		genInfo.add(infoName);
+		
+		JLabel infoEmail = new JLabel("Email:");
+		infoEmail.setBounds(10, 75, 46, 14);
+		genInfo.add(infoEmail);
+		
+		JLabel infoSubject = new JLabel("Subject:");
+		infoSubject.setBounds(10, 125, 46, 14);
+		genInfo.add(infoSubject);
+		
+		JLabel infoTutor = new JLabel("Tutor:");
+		infoTutor.setBounds(10, 100, 46, 14);
+		genInfo.add(infoTutor);
+		
+		JLabel infoStudyLevel = new JLabel("Study Level:");
+		infoStudyLevel.setBounds(10, 150, 85, 14);
+		genInfo.add(infoStudyLevel);
+		
+		JList list = new JList();
+		list.setBounds(992, 63, -583, 398);
+		frmLogin.getContentPane().add(list);
 	}
 }

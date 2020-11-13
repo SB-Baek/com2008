@@ -14,6 +14,9 @@ import database.Database;
  * 
  * Handle all active frames
  * 
+ * INFO
+ * Don't forget to init frames
+ * 
  * 
  * STARTUP
  * 1) Supply login credentials
@@ -30,15 +33,17 @@ public class ApplicationWindow  {
 
 	
 	public ApplicationWindow() {
-
+		
 	}
 	
 	public static void main(String args[]) {
-		new DegreeFrame().display();
+		//new DegreeFrame().display();
 		
 		//new DepartmentFrame().display();
 		
-		//Database.testConnection();
+		Database.testConnection();
+		StudentFrame.initStudentFrame();
+		StudentFrame.display();
 		//Database.viewStudent("James Horn");
 	}
 	

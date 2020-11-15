@@ -19,38 +19,26 @@ import database.Database;
  * 
  * 
  * STARTUP
- * 1) Supply login credentials
  * 2) use permissions to generate proper frame options (displaying toolbar or not)
  * 3) Add / remove widgets depending on permissions
  * 4) 
  * 
- * 
- * 
+ * SECURITY
+ * Protect against SQL attacks
+ * Store login details(SSL / RSA ???)
+ * database permissions
  * 
  */
 
 public class ApplicationWindow  {
 
-	
-	public ApplicationWindow() {
-		
+	public static void generateFrame(String username, String permission) {
+		StudentFrame.initStudentFrame(username, permission);
+		StudentFrame.display();
 	}
 	
 	public static void main(String args[]) {
-		//new DegreeFrame().display();
+		new LoginFrame().display();
 		
-		//new DepartmentFrame().display();
-		
-		Database.testConnection();
-		StudentFrame.initStudentFrame();
-		StudentFrame.display();
-		//Database.viewStudent("James Horn");
 	}
-	
-	
-	
-	
-	
-	
-	
 }

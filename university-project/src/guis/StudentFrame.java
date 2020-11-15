@@ -29,11 +29,6 @@ import java.awt.FlowLayout;
  * 
  * @author horn1
  *
- *
- *	-
- *
- *
- *
  *	After every operation call revalidate() to update GUI elements
  *
  */
@@ -51,12 +46,10 @@ public class StudentFrame {
 	private static JLabel iEmail = new JLabel("");
 	private static JLabel iTutor = new JLabel("");
 
-	private static String selected;
-
 	/**
 	 * Initialise the contents of the student frame.
 	 */
-	public static void initStudentFrame() {
+	public static void initStudentFrame(String user, String permission) {
 		frmLogin = new JFrame();
 		frmLogin.setTitle("University Project");
 		frmLogin.setBounds(100, 100, 1024, 768);
@@ -77,7 +70,7 @@ public class StudentFrame {
 		logout.setBounds(182, 11, 89, 23);
 		info.add(logout);
 		
-		JLabel nameTemp = new JLabel("Mr Example Username");
+		JLabel nameTemp = new JLabel(user);
 		nameTemp.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		nameTemp.setBounds(10, 11, 168, 19);
 		info.add(nameTemp);
@@ -104,7 +97,7 @@ public class StudentFrame {
 		
 		DefaultListModel<String> listModel = new DefaultListModel<>();
 		JList<String> list = new JList<>(listModel);
-		list.setBounds(500, 63, 583, 398);
+		list.setBounds(398, 60, 600, 407);
 
 		frmLogin.getContentPane().add(list);
 		
@@ -129,28 +122,28 @@ public class StudentFrame {
 		genInfo.add(infoTitle);
 		
 		JLabel infoReg = new JLabel("Registration number: ");
-		
+		infoReg.setBounds(10, 50, 46, 14);
+		ireg.setBounds(60, 50, 46, 14);
 		genInfo.add(ireg);
 		genInfo.add(infoReg);
 		
 		JLabel infoName = new JLabel("Name: ");
-		infoName.setBounds(10, 50, 46, 14);
-		iname.setBounds(60, 100, 46, 14);
+		infoName.setBounds(10, 75, 46, 14);
+		iname.setBounds(60, 75, 46, 14);
 		genInfo.add(infoName);
 		genInfo.add(iname);
 		
 		JLabel infoEmail = new JLabel("Email:");
-		infoEmail.setBounds(10, 75, 46, 14);
-		iEmail.setBounds(80, 50, 46, 14);
+		infoEmail.setBounds(10, 100, 46, 14);
+		iEmail.setBounds(60, 100, 46, 14);
 		genInfo.add(infoEmail);
 		genInfo.add(iEmail);
 		
 		JLabel infoTutor = new JLabel("Tutor:");
-		infoTutor.setBounds(10, 100, 46, 14);
+		infoTutor.setBounds(10, 125, 46, 14);
+		iTutor.setBounds(60, 125, 46, 14);
 		genInfo.add(infoTutor);
 		genInfo.add(iTutor);
-		
-		
 		frmLogin.getContentPane().add(genInfo);
 		
 		JButton searchBut = new JButton("Search");
@@ -196,9 +189,9 @@ public class StudentFrame {
 		System.out.println(i);
 		String[] info = i.split(" ");
 		ireg.setText(info[0]);
-		iname.setText(info[1]);
-		iEmail.setText(info[2]);
-		iTutor.setText(info[3]);
+		iname.setText(info[1] + " " + info[2] + " " + info[3]);
+		iEmail.setText(info[4]);
+		iTutor.setText(info[5]);
 
 		frmLogin.revalidate();
 	}

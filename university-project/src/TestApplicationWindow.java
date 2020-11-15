@@ -161,8 +161,32 @@ public class TestApplicationWindow {
 		infoStudyLevel.setBounds(10, 150, 85, 14);
 		genInfo.add(infoStudyLevel);
 		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setBounds(49, 50, 46, 14);
+		genInfo.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("New label");
+		lblNewLabel_1.setBounds(49, 75, 46, 14);
+		genInfo.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("New label");
+		lblNewLabel_2.setBounds(49, 100, 46, 14);
+		genInfo.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("New label");
+		lblNewLabel_3.setBounds(59, 125, 46, 14);
+		genInfo.add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_4 = new JLabel("New label");
+		lblNewLabel_4.setBounds(83, 150, 46, 14);
+		genInfo.add(lblNewLabel_4);
+		
 		JList list = new JList();
 		list.setBounds(992, 63, -583, 398);
 		frmLogin.getContentPane().add(list);
+		
+		JList list_1 = new JList();
+		list_1.setBounds(398, 466, 600, -407);
+		frmLogin.getContentPane().add(list_1);
 	}
 }

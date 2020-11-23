@@ -38,6 +38,7 @@ public class ApplicationWindow  {
 	}
 	
 	public static void main(String args[]) {
+		new DepartmentFrame().display();
 		new LoginFrame().display();
 		
 	}

@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,8 +19,9 @@ public class DepartmentFrame {
 
 
 	private JFrame frmLogin;
-	private JTextField name;
-	private JTextField code;
+	public static JTextField name;
+	public static JTextField code;
+	public static JTextField abb;
 	
 	
 	
@@ -71,9 +73,27 @@ public class DepartmentFrame {
 		info.add(exit);
 		
 		JPanel viewing = new JPanel();
-		viewing.setBounds(10, 88, 378, 129);
+		viewing.setBounds(10, 88, 378, 180);
 		frmLogin.getContentPane().add(viewing);
 		viewing.setLayout(null);
+		
+		JButton searchBut = new JButton("Add");
+		//searchBut.setIcon(new ImageIcon(DepartmentFrame.class.getResource("/javax/swing/plaf/metal/icons/ocean/hardDrive.gif")));
+		searchBut.setBounds(283, 36, 85, 23);
+        searchBut.setActionCommand("Add");
+        searchBut.addActionListener(EventHandler.getInstance());
+		viewing.add(searchBut);
+		
+		JButton deleteBut = new JButton("Delete");
+		deleteBut.setBounds(283, 73, 85, 23);
+        deleteBut.setActionCommand("Delete");
+        deleteBut.addActionListener(EventHandler.getInstance());
+		viewing.add(deleteBut);
+		
+		JLabel records = new JLabel("Add New Department");
+		records.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		records.setBounds(10, 11, 170, 23);
+		viewing.add(records);
 		
 		name = new JTextField();
 		name.setToolTipText("Type here");
@@ -81,21 +101,17 @@ public class DepartmentFrame {
 		viewing.add(name);
 		name.setColumns(10);
 		
-		JButton searchBut = new JButton("Add");
-		searchBut.setIcon(new ImageIcon(DepartmentFrame.class.getResource("/javax/swing/plaf/metal/icons/ocean/hardDrive.gif")));
-		searchBut.setBounds(283, 36, 85, 23);
-		viewing.add(searchBut);
-		
-		JLabel records = new JLabel("Add New Department");
-		records.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		records.setBounds(10, 11, 170, 23);
-		viewing.add(records);
-		
 		code = new JTextField();
 		code.setToolTipText("Type here");
 		code.setColumns(10);
 		code.setBounds(10, 74, 270, 28);
 		viewing.add(code);
+		
+		abb = new JTextField();
+		abb.setToolTipText("Type here");
+		abb.setColumns(10);
+		abb.setBounds(10, 113, 270, 28);
+		viewing.add(abb);
 		
 		JToolBar toolBar = new JToolBar();
 		toolBar.setBounds(398, 22, 600, 25);

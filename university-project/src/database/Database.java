@@ -8,9 +8,8 @@ import guis.StudentFrame;
 public class Database {
 
 	// for testing purposes
-	static final String CONNECTION_ARG = "jdbc:mysql://localhost:3306/test?user=root&password=04be7a6d";
-	// private static final String CONNECTION_ARG =
-	// "jdbc:mysql://stusql.dcs.shef.ac.uk/team052?user=team052&password=04be7a6d";
+	//static final String CONNECTION_ARG = "jdbc:mysql://localhost:3306/test?user=root&password=04be7a6d";
+	  static final String CONNECTION_ARG = "jdbc:mysql://stusql.dcs.shef.ac.uk:3306/team052?user=team052&password=04be7a6d";
 
 	public static void testConnection() {
 		System.out.println("\nDrivers loaded as properties:");

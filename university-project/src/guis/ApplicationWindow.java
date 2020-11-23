@@ -38,7 +38,7 @@ public class ApplicationWindow  {
 	}
 	
 	public static void main(String args[]) {
-		new LoginFrame().display();
+		generateFrame("Test", "S");
 		
 	}
 }

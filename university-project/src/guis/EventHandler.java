@@ -49,19 +49,34 @@ public class EventHandler extends JPanel implements ActionListener {
 			con = DriverManager.getConnection(database, dataUser, dataPassword);
 			stmt = con.createStatement();
 			//add button action
-			if (command.equals("Add")) {
+			if (command.equals("AddDep")) {
 				String depName = DepartmentFrame.name.getText();
 				String depCode = DepartmentFrame.code.getText();
 				String depAbb = DepartmentFrame.abb.getText();
 				String query = "INSERT INTO Department VALUES('" + depName + "','" + depCode + "','" + depAbb +"')";
 				stmt.executeUpdate(query);
 			}
-			else if (command.equals("Delete")) {
+			else if (command.equals("DeleteDep")) {
 				String depName = DepartmentFrame.name.getText();
 				String depCode = DepartmentFrame.code.getText();
 				String depAbb = DepartmentFrame.abb.getText();
 				String query = 
 						"DELETE FROM Department WHERE deptid='" + depName + "'and name='" + depCode + "'and abbreviation='" + depAbb +"'";
+				stmt.executeUpdate(query);
+			}
+			else if (command.equals("AddDeg")) {
+				String degId = DegreeFrame.id.getText();
+				String degName = DegreeFrame.name.getText();
+				String degCode = DegreeFrame.code.getText();
+				String query = "INSERT INTO Degree VALUES('" + degId + "','" + degName + "','" + degCode +"')";
+				stmt.executeUpdate(query);
+			}
+			else if (command.equals("DeleteDeg")) {
+				String degId = DegreeFrame.id.getText();
+				String degName = DegreeFrame.name.getText();
+				String degCode = DegreeFrame.code.getText();
+				String query 
+				= "DELETE FROM Degree WHERE degreeid='" + degId + "'and name='" + degName + "'and code='" + degCode +"'";
 				stmt.executeUpdate(query);
 			}
 			JOptionPane.showMessageDialog(null,"Query Executed");

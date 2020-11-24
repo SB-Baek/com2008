@@ -80,13 +80,13 @@ public class DepartmentFrame {
 		JButton searchBut = new JButton("Add");
 		//searchBut.setIcon(new ImageIcon(DepartmentFrame.class.getResource("/javax/swing/plaf/metal/icons/ocean/hardDrive.gif")));
 		searchBut.setBounds(283, 36, 85, 23);
-        searchBut.setActionCommand("Add");
+        searchBut.setActionCommand("AddDep");
         searchBut.addActionListener(EventHandler.getInstance());
 		viewing.add(searchBut);
 		
 		JButton deleteBut = new JButton("Delete");
 		deleteBut.setBounds(283, 73, 85, 23);
-        deleteBut.setActionCommand("Delete");
+        deleteBut.setActionCommand("DeleteDep");
         deleteBut.addActionListener(EventHandler.getInstance());
 		viewing.add(deleteBut);
 		

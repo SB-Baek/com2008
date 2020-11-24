@@ -18,8 +18,9 @@ public class DegreeFrame {
 
 
 	private JFrame frmLogin;
-	private JTextField name;
-	private JTextField code;
+	public static JTextField id;
+	public static JTextField name;
+	public static JTextField code;
 	
 	public DegreeFrame() {
 		initDegree();
@@ -69,30 +70,44 @@ public class DegreeFrame {
 		info.add(exit);
 		
 		JPanel viewing = new JPanel();
-		viewing.setBounds(10, 88, 378, 129);
+		viewing.setBounds(10, 88, 378, 180);
 		frmLogin.getContentPane().add(viewing);
 		viewing.setLayout(null);
 		
-		name = new JTextField();
-		name.setToolTipText("Type here");
-		name.setBounds(10, 35, 270, 28);
-		viewing.add(name);
-		name.setColumns(10);
-		
 		JButton searchBut = new JButton("Add");
-		searchBut.setIcon(new ImageIcon(DepartmentFrame.class.getResource("/javax/swing/plaf/metal/icons/ocean/hardDrive.gif")));
+		//searchBut.setIcon(new ImageIcon(DepartmentFrame.class.getResource("/javax/swing/plaf/metal/icons/ocean/hardDrive.gif")));
 		searchBut.setBounds(283, 36, 85, 23);
+		searchBut.setActionCommand("AddDeg");
+        searchBut.addActionListener(EventHandler.getInstance());
 		viewing.add(searchBut);
 		
-		JLabel records = new JLabel("Add New Department");
+		JButton deleteBut = new JButton("Delete");
+		deleteBut.setBounds(283, 73, 85, 23);
+		deleteBut.setActionCommand("DeleteDeg");
+        deleteBut.addActionListener(EventHandler.getInstance());
+		viewing.add(deleteBut);
+		
+		JLabel records = new JLabel("Edit Degree");
 		records.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		records.setBounds(10, 11, 170, 23);
 		viewing.add(records);
 		
+		id = new JTextField();
+		id.setToolTipText("Type here");
+		id.setBounds(10, 35, 270, 28);
+		viewing.add(id);
+		id.setColumns(10);
+		
+		name = new JTextField();
+		name.setToolTipText("Type here");
+		name.setBounds(10, 74, 270, 28);
+		viewing.add(name);
+		name.setColumns(10);
+		
 		code = new JTextField();
 		code.setToolTipText("Type here");
 		code.setColumns(10);
-		code.setBounds(10, 74, 270, 28);
+		code.setBounds(10, 113, 270, 28);
 		viewing.add(code);
 		
 		JToolBar toolBar = new JToolBar();

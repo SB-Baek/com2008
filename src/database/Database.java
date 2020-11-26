@@ -32,6 +32,33 @@ public class Database {
 		}
 	}
 
+	static String getModuleInfo(String moduleId) {
+		String output = "";
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			PreparedStatement stmt = con
+					.prepareStatement("SELECT * FROM Module WHERE moduleId=?");
+			ResultSet set = null;
+			stmt.setString(1, moduleId);
+			set = stmt.executeQuery();
+			while (set.next()) {
+				output += set.getString(2) + " " // name
+						+ set.getString(3) + " " // credits
+						+ set.getString(4) + " " // duration
+						+ set.getString(5) + " " // code
+						+ ((Integer.valueOf(set.getString(6)) == 1) ? "Core" : "Optional") + ":"; // core
+
+			}
+			set.close();
+			con.close();
+		} catch (SQLException e) {
+				e.printStackTrace();
+		}
+		
+		return output;
+	}
+	
 	public static String getStudentModules(String studentId) {
 		String output = "";
 		Connection con = null;
@@ -46,7 +73,7 @@ public class Database {
 				output += set.getString(1) + " " // initGrade
 						+ set.getString(2) + " " // resit
 						+ set.getString(3) + " " // passed
-						+ set.getString(4) + ":";// moduleId
+						+ Database.getModuleInfo(set.getString(4));
 			}
 			set.close();
 			con.close();

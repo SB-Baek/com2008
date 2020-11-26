@@ -17,7 +17,7 @@ public class ModuleFrame extends JFrame {
 
 	private JPanel contentPane;
 	private String info;
-	private String[] columnNames = {"Initial Grade", "Resit Grade", "Has passed", "Module Id"};
+	private String[] columnNames = {"Initial Grade", "Resit Grade", "Has passed", "Module Name", "Credits", "Duration", "Code", "Level of study"};
 	private static String[][] data;
 	
 	public ModuleFrame(String studentId) {
@@ -31,7 +31,6 @@ public class ModuleFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 812, 552);
 		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 

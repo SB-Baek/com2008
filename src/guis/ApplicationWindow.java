@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 import database.Database;
+import registrars.RegistrarFrame;
 
 /**
  * @author James Horn
@@ -38,8 +39,8 @@ public class ApplicationWindow  {
 	}
 	
 	public static void main(String args[]) {
-		new ModuleFrame("");
+		//new ModuleFrame("");
 		//new LoginFrame().display();
-		
+		new RegistrarFrame().display();
 	}
 }

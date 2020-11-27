@@ -1,3 +1,5 @@
+package registrars;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -25,57 +27,30 @@ import java.awt.BorderLayout;
 import javax.swing.JList;
 import java.awt.List;
 
-public class TestApplicationWindow {
 
-	private JFrame frmLogin;
-	private JTextField name;
-	private JTextField code;
+public class RegistrarFrame extends JFrame{
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TestApplicationWindow window = new TestApplicationWindow();
-					window.frmLogin.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JTextField textField_1;
 
-	/**
-	 * Create the application.
-	 */
-	public TestApplicationWindow() {
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frmLogin = new JFrame();
-		frmLogin.setTitle("University Project");
-		frmLogin.setBounds(100, 100, 1024, 768);
-		frmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmLogin.getContentPane().setLayout(null);
+	public RegistrarFrame() {
+	
+		setTitle("University Project");
+		setBounds(100, 100, 1024, 768);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(null);
 		
 		JLabel logged = new JLabel("Logged in as");
 		logged.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		logged.setBounds(10, 11, 137, 21);
-		frmLogin.getContentPane().add(logged);
+		getContentPane().add(logged);
 		
 		JPanel info = new JPanel();
 		info.setBounds(10, 34, 378, 43);
-		frmLogin.getContentPane().add(info);
+		getContentPane().add(info);
 		info.setLayout(null);
 		
 		JButton logout = new JButton("Logout");
-		logout.setBounds(182, 11, 89, 23);
+		logout.setBounds(264, 10, 89, 23);
 		info.add(logout);
 		
 		JLabel nameTemp = new JLabel("Mr Example Username");
@@ -83,57 +58,73 @@ public class TestApplicationWindow {
 		nameTemp.setBounds(10, 11, 168, 19);
 		info.add(nameTemp);
 		
-		JButton exit = new JButton("Exit");
-		exit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		exit.setBounds(281, 11, 89, 23);
-		info.add(exit);
-		
 		JPanel viewing = new JPanel();
-		viewing.setBounds(10, 88, 378, 129);
-		frmLogin.getContentPane().add(viewing);
+		viewing.setBounds(10, 88, 378, 267);
+	    getContentPane().add(viewing);
 		viewing.setLayout(null);
 		
-		name = new JTextField();
-		name.setToolTipText("Type here");
-		name.setBounds(10, 35, 270, 28);
-		viewing.add(name);
-		name.setColumns(10);
+		JButton addRemove = new JButton("Add/Remove Student");
+		addRemove.setIcon(null);
+		addRemove.setBounds(10, 34, 162, 23);
+		addRemove.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ARStudent().display();
+			}			
+		});
 		
-		JButton searchBut = new JButton("Add");
-		searchBut.setIcon(new ImageIcon(TestApplicationWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/hardDrive.gif")));
-		searchBut.setBounds(283, 36, 85, 23);
-		viewing.add(searchBut);
 		
-		JLabel records = new JLabel("Add New Department");
-		records.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		records.setBounds(10, 11, 170, 23);
-		viewing.add(records);
+		viewing.add(addRemove);
 		
-		code = new JTextField();
-		code.setToolTipText("Type here");
-		code.setColumns(10);
-		code.setBounds(10, 74, 270, 28);
-		viewing.add(code);
+		JLabel lblNewLabel_5 = new JLabel("Student");
+		lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_5.setBounds(10, 11, 162, 23);
+		viewing.add(lblNewLabel_5);
+		
+		JButton btnNewButton = new JButton("Check Registration");
+		btnNewButton.setBounds(10, 133, 131, 23);
+		viewing.add(btnNewButton);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(57, 105, 152, 20);
+		viewing.add(textField_1);
+		textField_1.setColumns(10);
+		
+		JLabel lblNewLabel_6 = new JLabel("Registration");
+		lblNewLabel_6.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_6.setBounds(10, 80, 152, 14);
+		viewing.add(lblNewLabel_6);
+		
+		JLabel lblNewLabel_7 = new JLabel("Email:");
+		lblNewLabel_7.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_7.setBounds(10, 108, 108, 14);
+		viewing.add(lblNewLabel_7);
+		
+		JLabel lblNewLabel_8 = new JLabel("Optional Modules");
+		lblNewLabel_8.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_8.setBounds(10, 167, 131, 14);
+		viewing.add(lblNewLabel_8);
+		
+		JButton btnAddremoveOptionalModules = new JButton("Add/Remove Optional Modules");
+		btnAddremoveOptionalModules.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//new ARModule();
+			}
+		});
+		btnAddremoveOptionalModules.setBounds(10, 192, 214, 23);
+		viewing.add(btnAddremoveOptionalModules);
 		
 		JToolBar toolBar = new JToolBar();
 		toolBar.setBounds(398, 22, 600, 25);
-		frmLogin.getContentPane().add(toolBar);
+		getContentPane().add(toolBar);
 		
 		JButton student = new JButton("Student");
 		toolBar.add(student);
 		
-		JButton degree = new JButton("Degree");
-		toolBar.add(degree);
-		
-		JButton department = new JButton("Department");
-		toolBar.add(department);
-		
 		JPanel genInfo = new JPanel();
 		genInfo.setBounds(398, 472, 600, 246);
-		frmLogin.getContentPane().add(genInfo);
+		getContentPane().add(genInfo);
 		genInfo.setLayout(null);
 		
 		JLabel infoTitle = new JLabel("Information");
@@ -187,14 +178,14 @@ public class TestApplicationWindow {
 		
 		JList list = new JList();
 		list.setBounds(992, 63, -583, 398);
-		frmLogin.getContentPane().add(list);
+	    getContentPane().add(list);
 		
 		JList list_1 = new JList();
 		list_1.setBounds(398, 466, 600, -407);
-		frmLogin.getContentPane().add(list_1);
-		
-		JPanel panel = new JPanel();
-		panel.setBounds(10, 216, 378, 129);
-		frmLogin.getContentPane().add(panel);
+		getContentPane().add(list_1);
+	}
+	
+	public void display() {
+		setVisible(true);
 	}
 }

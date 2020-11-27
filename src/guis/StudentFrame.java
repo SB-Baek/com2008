@@ -205,6 +205,11 @@ public class StudentFrame {
 		
 		JButton department = new JButton("Department");
 		toolBar.add(department);	
+		
+		
+		
+		
+		
 	}
 	
 	public static void displayStudentInfo(String i) {

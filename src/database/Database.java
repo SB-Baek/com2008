@@ -22,7 +22,7 @@ public class Database {
 	// private static final String CONNECTION_ARG =
 	// "jdbc:mysql://stusql.dcs.shef.ac.uk/team052?user=team052&password=04be7a6d";
 
-	public static void testConnection() {
+	static void testConnection() {
 		System.out.println("\nDrivers loaded as properties:");
 		System.out.println(System.getProperty("jdbc.drivers"));
 		System.out.println("\nDrivers loaded by DriverManager:");
@@ -32,13 +32,30 @@ public class Database {
 		}
 	}
 
+	static int getNextStudentId() {
+		Connection con = null;
+		int id = 0;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			try (Statement stmt = con.createStatement()) {
+
+				ResultSet set = stmt.executeQuery("SELECT MAX(registrationNumber) AS largestId FROM Student;");
+				set.next();
+				id = set.getInt("largestId") + 1;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
+
 	static String getModuleInfo(String moduleId) {
 		String output = "";
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
-			PreparedStatement stmt = con
-					.prepareStatement("SELECT * FROM Module WHERE moduleId=?");
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Module WHERE moduleId=?");
 			ResultSet set = null;
 			stmt.setString(1, moduleId);
 			set = stmt.executeQuery();
@@ -53,12 +70,12 @@ public class Database {
 			set.close();
 			con.close();
 		} catch (SQLException e) {
-				e.printStackTrace();
+			e.printStackTrace();
 		}
-		
+
 		return output;
 	}
-	
+
 	public static String getStudentModules(String studentId) {
 		String output = "";
 		Connection con = null;
@@ -211,6 +228,60 @@ public class Database {
 		}
 
 		return names;
+	}
+
+	static String generateEmail(String fore, String sur) {
+		String output = "";
+		Connection con = null;
+		int emailCount = 0;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			PreparedStatement stmt = con
+					.prepareStatement("SELECT COUNT(email) AS count FROM Student WHERE forename=? AND surname=?;");
+			stmt.setString(1, fore);
+			stmt.setString(2, sur);
+			ResultSet set = stmt.executeQuery();
+			set.next();
+			emailCount = Integer.valueOf(set.getString("count")) + 1;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		output += fore.substring(0, 1) + sur + ((emailCount == 0) ? "" : String.valueOf(emailCount));
+
+		return output + "@uni.ac.uk";
+	}
+
+	public static void addStudent(String title, String forename, String surname) {
+		System.out.print("Added student: ");
+		Connection con = null;
+		try {
+
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			con.setAutoCommit(false);
+
+			PreparedStatement addition = con.prepareStatement(
+					"INSERT INTO Student(registrationNumber, title, forename, surname, email, Tutor_tutorId, Department_deptId) VALUES (?,?,?,?,?,?,?);");
+			addition.setInt(1, getNextStudentId());
+			addition.setString(2, title);
+			addition.setString(3, forename);
+			addition.setString(4, surname);
+			addition.setString(5, generateEmail(forename, surname));
+			addition.setInt(6, java.sql.Types.INTEGER);
+			addition.setInt(7, java.sql.Types.INTEGER);
+			
+			System.out.println(" " + addition.execute());
+			
+			con.commit();
+			con.setAutoCommit(true);
+			
+			addition.close();
+			con.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -60,7 +60,28 @@ public class Database {
 		}
 		return id;
 	}
-
+	static int getStudentIdFromEmail(String email) {
+		int id = 0;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			con.setAutoCommit(false);
+			
+			PreparedStatement stmt = con.prepareStatement("SELECT registrationNumber FROM Student WHERE email = ?;");
+			stmt.setString(1, email);
+			ResultSet set = stmt.executeQuery();
+			while (set.next()) {
+				id = set.getInt(1);
+			}
+			set.close();
+			con.close();	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return id;
+		
+	}
 	static String getModuleInfo(String moduleId) {
 		String output = "";
 		Connection con = null;
@@ -384,6 +405,53 @@ public class Database {
 			e.printStackTrace();
 		}
 		return output;
+	}
+
+	public static boolean checkStudentExists(String email) {
+		boolean check = false;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Student WHERE email = ?");
+			stmt.setString(1, email);
+			ResultSet set = stmt.executeQuery();
+			while(set.next()) {
+				check = true; break;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return check;
+	}
+
+	public static boolean deleteStudent(String email) {
+		boolean worked = false;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			con.setAutoCommit(false);
+			PreparedStatement stmt2 = con.prepareStatement("DELETE FROM Period WHERE Student_registrationNumber = ?;");
+			PreparedStatement stmt3 = con.prepareStatement("DELETE FROM StudentModule WHERE Student_registrationNumber = ?;");
+
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM Student WHERE email = ?;");
+			stmt.setString(1, email);
+			stmt2.setInt(1, Database.getStudentIdFromEmail(email));
+			stmt3.setInt(1, Database.getStudentIdFromEmail(email));
+			stmt2.execute();
+			stmt3.execute();
+			worked = stmt.execute();
+			con.commit();
+			con.setAutoCommit(true);
+		
+		
+		con.close();	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return worked;
 	}
 	
 	

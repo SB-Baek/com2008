@@ -60,6 +60,7 @@ public class ARStudent extends JFrame {
 	 String degreeName = "BSC Computer Science";
 	 JLabel addStatus;
 	 JLabel deleteStatus;
+	 String email= "";
 	 
 	 Map<Integer, String> idname = new HashMap<>();
 	 
@@ -232,7 +233,7 @@ public class ARStudent extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				 
 				String batch = textField_4.getText() + ":" + initYear + ":" + initMonth + ":" + initDay + ":" + endYear + ":" + endMonth + ":" + endDay + ":" + sl;
-				if (batch.length() > 24) {// length of batch excluding length of degree, make sure that batch info is valid 
+				if (batch.length() > 25) {// length of batch excluding length of degree, make sure that batch info is valid 
 					//check batch length for valid student addition
 					Database.addStudent(textField.getText(), textField_1.getText(), textField_3.getText(), batch, degreeName);
 					addStatus.setText("Adding new student");
@@ -258,6 +259,21 @@ public class ARStudent extends JFrame {
 		
 		JButton deleteButton = new JButton("Delete");
 		deleteButton.setBounds(22, 356, 89, 23);
+		deleteButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				email = textField_2.getText();
+				if (Database.checkStudentExists(email)) {
+					System.out.println("Deleted student: " + Database.deleteStudent(email));
+					deleteStatus.setText("Successfully deleted student");
+				} else {
+					deleteStatus.setText("Could not find email");
+
+				}
+				revalidate();
+			}			
+		});
 		addForm.add(deleteButton);
 		
 		addStatus = new JLabel("");

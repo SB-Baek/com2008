@@ -1,6 +1,7 @@
 package database;
 
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 import guis.StudentFrame;
@@ -18,11 +19,11 @@ import guis.StudentFrame;
 public class Database {
 
 	// for testing purposes
-	static final String CONNECTION_ARG = "jdbc:mysql://localhost:3306/test?user=root&password=04be7a6d";
-	// private static final String CONNECTION_ARG =
-	// "jdbc:mysql://stusql.dcs.shef.ac.uk/team052?user=team052&password=04be7a6d";
+	//static final String CONNECTION_ARG = "jdbc:mysql://localhost:3306/test?user=root&password=04be7a6d";
+	private static final String CONNECTION_ARG = "jdbc:mysql://stusql.dcs.shef.ac.uk:3306/team052?user=team052&password=04be7a6d";
 
-	static void testConnection() {
+	public static void initConnection() {
+
 		System.out.println("\nDrivers loaded as properties:");
 		System.out.println(System.getProperty("jdbc.drivers"));
 		System.out.println("\nDrivers loaded by DriverManager:");
@@ -30,8 +31,18 @@ public class Database {
 		while (list.hasMoreElements()) {
 			System.out.println(list.nextElement());
 		}
+		
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			try (Statement stmt = con.createStatement()) {
+				System.out.println("Using database: " + stmt.execute("USE team052;"));	
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();	
+		}
 	}
-
+	
 	static int getNextStudentId() {
 		Connection con = null;
 		int id = 0;
@@ -43,7 +54,7 @@ public class Database {
 				set.next();
 				id = set.getInt("largestId") + 1;
 			}
-
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -253,25 +264,98 @@ public class Database {
 		return output + "@uni.ac.uk";
 	}
 
-	public static void addStudent(String title, String forename, String surname) {
+	static int degreeId(String name) {
+		int output = 0;
+		Connection con = null;
+		try {
+
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			PreparedStatement stmt = con.prepareStatement("SELECT degreeId FROM Degree WHERE name = ?");
+			stmt.setString(1, name);
+			ResultSet set = stmt.executeQuery();
+			while (set.next()) {
+				output = set.getInt("degreeId");
+			}
+		}
+		 catch (SQLException e) {
+			 e.printStackTrace();
+		 }
+		
+		return output;
+	}
+	
+	public static void addStudent(String title, String forename, String surname, String batchInfo, String degree) {
+
 		System.out.print("Added student: ");
 		Connection con = null;
 		try {
 
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			con.setAutoCommit(false);
-
+			
 			PreparedStatement addition = con.prepareStatement(
 					"INSERT INTO Student(registrationNumber, title, forename, surname, email, Tutor_tutorId, Department_deptId) VALUES (?,?,?,?,?,?,?);");
-			addition.setInt(1, getNextStudentId());
+			PreparedStatement pdAddition = con.prepareStatement(
+					"INSERT INTO Period(grade, start, end, label, creditTotal, Student_registrationNumber, Degree_degreeId) VALUES (?,?,?,?,?,?,?)");
+			int studentId = getNextStudentId();
+			
+			
+			//Add Student record
+			addition.setInt(1, studentId);
 			addition.setString(2, title);
 			addition.setString(3, forename);
 			addition.setString(4, surname);
 			addition.setString(5, generateEmail(forename, surname));
 			addition.setInt(6, java.sql.Types.INTEGER);
 			addition.setInt(7, java.sql.Types.INTEGER);
+			System.out.println(title);
+			System.out.println(forename);
+			System.out.println(surname);
+
+			
+			//Add Period record
+			String[] bInfo = batchInfo.split(":");
+			for (String x : bInfo) {
+				System.out.println(x);
+			}
+			pdAddition.setFloat(1, Float.valueOf(bInfo[0])); //grade
+			pdAddition.setDate(2, Date.valueOf(bInfo[1] + "-" + bInfo[2] + "-" + bInfo[3])); //start date
+			pdAddition.setDate(3, Date.valueOf(bInfo[4] + "-" + bInfo[5] + "-" + bInfo[6])); //end date
+			switch(bInfo[7]) {
+			case "1":
+				pdAddition.setString(4, "CER1"); // label
+				break;
+			case "2":
+				pdAddition.setString(4, "DIP1"); // label
+				break;
+			case "3":
+				pdAddition.setString(4, "BAC1"); // label
+				break;
+			case "4":
+				pdAddition.setString(4, "MAS1"); // label
+				break;
+			case "P":
+				pdAddition.setString(4, "PLA"); // label
+				break;
+			default:
+				break;
+			}
+			
+			if (bInfo[7] == "4") { //creditTotal
+				pdAddition.setInt(5, 180);
+				
+			} else {
+				pdAddition.setInt(5, 120);
+			}
+			
+			//regNumber
+			pdAddition.setInt(6, studentId);
+			
+			//degreeId
+			pdAddition.setInt(7, degreeId(degree));
 			
 			System.out.println(" " + addition.execute());
+			System.out.println(" " + pdAddition.execute());
 			
 			con.commit();
 			con.setAutoCommit(true);
@@ -284,4 +368,25 @@ public class Database {
 		}
 	}
 
+	public static String getDegrees() {
+		String output = "";
+		Connection con = null;
+		
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			try (Statement stmt = con.createStatement()) {
+				ResultSet set = stmt.executeQuery("SELECT * FROM Degree");
+				while (set.next()) {
+					output += set.getString(1) + " " + set.getString(2) + " " + set.getString(3) + ":"; 
+				}	
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return output;
+	}
+	
+	
+	
+	
 }

@@ -41,6 +41,7 @@ public class ApplicationWindow  {
 	public static void main(String args[]) {
 		//new ModuleFrame("");
 		//new LoginFrame().display();
+		Database.initConnection();
 		new RegistrarFrame().display();
 	}
 }

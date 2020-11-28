@@ -1,4 +1,4 @@
-package actors;
+package app;
 
 public class Registrars {
 

@@ -177,11 +177,11 @@ public class RegistrarFrame extends JFrame{
 		genInfo.add(button);
 		
 		JList list = new JList();
-		list.setBounds(992, 63, -583, 398);
+		list.setBounds(992, 63, 583, 398);
 	    getContentPane().add(list);
 		
 		JList list_1 = new JList();
-		list_1.setBounds(398, 466, 600, -407);
+		list_1.setBounds(398, 466, 600, 407);
 		getContentPane().add(list_1);
 	}
 	

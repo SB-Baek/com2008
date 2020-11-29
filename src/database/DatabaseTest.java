@@ -1,6 +1,6 @@
 package database;
 
-import guis.StudentFrame;
+import guis.BaseFrame;
 
 public class DatabaseTest {
 

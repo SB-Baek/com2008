@@ -4,7 +4,7 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
-import guis.StudentFrame;
+import guis.BaseFrame;
 
 /**
  * 
@@ -678,5 +678,62 @@ public class Database {
 	public static void verifyStudent(String selectedStudentInfo) {
 		// TODO Auto-generated method stub
 		
-	}	
+	}
+
+	public static ArrayList<String> getModules(String studentInfo) {
+		
+		String[] info = studentInfo.split(" ");
+		ArrayList<String> moduleInfo = new ArrayList<>();
+		
+		
+		Connection con = null;
+		try {
+			
+			//get module ids
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			PreparedStatement stmt = con.prepareStatement("SELECT initialGrade, resitGrade, passed, Module_moduleId FROM StudentModule WHERE Student_registrationNumber = ?");
+			stmt.setInt(1, Integer.valueOf(info[0]));
+			ResultSet set = stmt.executeQuery();
+			while(set.next()) {
+				String i = "";
+				PreparedStatement stmt2 = con.prepareStatement("SELECT name, code FROM Module WHERE moduleId = ?");
+				i = String.valueOf(set.getInt(1)) + " " + String.valueOf(set.getInt(2)) + " " + String.valueOf(set.getInt(3));
+				stmt2.setInt(1, set.getInt(4));
+				ResultSet set2 = stmt2.executeQuery();
+				while (set2.next()) {
+					moduleInfo.add(String.valueOf(set.getInt(4)) + " " + set2.getString(1) + " " + set2.getString(2) + " " + i);
+				}
+				set2.close();
+			}
+			set.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return moduleInfo;
+	}
+
+	public static void updateModule(int moduleId, String init, String resit, String passed) {
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			con.setAutoCommit(false);
+			PreparedStatement stmt = con.prepareStatement("UPDATE StudentModule SET initialGrade = ?, resitGrade = ?, passed = ? WHERE Module_moduleId = ?");
+			stmt.setInt(1, Integer.valueOf(init));
+			stmt.setInt(2, Integer.valueOf(resit));
+			stmt.setInt(3, Integer.valueOf(passed));
+			stmt.setInt(4, moduleId);
+			
+			
+			con.commit();
+			con.setAutoCommit(true);
+			con.close();
+
+		} catch (SQLException e ) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 }

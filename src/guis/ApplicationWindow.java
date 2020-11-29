@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 
 import database.Database;
 import registrars.RegistrarFrame;
+import teachers.TeacherFrame;
 
 /**
  * @author James Horn
@@ -34,14 +35,20 @@ import registrars.RegistrarFrame;
 public class ApplicationWindow  {
 
 	public static void generateFrame(String username, String permission) {
-		StudentFrame.initStudentFrame(username, permission);
-		StudentFrame.display();
+		switch(permission) {
+		case "R":
+			new RegistrarFrame(username);
+			break;
+		case "T":
+			new TeacherFrame(username);
+		
+		}
 	}
 	
 	public static void main(String args[]) {
-		//new ModuleFrame("");
-		//new LoginFrame().display();
+		
+		new LoginFrame().display();
 		Database.initConnection();
-		new RegistrarFrame().display();
+		
 	}
 }

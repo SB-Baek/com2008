@@ -10,17 +10,25 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import java.awt.FlowLayout;
 import javax.swing.JToolBar;
 import java.awt.Color;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import database.Database;
+import guis.ModuleFrame;
+
 import java.awt.CardLayout;
 import javax.swing.ScrollPaneConstants;
 import java.awt.BorderLayout;
@@ -31,7 +39,22 @@ import java.awt.List;
 public class RegistrarFrame extends JFrame{
 
 	private JTextField textField_1;
-
+	private static String selectedStudentInfo = "";
+	private static JTextField searchField;
+	private static String searchQuery = "";
+	private static JPanel genInfo;
+	private static JLabel ireg = new JLabel("");
+	private static JLabel iname = new JLabel("");
+	private static JLabel iEmail = new JLabel("");
+	private static JLabel iTutor = new JLabel("");
+	
+	public void loadStudents(DefaultListModel<String> model) {
+		ArrayList<String> studentInfo = Database.getStudents();
+		for (String x: studentInfo) {
+			model.addElement(x);
+		}
+	}
+		
 	public RegistrarFrame() {
 	
 		setTitle("University Project");
@@ -109,11 +132,18 @@ public class RegistrarFrame extends JFrame{
 		JButton btnAddremoveOptionalModules = new JButton("Add/Remove Optional Modules");
 		btnAddremoveOptionalModules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//new ARModule();
+				if (!selectedStudentInfo.equals("")) {
+					new OptionalModule(selectedStudentInfo).display();
+				}
 			}
 		});
 		btnAddremoveOptionalModules.setBounds(10, 192, 214, 23);
 		viewing.add(btnAddremoveOptionalModules);
+		
+		JLabel optionalInfo = new JLabel("Select a student from the list before editing student information.");
+		optionalInfo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		optionalInfo.setBounds(10, 10, 100, 100);
+		info.add(optionalInfo);
 		
 		JToolBar toolBar = new JToolBar();
 		toolBar.setBounds(398, 22, 600, 25);
@@ -122,7 +152,27 @@ public class RegistrarFrame extends JFrame{
 		JButton student = new JButton("Student");
 		toolBar.add(student);
 		
-		JPanel genInfo = new JPanel();
+		
+		DefaultListModel<String> listModel = new DefaultListModel<>();
+		JList<String> list = new JList<>(listModel);
+		list.setBounds(398, 60, 600, 407);
+
+		loadStudents(listModel);
+		getContentPane().add(list);
+		
+		list.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				
+				selectedStudentInfo = list.getSelectedValue();
+				displayStudentInfo(Database.selectStudentInfo(list.getSelectedValue()));
+				revalidate();
+			
+			}
+		});
+		
+		genInfo = new JPanel();
 		genInfo.setBounds(398, 472, 600, 246);
 		getContentPane().add(genInfo);
 		genInfo.setLayout(null);
@@ -132,35 +182,61 @@ public class RegistrarFrame extends JFrame{
 		infoTitle.setBounds(10, 11, 111, 25);
 		genInfo.add(infoTitle);
 		
+		JLabel infoReg = new JLabel("Registration number: ");
+		infoReg.setBounds(10, 50, 46, 14);
+		ireg.setBounds(60, 50, 46, 14);
+		genInfo.add(ireg);
+		genInfo.add(infoReg);
+		
 		JLabel infoName = new JLabel("Name: ");
-		infoName.setBounds(10, 50, 46, 14);
+		infoName.setBounds(10, 75, 46, 14);
+		iname.setBounds(60, 75, 46, 14);
 		genInfo.add(infoName);
+		genInfo.add(iname);
 		
 		JLabel infoEmail = new JLabel("Email:");
-		infoEmail.setBounds(10, 75, 46, 14);
+		infoEmail.setBounds(10, 100, 46, 14);
+		iEmail.setBounds(60, 100, 46, 14);
 		genInfo.add(infoEmail);
-		
-		JLabel infoSubject = new JLabel("Subject:");
-		infoSubject.setBounds(10, 125, 46, 14);
-		genInfo.add(infoSubject);
+		genInfo.add(iEmail);
 		
 		JLabel infoTutor = new JLabel("Tutor:");
-		infoTutor.setBounds(10, 100, 46, 14);
+		infoTutor.setBounds(10, 125, 46, 14);
+		iTutor.setBounds(60, 125, 46, 14);
 		genInfo.add(infoTutor);
+		genInfo.add(iTutor);
+	
+		JButton moduleViewer = new JButton("View Modules");
+		moduleViewer.setBounds(10, 189, 89, 23);
+		genInfo.add(moduleViewer);
+		
+		moduleViewer.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!searchQuery.equals("")) {
+					System.out.println(selectedStudentInfo);
+					new ModuleFrame(selectedStudentInfo.split(" ")[0]);
+				}				
+			}			
+		});
+		
+		
+		getContentPane().add(genInfo);
 		
 		JLabel infoStudyLevel = new JLabel("Study Level:");
 		infoStudyLevel.setBounds(10, 150, 85, 14);
 		genInfo.add(infoStudyLevel);
 		
-		JLabel lblNewLabel = new JLabel("New label");
+		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setBounds(49, 50, 46, 14);
 		genInfo.add(lblNewLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("New label");
+		JLabel lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setBounds(49, 75, 46, 14);
 		genInfo.add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_2 = new JLabel("New label");
+		JLabel lblNewLabel_2 = new JLabel("");
 		lblNewLabel_2.setBounds(49, 100, 46, 14);
 		genInfo.add(lblNewLabel_2);
 		
@@ -176,13 +252,19 @@ public class RegistrarFrame extends JFrame{
 		button.setBounds(10, 189, 89, 23);
 		genInfo.add(button);
 		
-		JList list = new JList();
-		list.setBounds(992, 63, 583, 398);
-	    getContentPane().add(list);
-		
 		JList list_1 = new JList();
 		list_1.setBounds(398, 466, 600, 407);
 		getContentPane().add(list_1);
+	}
+	public void displayStudentInfo(String i) {
+		System.out.println(i);
+		String[] info = i.split(" ");
+		ireg.setText(info[0]);
+		iname.setText(info[1] + " " + info[2] + " " + info[3]);
+		iEmail.setText(info[4]);
+		iTutor.setText(info[5]);
+
+		revalidate();
 	}
 	
 	public void display() {

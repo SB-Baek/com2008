@@ -160,7 +160,6 @@ public class Database {
 	public static String selectStudentInfo(String name) {
 		String info = "";
 		String[] searchName = name.toLowerCase().split(" ");
-		System.out.println(searchName[0]);
 
 		Connection con = null;
 		try {
@@ -454,7 +453,171 @@ public class Database {
 		return worked;
 	}
 	
+	public static int getDegreeId(String degreeName) {
+		int id = 0;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			PreparedStatement stmt = con.prepareStatement("SELECT degreeId FROM Degree WHERE name = ?");
+			stmt.setString(1, degreeName);
+			ResultSet set = stmt.executeQuery();
+			while(set.next()) {
+				id = set.getInt(1);
+			}
+			set.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
+		
+	}
+
+	public static List<String> loadOptionals(String degree) {
+		List<String> models = new ArrayList<>();
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			int id = getDegreeId(degree);
+			System.out.println("degree name optioanl: " + degree);
+			System.out.println("degree id optional: " + id);
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM DegreeModule WHERE Degree_degreeId = ?");
+			stmt.setInt(1, id);
+			ResultSet set = stmt.executeQuery();
+			while(set.next()) {
+				PreparedStatement st = con.prepareStatement("SELECT name FROM Module WHERE moduleId = ? AND core = 1");
+				st.setInt(1, set.getInt(1));
+				ResultSet set2 = st.executeQuery();
+				
+				while(set2.next()) {
+					System.out.println("Found optional module: " + set2.getString(1));
+					models.add(set2.getString(1));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return models;
+	}
 	
-	
-	
+	public static List<String> removeOptional(int studentId) {
+		List<String> models = new ArrayList<>();
+		
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			
+			PreparedStatement stmt = con.prepareStatement("SELECT Module_moduleId FROM DegreeModule WHERE Degree_degreeId = ?");
+			stmt.setInt(1, studentId);
+			ResultSet set = stmt.executeQuery();
+			while(set.next()) {
+				PreparedStatement st = con.prepareStatement("SELECT name FROM Module WHERE moduleId = ? AND core = 0");
+				st.setInt(1, set.getInt(1));
+				ResultSet set2 = st.executeQuery();
+				while(set2.next()) {
+					System.out.println("Found student's optional module: " + set2.getString(1));
+					models.add(set2.getString(1));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static boolean addOptionalModule(String selectedModule, int studentId) {
+		boolean done = false;
+		Connection con = null;
+		try {
+			
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			con.setAutoCommit(false);
+			
+			PreparedStatement stmt = con.prepareStatement("SELECT moduleId FROM Module WHERE name = ?");
+			PreparedStatement stmt2 = con.prepareStatement("INSERT INTO StudentModule(initialGrade, resitGrade, passed, Module_moduleId, Student_registrationNumber) VALUES (NULL, NULL, NULL, ?, ?);");
+
+			stmt.setString(1, selectedModule);
+			ResultSet set = stmt.executeQuery();
+			int moduleId = 0;
+			while(set.next()) {
+				moduleId = set.getInt(1);
+			}
+			
+			stmt2.setInt(1, moduleId);
+			stmt2.setInt(2, studentId);
+			done = stmt2.execute();
+			
+			con.commit();
+			con.setAutoCommit(true);
+			
+			
+			set.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return done;
+		
+	}
+
+	public static ArrayList<String> getStudents() {
+		ArrayList<String> studentInfo = new ArrayList<>();
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Student;");
+			ResultSet set = stmt.executeQuery();
+			while(set.next()) {
+				//reg number - title - forename 
+				System.out.println(set.getInt(1));
+				System.out.println(set.getString(2));
+				System.out.println(set.getString(3));
+				System.out.println(set.getString(4));
+				System.out.println(set.getString(5));
+
+				String out = set.getInt(1) + " " + set.getString(2) + " " + set.getString(3) + 
+						
+						//surname - email - tutorId - deptId 
+						" " + set.getString(4) + " " + set.getString(5) + " " +  set.getInt(6) + " " + set.getInt(7);
+				
+				studentInfo.add(out);
+			}
+			
+			set.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return studentInfo;
+	}
+
+	public static String getDegreeName(int studentId) {
+		String degree = "";
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			PreparedStatement stmt2 = con.prepareStatement("SELECT name FROM Degree WHERE degreeId = ?;");
+			PreparedStatement stmt = con.prepareStatement("SELECT Degree_degreeId FROM Period WHERE Student_registrationNumber = ?;");
+			stmt.setInt(1, studentId);
+
+			ResultSet set = stmt.executeQuery();
+			
+			while(set.next()) {
+				stmt2.setInt(1, set.getInt(1));
+				ResultSet set2 = stmt2.executeQuery();
+				while (set2.next()) {
+					degree = set2.getString(1);						
+				}
+			}
+			
+			set.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return degree;
+	}	
 }

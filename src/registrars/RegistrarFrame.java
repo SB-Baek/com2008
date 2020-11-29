@@ -27,6 +27,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import database.Database;
+import guis.BaseFrame;
 import guis.ModuleFrame;
 
 import java.awt.CardLayout;
@@ -42,13 +43,12 @@ import java.awt.List;
  * 
  */
 
-public class RegistrarFrame extends JFrame {
+public class RegistrarFrame extends BaseFrame {
 
 	private JTextField textField_1;
 	private static String selectedStudentInfo = "";
 	private static JTextField searchField;
 	private static String searchQuery = "";
-	private static JPanel genInfo;
 	private static JLabel ireg = new JLabel("");
 	private static JLabel iname = new JLabel("");
 	private static JLabel iEmail = new JLabel("");
@@ -62,30 +62,13 @@ public class RegistrarFrame extends JFrame {
 	}
 
 	public RegistrarFrame(String username) {
+		
+		initBaseFrame(username);
+		
+	
 
-		setTitle("University Project");
-		setBounds(100, 100, 1024, 768);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setLayout(null);
 
-		JLabel logged = new JLabel("Logged in as ");
-		logged.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		logged.setBounds(10, 11, 137, 21);
-		getContentPane().add(logged);
 
-		JPanel info = new JPanel();
-		info.setBounds(10, 34, 378, 43);
-		getContentPane().add(info);
-		info.setLayout(null);
-
-		JButton logout = new JButton("Logout");
-		logout.setBounds(264, 10, 89, 23);
-		info.add(logout);
-
-		JLabel nameTemp = new JLabel(username);
-		nameTemp.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		nameTemp.setBounds(10, 11, 168, 19);
-		info.add(nameTemp);
 
 		JPanel viewing = new JPanel();
 		viewing.setBounds(10, 88, 378, 267);
@@ -175,7 +158,7 @@ public class RegistrarFrame extends JFrame {
 		JLabel optionalInfo = new JLabel("Select a student from the list before editing student information.");
 		optionalInfo.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		optionalInfo.setBounds(10, 10, 100, 100);
-		info.add(optionalInfo);
+		genInfo.add(optionalInfo);
 
 		JToolBar toolBar = new JToolBar();
 		toolBar.setBounds(398, 22, 600, 25);
@@ -203,39 +186,7 @@ public class RegistrarFrame extends JFrame {
 			}
 		});
 
-		genInfo = new JPanel();
-		genInfo.setBounds(398, 472, 600, 246);
-		getContentPane().add(genInfo);
-		genInfo.setLayout(null);
 
-		JLabel infoTitle = new JLabel("Information");
-		infoTitle.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		infoTitle.setBounds(10, 11, 111, 25);
-		genInfo.add(infoTitle);
-
-		JLabel infoReg = new JLabel("Registration number: ");
-		infoReg.setBounds(10, 50, 46, 14);
-		ireg.setBounds(60, 50, 46, 14);
-		genInfo.add(ireg);
-		genInfo.add(infoReg);
-
-		JLabel infoName = new JLabel("Name: ");
-		infoName.setBounds(10, 75, 46, 14);
-		iname.setBounds(60, 75, 46, 14);
-		genInfo.add(infoName);
-		genInfo.add(iname);
-
-		JLabel infoEmail = new JLabel("Email:");
-		infoEmail.setBounds(10, 100, 46, 14);
-		iEmail.setBounds(60, 100, 46, 14);
-		genInfo.add(infoEmail);
-		genInfo.add(iEmail);
-
-		JLabel infoTutor = new JLabel("Tutor:");
-		infoTutor.setBounds(10, 125, 46, 14);
-		iTutor.setBounds(60, 125, 46, 14);
-		genInfo.add(infoTutor);
-		genInfo.add(iTutor);
 
 		JButton moduleViewer = new JButton("View Modules");
 		moduleViewer.setBounds(10, 189, 89, 23);

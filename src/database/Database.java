@@ -145,10 +145,11 @@ public class Database {
 			set = stmt.executeQuery();
 			String output = "";
 			while (set.next()) {
-				output += set.getString(2) + " " + set.getString(3) + " " + set.getString(4);
+				output += set.getString(2) + " " + set.getString(3) + " " + set.getString(5);
 			}
 			set.close();
 			con.close();
+			System.out.println(output);
 			return output;
 		} catch (SQLException e) {
 			e.printStackTrace();

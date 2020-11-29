@@ -38,7 +38,7 @@ public class BaseFrame extends JFrame {
 	private static JTextField searchField;
 	private static String searchQuery = "";
 	private static String selectedStudentInfo = "";
-	private static JPanel genInfo;
+	public static JPanel genInfo;
 	private static JLabel ireg = new JLabel("");
 	private static JLabel iname = new JLabel("");
 	private static JLabel iEmail = new JLabel("");
@@ -47,7 +47,7 @@ public class BaseFrame extends JFrame {
 	/**
 	 * Initialise the contents of the student frame.
 	 */
-	public void initStudentFrame(String user) {
+	public void initBaseFrame(String user) {
 		new JFrame();
 		setTitle("University Project");
 		setBounds(100, 100, 1024, 768);

@@ -84,6 +84,7 @@ public class Authenticate {
 	}
 
 	public static boolean verify(String password, String key, String salt) {
+	System.out.println(password);
 		Optional<String> optEncrypted = encrypt(password, salt);
 		if (!optEncrypted.isPresent()) {
 			System.out.println("asd");
@@ -91,12 +92,13 @@ public class Authenticate {
 			return false;
 		}
 		System.out.println(optEncrypted.get());
+		System.out.println("Key: " + key);
+		System.out.println(optEncrypted.get().equals(key));
 		return optEncrypted.get().equals(key);
 	}
 	
 	//store keys and salts.
 	public static void main(String[] args) {
-		System.out.println(Authenticate.createKey("12345", "james"));
 	}
 
 }

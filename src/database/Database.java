@@ -619,5 +619,64 @@ public class Database {
 		}
 		
 		return degree;
+	}
+	
+	//student registration verification
+	//Period - check date validity, check credit total
+	
+	public static String checkCreditTotal(String selectedStudentInfo) {
+		
+		String[] info = selectedStudentInfo.split(" ");
+		String check = "";
+		int foundCreditTotal = 0;
+		int creditCount = 0;
+		Connection con = null;
+		try {
+
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			
+			//find credit total from Period table 
+			PreparedStatement stmt = con.prepareStatement("SELECT creditTotal FROM Period WHERE Student_registrationNumber = ?;");
+			stmt.setInt(1, Integer.valueOf(info[0]));
+			ResultSet set = stmt.executeQuery();
+			while(set.next()) {
+				foundCreditTotal = set.getInt(1);
+			}
+			
+			PreparedStatement stmt2 = con.prepareStatement("SELECT Module_moduleId FROM StudentModule WHERE Student_registrationNumber = ?;");
+			stmt2.setInt(1, Integer.valueOf(info[0]));
+			ResultSet set2 = stmt2.executeQuery();
+			while(set2.next()) {
+				PreparedStatement stmt3 = con.prepareStatement("SELECT credits FROM Module WHERE moduleId = ?;");
+				stmt3.setInt(1, set2.getInt(1));
+				ResultSet set3 = stmt3.executeQuery();
+				
+				while(set3.next()) {
+					creditCount += set3.getInt(1);
+				}
+				
+				set3.close();
+			}
+			set2.close();
+			set.close();
+			
+			con.close();
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (foundCreditTotal != creditCount) {
+			check = "Not enough credits: ";
+		} else {
+			check = "Credit total matched: ";
+		}
+		return check += " " + String.valueOf(creditCount) + "/" + String.valueOf(foundCreditTotal);
+	}
+	
+	public static void verifyStudent(String selectedStudentInfo) {
+		// TODO Auto-generated method stub
+		
 	}	
 }

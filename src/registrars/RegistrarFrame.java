@@ -107,7 +107,35 @@ public class RegistrarFrame extends JFrame{
 		
 		JButton btnNewButton = new JButton("Check Registration");
 		btnNewButton.setBounds(10, 133, 131, 23);
+		btnNewButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Database.verifyStudent(selectedStudentInfo);
+			}
+			
+			
+		});
+		
 		viewing.add(btnNewButton);
+		
+		
+		JLabel creditLabel = new JLabel();
+		creditLabel.setBounds(10, 179, 250, 23);
+		creditLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		viewing.add(creditLabel);
+		
+		JButton creditTotal = new JButton("Check Credit Total");
+		creditTotal.setBounds(10, 156, 150, 23);
+		creditTotal.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!selectedStudentInfo.equals(""))
+					creditLabel.setText(Database.checkCreditTotal(selectedStudentInfo));
+			}
+			
+		});
+		
+		viewing.add(creditTotal);
 		
 		textField_1 = new JTextField();
 		textField_1.setBounds(57, 105, 152, 20);
@@ -137,7 +165,7 @@ public class RegistrarFrame extends JFrame{
 				}
 			}
 		});
-		btnAddremoveOptionalModules.setBounds(10, 192, 214, 23);
+		btnAddremoveOptionalModules.setBounds(10, 192, 275, 23);
 		viewing.add(btnAddremoveOptionalModules);
 		
 		JLabel optionalInfo = new JLabel("Select a student from the list before editing student information.");

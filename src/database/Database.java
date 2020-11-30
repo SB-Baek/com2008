@@ -145,7 +145,7 @@ public class Database {
 			set = stmt.executeQuery();
 			String output = "";
 			while (set.next()) {
-				output += set.getString(2) + " " + set.getString(3) + " " + set.getString(5);
+				output += set.getString(2) + " " + set.getString(3) + " " + set.getString(4) + " " + set.getString(5);
 			}
 			set.close();
 			con.close();
@@ -675,9 +675,33 @@ public class Database {
 		}
 		return check += " " + String.valueOf(creditCount) + "/" + String.valueOf(foundCreditTotal);
 	}
+		
+	public static int getStudentStudyLevel(String info) {
+		int output = 0;
+		Connection con = null;
+		
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			PreparedStatement stmt = con.prepareStatement("SELECT label FROM Period WHERE Student_registrationNumber = ?;");
+			stmt.setString(1, info.split(" ")[0]);
+			ResultSet set = stmt.executeQuery();
+			
+			while(set.next()) {
+				output = Integer.valueOf(set.getString(1).substring(set.getString(1).length() - 1, set.getString(1).length()));
+			}	
+		
+			set.close();
+			con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return output;
+	}
+	
+	
 	
 	public static void verifyStudent(String selectedStudentInfo) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -697,12 +721,12 @@ public class Database {
 			ResultSet set = stmt.executeQuery();
 			while(set.next()) {
 				String i = "";
-				PreparedStatement stmt2 = con.prepareStatement("SELECT name, code FROM Module WHERE moduleId = ?");
+				PreparedStatement stmt2 = con.prepareStatement("SELECT name, code, credits, studyLevel FROM Module WHERE moduleId = ?");
 				i = String.valueOf(set.getInt(1)) + " " + String.valueOf(set.getInt(2)) + " " + String.valueOf(set.getInt(3));
 				stmt2.setInt(1, set.getInt(4));
 				ResultSet set2 = stmt2.executeQuery();
 				while (set2.next()) {
-					moduleInfo.add(String.valueOf(set.getInt(4)) + " " + set2.getString(1) + " " + set2.getString(2) + " " + i);
+					moduleInfo.add(String.valueOf(set.getInt(4)) + " " + set2.getString(1) + " " + set2.getString(2) + " " + i + " " + set2.getString(3) + " " + set2.getString(4));
 				}
 				set2.close();
 			}

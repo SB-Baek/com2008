@@ -47,8 +47,11 @@ public class ApplicationWindow  {
 	
 	public static void main(String args[]) {
 		
-		new LoginFrame().display();
+		//new LoginFrame().display();
 		Database.initConnection();
+		new TeacherFrame("J");
+		
+		
 		
 	}
 }

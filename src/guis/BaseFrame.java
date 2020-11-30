@@ -11,6 +11,7 @@ import javax.swing.JToolBar;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JScrollPane;
@@ -37,16 +38,22 @@ public class BaseFrame extends JFrame {
 
 	private static JTextField searchField;
 	private static String searchQuery = "";
-	private static String selectedStudentInfo = "";
+	public static String selectedStudentInfo = "";
 	public static JPanel genInfo;
 	private static JLabel ireg = new JLabel("");
 	private static JLabel iname = new JLabel("");
 	private static JLabel iEmail = new JLabel("");
 	private static JLabel iTutor = new JLabel("");
+	public DefaultListModel<String> listModel = new DefaultListModel<>();
 
-	/**
-	 * Initialise the contents of the student frame.
-	 */
+	
+	public void loadStudents() {
+		ArrayList<String> students = Database.getStudents();
+		for (String student : students) {
+			listModel.addElement(student);
+		}
+	}
+	
 	public void initBaseFrame(String user) {
 		new JFrame();
 		setTitle("University Project");
@@ -93,7 +100,7 @@ public class BaseFrame extends JFrame {
 		viewing.add(searchField);
 		searchField.setColumns(10);
 
-		DefaultListModel<String> listModel = new DefaultListModel<>();
+		loadStudents();
 		JList<String> list = new JList<>(listModel);
 		list.setBounds(398, 60, 600, 407);
 
@@ -110,7 +117,7 @@ public class BaseFrame extends JFrame {
 
 			}
 		});
-
+		
 		genInfo = new JPanel();
 		genInfo.setBounds(398, 472, 600, 246);
 		getContentPane().add(genInfo);
@@ -122,31 +129,31 @@ public class BaseFrame extends JFrame {
 		genInfo.add(infoTitle);
 
 		JLabel infoReg = new JLabel("Registration number: ");
-		infoReg.setBounds(10, 50, 46, 14);
-		ireg.setBounds(60, 50, 46, 14);
+		infoReg.setBounds(10, 50, 150, 14);
+		ireg.setBounds(170, 50, 150, 14);
 		genInfo.add(ireg);
 		genInfo.add(infoReg);
 
 		JLabel infoName = new JLabel("Name: ");
-		infoName.setBounds(10, 75, 46, 14);
-		iname.setBounds(60, 75, 46, 14);
+		infoName.setBounds(10, 75, 150, 14);
+		iname.setBounds(60, 75, 150, 14);
 		genInfo.add(infoName);
 		genInfo.add(iname);
 
 		JLabel infoEmail = new JLabel("Email:");
-		infoEmail.setBounds(10, 100, 46, 14);
-		iEmail.setBounds(60, 100, 46, 14);
+		infoEmail.setBounds(10, 100, 150, 14);
+		iEmail.setBounds(60, 100, 150, 14);
 		genInfo.add(infoEmail);
 		genInfo.add(iEmail);
 
 		JLabel infoTutor = new JLabel("Tutor:");
-		infoTutor.setBounds(10, 125, 46, 14);
-		iTutor.setBounds(60, 125, 46, 14);
+		infoTutor.setBounds(10, 125, 50, 14);
+		iTutor.setBounds(60, 125, 300, 14);
 		genInfo.add(infoTutor);
 		genInfo.add(iTutor);
 
 		JButton moduleViewer = new JButton("View Modules");
-		moduleViewer.setBounds(10, 189, 89, 23);
+		moduleViewer.setBounds(10, 189, 150, 23);
 		genInfo.add(moduleViewer);
 
 		moduleViewer.addActionListener(new ActionListener() {
@@ -252,5 +259,11 @@ public class BaseFrame extends JFrame {
 
 		});
 		revalidate();
+	}
+	
+	public static void main(String args[]) {
+		BaseFrame a = new BaseFrame();
+		a.initBaseFrame("Test");
+		a.display();
 	}
 }

@@ -135,9 +135,10 @@ public class LoginFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String[] info= Database.getKey(usernameField.getText()).split(" ");
-				
-				if (Authenticate.verify(String.valueOf(passwordField.getPassword()), info[2], info[0])) {
-					ApplicationWindow.generateFrame(info[0],info[1]);
+			
+
+				if (Authenticate.verify(String.valueOf(passwordField.getPassword()), info[3], info[0])) {
+					ApplicationWindow.generateFrame(info[0],info[2]);
 					dispose();
 				} else {
 					errMsg.setText("Invalid login");

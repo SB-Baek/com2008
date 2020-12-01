@@ -90,13 +90,12 @@ public class Authenticate {
 
 			return false;
 		}
-		System.out.println(optEncrypted.get());
+
 		return optEncrypted.get().equals(key);
 	}
 	
 	//store keys and salts.
 	public static void main(String[] args) {
-		System.out.println(Authenticate.createKey("12345", "james"));
 	}
 
 }

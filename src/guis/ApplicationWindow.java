@@ -1,16 +1,12 @@
 package guis;
 
-import java.awt.Dimension;
 
-import java.awt.Toolkit;
-
-import javax.swing.JFrame;
 
 import admins.AdminFrame;
 import database.Database;
 import registrars.RegistrarFrame;
+import students.StudentFrame;
 import teachers.TeacherFrame;
-import admins.ModuleFrame;
 
 /**
  * ApplicationWindow.java 03/11/2020
@@ -24,20 +20,24 @@ public class ApplicationWindow  {
 
 	public static void generateFrame(String username, String permission) {
 		switch(permission) {
+		case "S":
+			new StudentFrame(username).setVisible(true);
+			break;
+		case "A":
+			new AdminFrame(username).setVisible(true);
 		case "R":
-			new RegistrarFrame(username);
+			new RegistrarFrame(username).setVisible(true);
 			break;
 		case "T":
-			new TeacherFrame(username);
+			new TeacherFrame(username).setVisible(true);
 		
 		}
 	}
 	
 	public static void main(String args[]) {
 		
-		//new LoginFrame().display();
 		Database.initConnection();
-		new ModuleFrame().setVisible(true);
+		//new LoginFrame().setVisible(true);
 		
 		
 		

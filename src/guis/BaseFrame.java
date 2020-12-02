@@ -236,7 +236,7 @@ public class BaseFrame extends JFrame {
 
 	}
 
-	public  void appendStudent(String name, String email, String tutor) {
+	public void appendStudent(String name, String email, String tutor) {
 		JPanel student = new JPanel();
 		JLabel jname = new JLabel(name);
 		JLabel jemail = new JLabel(email);

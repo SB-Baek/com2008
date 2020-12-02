@@ -148,7 +148,7 @@ public class Database {
 			set = stmt.executeQuery();
 			String output = "";
 			while (set.next()) {
-				output += set.getString(2) + " " + set.getString(3) + " " + set.getString(4) + " " + set.getString(5);
+				output += set.getString(2) + " " + set.getString(3) + " " + set.getString(4);
 			}
 			set.close();
 			con.close();
@@ -987,6 +987,40 @@ public class Database {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static String getStudentInfo(String user) {
+		Connection con = null;
+		String output = "";
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Student WHERE forename = ?");
+			PreparedStatement tutorInfo;
+			
+			stmt.setString(1, user);
+			ResultSet set = stmt.executeQuery();
+			ResultSet tutorRes;
+			set.next();
+			output = String.valueOf(set.getInt(1)) + " " +  set.getString(2) + " " + set.getString(3) + " " + set.getString(4) + " " + set.getString(5); 
+		
+			tutorInfo = con.prepareStatement("SELECT * FROM Tutor WHERE tutorId=?");
+			tutorInfo.setInt(1, set.getInt(1)); // supply tutorId
+			tutorRes = tutorInfo.executeQuery();
+
+			// point to tutor name
+			while (tutorRes.next())
+				output += " " + tutorRes.getString(2); // tutor name
+			
+			set.close();
+			tutorRes.close();
+			con.close();
+			
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return output;
+		
 	}
 
 }

@@ -99,7 +99,26 @@ public class Database {
 						+ set.getString(3) + " " // credits
 						+ set.getString(4) + " " // duration
 						+ set.getString(5) + " " // code
-						+ ((Integer.valueOf(set.getString(6)) == 1) ? "Core" : "Optional") + ":"; // core
+						+ ((Integer.valueOf(set.getString(6)) == 1) ? "Core" : "Optional"); 
+				switch(Integer.valueOf(set.getString(6))) {
+				case 1:
+					output += " CERTIFICATE:";
+					break;
+				case 2:
+					output += " DIPLOMA:";
+					break;
+				case 3:
+					output += " BACHELORS:";
+					break;
+				case 4:
+					output += " MASTERS:";
+					break;
+				default:
+					break;
+				}
+						
+						
+						
 
 			}
 			set.close();

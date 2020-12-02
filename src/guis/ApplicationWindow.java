@@ -37,7 +37,7 @@ public class ApplicationWindow  {
 	public static void main(String args[]) {
 		
 		Database.initConnection();
-		//new LoginFrame().setVisible(true);
+		new LoginFrame().setVisible(true);
 		
 		
 		

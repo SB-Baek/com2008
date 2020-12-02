@@ -926,5 +926,47 @@ public class Database {
 		}
 		return done;
 	}
+	
+	public static List<String> getModuleElements(String name) {
+		List<String> items = new ArrayList<>();
+		String selectQuery = "SELECT * FROM Module;";
+	
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			Statement stmt = con.createStatement();
+			ResultSet set = stmt.executeQuery(selectQuery);
+	
+			
+			while(set.next()) {
+				items.add(set.getInt(1) + " " + set.getString(2)+ " " + set.getInt(3) + " " + set.getString(4) + " " + set.getString(5) + " " + set.getInt(6) + " " + set.getInt(7));
+			}
+			
+			
+			con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+			
+		return items;
+		
+	}
+	
+	public static boolean removeModule(int moduleId) {
+		Connection con = null;
+		boolean done = false;
+		try {
+		
+		con = DriverManager.getConnection(CONNECTION_ARG);
+		PreparedStatement stmt = con.prepareStatement("DELETE FROM Module WHERE moduleId = ?;");
+		stmt.setInt(1, moduleId);
+		done = stmt.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return done;
+		
+	}
 
 }

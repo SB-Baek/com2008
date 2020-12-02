@@ -13,10 +13,12 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -29,6 +31,19 @@ import javax.swing.JScrollPane;
 		private JComboBox durationComboBox;
 		private JTextField codeField;
 		private JLabel info = new JLabel("");
+		private DefaultListModel<String> items;
+		
+		
+		private DefaultListModel<String> loadList(String tableName) {
+			DefaultListModel<String> model = new DefaultListModel<>();
+			List<String> elements = Database.getModuleElements(tableName);
+			for (String elem : elements) {
+				model.addElement(elem);
+			}
+			return model;
+			
+			
+		}
 
 		public ModuleFrame() {
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -134,7 +149,12 @@ import javax.swing.JScrollPane;
 				}
 			});
 			panel.add(addModuleButton);
+			JScrollPane scrollPane = new JScrollPane();
+			scrollPane.setBounds(291, 46, 331, 208);
+			panel.add(scrollPane);
 			
+			JList listModules = new JList(items);
+			scrollPane.setViewportView(listModules);
 			
 			
 			JLabel removeTitle = new JLabel("Remove Module");
@@ -144,14 +164,21 @@ import javax.swing.JScrollPane;
 			
 			JButton removeButton = new JButton("Remove Module");
 			removeButton.setBounds(291, 264, 109, 23);
+			removeButton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (Database.removeModule((int) listModules.getSelectedValue())) {
+						info.setText("Removed module");
+					} else {
+						info.setText("Could not remove module");
+					}
+				}
+				
+				
+				
+				
+			});
 			panel.add(removeButton);
-			
-			
-			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setBounds(291, 46, 331, 208);
-			panel.add(scrollPane);
-			
-			JList listModules = new JList();
-			scrollPane.setViewportView(listModules);
 		}
 	}

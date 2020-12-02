@@ -1,6 +1,7 @@
 package guis;
 
 import java.awt.Dimension;
+
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
@@ -9,6 +10,7 @@ import admins.AdminFrame;
 import database.Database;
 import registrars.RegistrarFrame;
 import teachers.TeacherFrame;
+import admins.ModuleFrame;
 
 /**
  * ApplicationWindow.java 03/11/2020
@@ -35,7 +37,7 @@ public class ApplicationWindow  {
 		
 		//new LoginFrame().display();
 		Database.initConnection();
-		new AdminFrame("J").display();
+		new ModuleFrame().setVisible(true);
 		
 		
 		

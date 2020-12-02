@@ -37,7 +37,7 @@ public class Database {
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			try (Statement stmt = con.createStatement()) {
-				System.out.println("Using database: " + stmt.execute("USE team052;"));
+				System.out.println("Using database: " + stmt.execute("USE test;"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -927,7 +927,7 @@ public class Database {
 		return done;
 	}
 	
-	public static List<String> getModuleElements(String name) {
+	public static List<String> getModuleElements() {
 		List<String> items = new ArrayList<>();
 		String selectQuery = "SELECT * FROM Module;";
 	
@@ -967,6 +967,26 @@ public class Database {
 		}
 		return done;
 		
+	}
+	
+	public static void addDegreeModule(int moduleId, String degreeName) {
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			
+			con.setAutoCommit(false);
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO Degree(Module_moduleId, Degree_degreeId) VALUES (?, ?);");
+			stmt.setInt(1, moduleId);
+			stmt.setInt(2, Database.getDegreeId(degreeName));
+			stmt.execute();
+			
+			
+			con.commit();
+			con.setAutoCommit(true);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

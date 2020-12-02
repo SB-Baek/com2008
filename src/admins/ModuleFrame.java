@@ -30,22 +30,23 @@ import javax.swing.JScrollPane;
 		private JTextField creditsField;
 		private JComboBox durationComboBox;
 		private JTextField codeField;
+		private JTextField degree;
 		private JLabel info = new JLabel("");
 		private DefaultListModel<String> items;
 		
-		
-		private DefaultListModel<String> loadList(String tableName) {
+		private DefaultListModel<String> loadList() {
 			DefaultListModel<String> model = new DefaultListModel<>();
-			List<String> elements = Database.getModuleElements(tableName);
+			List<String> elements = Database.getModuleElements();
 			for (String elem : elements) {
 				model.addElement(elem);
 			}
 			return model;
-			
-			
 		}
 
 		public ModuleFrame() {
+			items = loadList();
+
+			
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setBounds(100, 100, 658, 403);
 			contentPane = new JPanel();
@@ -121,7 +122,7 @@ import javax.swing.JScrollPane;
 			panel.add(info);
 			
 			JButton addModuleButton = new JButton("Add module");
-			addModuleButton.setBounds(7, 208, 89, 23);
+			addModuleButton.setBounds(7, 208, 150, 23);
 			addModuleButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -163,7 +164,7 @@ import javax.swing.JScrollPane;
 			panel.add(removeTitle);
 			
 			JButton removeButton = new JButton("Remove Module");
-			removeButton.setBounds(291, 264, 109, 23);
+			removeButton.setBounds(291, 264, 200, 23);
 			removeButton.addActionListener(new ActionListener() {
 
 				@Override
@@ -174,11 +175,32 @@ import javax.swing.JScrollPane;
 						info.setText("Could not remove module");
 					}
 				}
-				
-				
-				
-				
 			});
 			panel.add(removeButton);
+			
+			JLabel linkToDegree = new JLabel("Link module to degree");
+			linkToDegree.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			linkToDegree.setBounds(10, 280, 200, 14);
+			panel.add(linkToDegree);
+			
+			degree = new JTextField(); 
+			degree.setBounds(10, 300, 117, 20);
+			panel.add(degree);
+			degree.setColumns(10);
+			
+			JButton linkButton = new JButton("Link");
+			linkButton.setBounds(10, 325, 117, 20);
+			linkButton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					Database.addDegreeModule((int) listModules.getSelectedValue(), degree.getText());
+					
+				}				
+			});
+			panel.add(linkButton);
+			
+			
+			
 		}
 	}

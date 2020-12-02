@@ -23,11 +23,6 @@ public class ModuleFrame extends JFrame {
 	public ModuleFrame(String studentId) {
 		init(studentId);
 	}
-	
-	public static void main(String[] args) {
-		new ModuleFrame("0");
-	}
-	
 
 	private void init(String id) {
 

@@ -159,7 +159,7 @@ public class BaseFrame extends JFrame {
 				System.out.println(searchQuery);
 				if (!searchQuery.equals("")) {
 					System.out.println(selectedStudentInfo);
-					new ModuleFrame(selectedStudentInfo.split(" ")[0]);
+					new ModuleFrame(selectedStudentInfo.split(" ")[0]).setVisible(true);
 				}
 			}
 		});
@@ -169,7 +169,7 @@ public class BaseFrame extends JFrame {
 		JButton searchBut = new JButton("Search");
 		searchBut.setIcon(
 				new ImageIcon(BaseFrame.class.getResource("/javax/swing/plaf/metal/icons/ocean/hardDrive.gif")));
-		searchBut.setBounds(283, 36, 85, 23);
+		searchBut.setBounds(283, 36, 100, 23);
 		searchBut.addActionListener(new ActionListener() {
 
 			@Override
@@ -187,7 +187,7 @@ public class BaseFrame extends JFrame {
 		});
 		viewing.add(searchBut);
 
-		JLabel records = new JLabel("View Student Records");
+		JLabel records = new JLabel("View Student Records (type username)");
 		records.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		records.setBounds(10, 11, 170, 23);
 		viewing.add(records);

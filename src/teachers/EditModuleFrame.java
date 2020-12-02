@@ -29,7 +29,7 @@ public class EditModuleFrame extends JFrame {
 	private JTextField initField;
 	private JTextField resitField;
 	private JTextField passedField;
-	private int moduleId = (Integer) null;
+	private int moduleId = 0;
 
 	private DefaultListModel<String> model = new DefaultListModel<>();
 
@@ -42,8 +42,8 @@ public class EditModuleFrame extends JFrame {
 	public EditModuleFrame(String studentInfo) {
 
 		loadModel(studentInfo);
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 605, 222);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

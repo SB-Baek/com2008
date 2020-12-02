@@ -20,11 +20,27 @@ public class TeacherFrame extends BaseFrame {
 		initBaseFrame(user);
 		
 		JPanel teacherOptions = new JPanel();
-		teacherOptions.setBounds(10, 466, 378, 74);
+		teacherOptions.setBounds(10, 200, 378, 400);
 		getContentPane().add(teacherOptions);
 		teacherOptions.setLayout(null);
 		
-		JLabel weightedGradeLabel = new JLabel("Find the average score of a student from the list");
+	
+
+		JButton aUButton = new JButton("Add or update student grades");
+		aUButton.setBounds(0, 60, 250, 20);
+		aUButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!selectedStudentInfo.equals("")) { 
+					new EditModuleFrame(selectedStudentInfo).setVisible(true);
+				}
+			}
+			
+		});
+		teacherOptions.add(aUButton);
+		
+		JLabel weightedGradeLabel = new JLabel("Click on the list of students to edit details");
 		weightedGradeLabel.setBounds(0, 0, 378, 32);
 		weightedGradeLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		teacherOptions.add(weightedGradeLabel);
@@ -36,8 +52,6 @@ public class TeacherFrame extends BaseFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!selectedStudentInfo.equals("")) { 
-					
-						
 					Teacher.weightedMeanGrade(selectedStudentInfo);
 				}
 			}

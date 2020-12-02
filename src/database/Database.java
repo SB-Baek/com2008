@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.util.*;
 
 import guis.BaseFrame;
+import security.Authenticate;
 
 /**
  * 
@@ -19,8 +20,8 @@ import guis.BaseFrame;
 public class Database {
 
 	// for testing purposes
-	//static final String CONNECTION_ARG = "jdbc:mysql://localhost:3306/test?user=root&password=04be7a6d";
-	private static final String CONNECTION_ARG = "jdbc:mysql://stusql.dcs.shef.ac.uk:3306/team052?user=team052&password=04be7a6d";
+	private static final String CONNECTION_ARG = "jdbc:mysql://localhost:3306/test?user=root&password=04be7a6d";
+	//private static final String CONNECTION_ARG = "jdbc:mysql://stusql.dcs.shef.ac.uk:3306/team052?user=team052&password=04be7a6d";
 
 	public static void initConnection() {
 
@@ -31,18 +32,18 @@ public class Database {
 		while (list.hasMoreElements()) {
 			System.out.println(list.nextElement());
 		}
-		
+
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			try (Statement stmt = con.createStatement()) {
-				System.out.println("Using database: " + stmt.execute("USE team052;"));	
+				System.out.println("Using database: " + stmt.execute("USE team052;"));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();	
+			e.printStackTrace();
 		}
 	}
-	
+
 	static int getNextStudentId() {
 		Connection con = null;
 		int id = 0;
@@ -60,13 +61,14 @@ public class Database {
 		}
 		return id;
 	}
+
 	static int getStudentIdFromEmail(String email) {
 		int id = 0;
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			con.setAutoCommit(false);
-			
+
 			PreparedStatement stmt = con.prepareStatement("SELECT registrationNumber FROM Student WHERE email = ?;");
 			stmt.setString(1, email);
 			ResultSet set = stmt.executeQuery();
@@ -74,14 +76,15 @@ public class Database {
 				id = set.getInt(1);
 			}
 			set.close();
-			con.close();	
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return id;
-		
+
 	}
+
 	static String getModuleInfo(String moduleId) {
 		String output = "";
 		Connection con = null;
@@ -297,14 +300,13 @@ public class Database {
 			while (set.next()) {
 				output = set.getInt("degreeId");
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		 catch (SQLException e) {
-			 e.printStackTrace();
-		 }
-		
+
 		return output;
 	}
-	
+
 	public static void addStudent(String title, String forename, String surname, String batchInfo, String degree) {
 
 		System.out.print("Added student: ");
@@ -313,15 +315,14 @@ public class Database {
 
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			con.setAutoCommit(false);
-			
+
 			PreparedStatement addition = con.prepareStatement(
 					"INSERT INTO Student(registrationNumber, title, forename, surname, email, Tutor_tutorId, Department_deptId) VALUES (?,?,?,?,?,?,?);");
 			PreparedStatement pdAddition = con.prepareStatement(
 					"INSERT INTO Period(grade, start, end, label, creditTotal, Student_registrationNumber, Degree_degreeId) VALUES (?,?,?,?,?,?,?)");
 			int studentId = getNextStudentId();
-			
-			
-			//Add Student record
+
+			// Add Student record
 			addition.setInt(1, studentId);
 			addition.setString(2, title);
 			addition.setString(3, forename);
@@ -333,16 +334,15 @@ public class Database {
 			System.out.println(forename);
 			System.out.println(surname);
 
-			
-			//Add Period record
+			// Add Period record
 			String[] bInfo = batchInfo.split(":");
 			for (String x : bInfo) {
 				System.out.println(x);
 			}
-			pdAddition.setFloat(1, Float.valueOf(bInfo[0])); //grade
-			pdAddition.setDate(2, Date.valueOf(bInfo[1] + "-" + bInfo[2] + "-" + bInfo[3])); //start date
-			pdAddition.setDate(3, Date.valueOf(bInfo[4] + "-" + bInfo[5] + "-" + bInfo[6])); //end date
-			switch(bInfo[7]) {
+			pdAddition.setFloat(1, Float.valueOf(bInfo[0])); // grade
+			pdAddition.setDate(2, Date.valueOf(bInfo[1] + "-" + bInfo[2] + "-" + bInfo[3])); // start date
+			pdAddition.setDate(3, Date.valueOf(bInfo[4] + "-" + bInfo[5] + "-" + bInfo[6])); // end date
+			switch (bInfo[7]) {
 			case "1":
 				pdAddition.setString(4, "CER1"); // label
 				break;
@@ -361,26 +361,26 @@ public class Database {
 			default:
 				break;
 			}
-			
-			if (bInfo[7] == "4") { //creditTotal
+
+			if (bInfo[7] == "4") { // creditTotal
 				pdAddition.setInt(5, 180);
-				
+
 			} else {
 				pdAddition.setInt(5, 120);
 			}
-			
-			//regNumber
+
+			// regNumber
 			pdAddition.setInt(6, studentId);
-			
-			//degreeId
+
+			// degreeId
 			pdAddition.setInt(7, degreeId(degree));
-			
+
 			System.out.println(" " + addition.execute());
 			System.out.println(" " + pdAddition.execute());
-			
+
 			con.commit();
 			con.setAutoCommit(true);
-			
+
 			addition.close();
 			con.close();
 
@@ -392,14 +392,14 @@ public class Database {
 	public static String getDegrees() {
 		String output = "";
 		Connection con = null;
-		
+
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			try (Statement stmt = con.createStatement()) {
 				ResultSet set = stmt.executeQuery("SELECT * FROM Degree");
 				while (set.next()) {
-					output += set.getString(1) + " " + set.getString(2) + " " + set.getString(3) + ":"; 
-				}	
+					output += set.getString(1) + " " + set.getString(2) + " " + set.getString(3) + ":";
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -415,14 +415,15 @@ public class Database {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Student WHERE email = ?");
 			stmt.setString(1, email);
 			ResultSet set = stmt.executeQuery();
-			while(set.next()) {
-				check = true; break;
+			while (set.next()) {
+				check = true;
+				break;
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return check;
 	}
 
@@ -433,7 +434,8 @@ public class Database {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			con.setAutoCommit(false);
 			PreparedStatement stmt2 = con.prepareStatement("DELETE FROM Period WHERE Student_registrationNumber = ?;");
-			PreparedStatement stmt3 = con.prepareStatement("DELETE FROM StudentModule WHERE Student_registrationNumber = ?;");
+			PreparedStatement stmt3 = con
+					.prepareStatement("DELETE FROM StudentModule WHERE Student_registrationNumber = ?;");
 
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM Student WHERE email = ?;");
 			stmt.setString(1, email);
@@ -444,16 +446,15 @@ public class Database {
 			worked = stmt.execute();
 			con.commit();
 			con.setAutoCommit(true);
-		
-		
-		con.close();	
+
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return worked;
 	}
-	
+
 	public static int getDegreeId(String degreeName) {
 		int id = 0;
 		Connection con = null;
@@ -462,7 +463,7 @@ public class Database {
 			PreparedStatement stmt = con.prepareStatement("SELECT degreeId FROM Degree WHERE name = ?");
 			stmt.setString(1, degreeName);
 			ResultSet set = stmt.executeQuery();
-			while(set.next()) {
+			while (set.next()) {
 				id = set.getInt(1);
 			}
 			set.close();
@@ -471,7 +472,7 @@ public class Database {
 			e.printStackTrace();
 		}
 		return id;
-		
+
 	}
 
 	public static List<String> loadOptionals(String degree) {
@@ -485,12 +486,12 @@ public class Database {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM DegreeModule WHERE Degree_degreeId = ?");
 			stmt.setInt(1, id);
 			ResultSet set = stmt.executeQuery();
-			while(set.next()) {
+			while (set.next()) {
 				PreparedStatement st = con.prepareStatement("SELECT name FROM Module WHERE moduleId = ? AND core = 1");
 				st.setInt(1, set.getInt(1));
 				ResultSet set2 = st.executeQuery();
-				
-				while(set2.next()) {
+
+				while (set2.next()) {
 					System.out.println("Found optional module: " + set2.getString(1));
 					models.add(set2.getString(1));
 				}
@@ -500,22 +501,23 @@ public class Database {
 		}
 		return models;
 	}
-	
+
 	public static List<String> removeOptional(int studentId) {
 		List<String> models = new ArrayList<>();
-		
+
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
-			
-			PreparedStatement stmt = con.prepareStatement("SELECT Module_moduleId FROM DegreeModule WHERE Degree_degreeId = ?");
+
+			PreparedStatement stmt = con
+					.prepareStatement("SELECT Module_moduleId FROM DegreeModule WHERE Degree_degreeId = ?");
 			stmt.setInt(1, studentId);
 			ResultSet set = stmt.executeQuery();
-			while(set.next()) {
+			while (set.next()) {
 				PreparedStatement st = con.prepareStatement("SELECT name FROM Module WHERE moduleId = ? AND core = 0");
 				st.setInt(1, set.getInt(1));
 				ResultSet set2 = st.executeQuery();
-				while(set2.next()) {
+				while (set2.next()) {
 					System.out.println("Found student's optional module: " + set2.getString(1));
 					models.add(set2.getString(1));
 				}
@@ -530,35 +532,35 @@ public class Database {
 		boolean done = false;
 		Connection con = null;
 		try {
-			
+
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			con.setAutoCommit(false);
-			
+
 			PreparedStatement stmt = con.prepareStatement("SELECT moduleId FROM Module WHERE name = ?");
-			PreparedStatement stmt2 = con.prepareStatement("INSERT INTO StudentModule(initialGrade, resitGrade, passed, Module_moduleId, Student_registrationNumber) VALUES (NULL, NULL, NULL, ?, ?);");
+			PreparedStatement stmt2 = con.prepareStatement(
+					"INSERT INTO StudentModule(initialGrade, resitGrade, passed, Module_moduleId, Student_registrationNumber) VALUES (NULL, NULL, NULL, ?, ?);");
 
 			stmt.setString(1, selectedModule);
 			ResultSet set = stmt.executeQuery();
 			int moduleId = 0;
-			while(set.next()) {
+			while (set.next()) {
 				moduleId = set.getInt(1);
 			}
-			
+
 			stmt2.setInt(1, moduleId);
 			stmt2.setInt(2, studentId);
 			done = stmt2.execute();
-			
+
 			con.commit();
 			con.setAutoCommit(true);
-			
-			
+
 			set.close();
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return done;
-		
+
 	}
 
 	public static ArrayList<String> getStudents() {
@@ -566,31 +568,31 @@ public class Database {
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
-			
+
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Student;");
 			ResultSet set = stmt.executeQuery();
-			while(set.next()) {
-				//reg number - title - forename 
+			while (set.next()) {
+				// reg number - title - forename
 				System.out.println(set.getInt(1));
 				System.out.println(set.getString(2));
 				System.out.println(set.getString(3));
 				System.out.println(set.getString(4));
 				System.out.println(set.getString(5));
 
-				String out = set.getInt(1) + " " + set.getString(2) + " " + set.getString(3) + 
-						
-						//surname - email - tutorId - deptId 
-						" " + set.getString(4) + " " + set.getString(5) + " " +  set.getInt(6) + " " + set.getInt(7);
-				
+				String out = set.getInt(1) + " " + set.getString(2) + " " + set.getString(3) +
+
+				// surname - email - tutorId - deptId
+						" " + set.getString(4) + " " + set.getString(5) + " " + set.getInt(6) + " " + set.getInt(7);
+
 				studentInfo.add(out);
 			}
-			
+
 			set.close();
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return studentInfo;
 	}
 
@@ -600,32 +602,33 @@ public class Database {
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			PreparedStatement stmt2 = con.prepareStatement("SELECT name FROM Degree WHERE degreeId = ?;");
-			PreparedStatement stmt = con.prepareStatement("SELECT Degree_degreeId FROM Period WHERE Student_registrationNumber = ?;");
+			PreparedStatement stmt = con
+					.prepareStatement("SELECT Degree_degreeId FROM Period WHERE Student_registrationNumber = ?;");
 			stmt.setInt(1, studentId);
 
 			ResultSet set = stmt.executeQuery();
-			
-			while(set.next()) {
+
+			while (set.next()) {
 				stmt2.setInt(1, set.getInt(1));
 				ResultSet set2 = stmt2.executeQuery();
 				while (set2.next()) {
-					degree = set2.getString(1);						
+					degree = set2.getString(1);
 				}
 			}
-			
+
 			set.close();
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return degree;
 	}
-	
-	//student registration verification
-	//Period - check date validity, check credit total
+
+	// student registration verification
+	// Period - check date validity, check credit total
 	public static String checkCreditTotal(String selectedStudentInfo) {
-		
+
 		String[] info = selectedStudentInfo.split(" ");
 		String check = "";
 		int foundCreditTotal = 0;
@@ -634,36 +637,36 @@ public class Database {
 		try {
 
 			con = DriverManager.getConnection(CONNECTION_ARG);
-			
-			//find credit total from Period table 
-			PreparedStatement stmt = con.prepareStatement("SELECT creditTotal FROM Period WHERE Student_registrationNumber = ?;");
+
+			// find credit total from Period table
+			PreparedStatement stmt = con
+					.prepareStatement("SELECT creditTotal FROM Period WHERE Student_registrationNumber = ?;");
 			stmt.setInt(1, Integer.valueOf(info[0]));
 			ResultSet set = stmt.executeQuery();
-			while(set.next()) {
+			while (set.next()) {
 				foundCreditTotal = set.getInt(1);
 			}
-			
-			PreparedStatement stmt2 = con.prepareStatement("SELECT Module_moduleId FROM StudentModule WHERE Student_registrationNumber = ?;");
+
+			PreparedStatement stmt2 = con.prepareStatement(
+					"SELECT Module_moduleId FROM StudentModule WHERE Student_registrationNumber = ?;");
 			stmt2.setInt(1, Integer.valueOf(info[0]));
 			ResultSet set2 = stmt2.executeQuery();
-			while(set2.next()) {
+			while (set2.next()) {
 				PreparedStatement stmt3 = con.prepareStatement("SELECT credits FROM Module WHERE moduleId = ?;");
 				stmt3.setInt(1, set2.getInt(1));
 				ResultSet set3 = stmt3.executeQuery();
-				
-				while(set3.next()) {
+
+				while (set3.next()) {
 					creditCount += set3.getInt(1);
 				}
-				
+
 				set3.close();
 			}
 			set2.close();
 			set.close();
-			
+
 			con.close();
-			
-			
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -674,19 +677,20 @@ public class Database {
 		}
 		return check += " " + String.valueOf(creditCount) + "/" + String.valueOf(foundCreditTotal);
 	}
-		
+
 	public static int getStudentStudyLevel(String info) {
 		int output = 0;
 		Connection con = null;
-		
+
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
-			PreparedStatement stmt = con.prepareStatement("SELECT label FROM Period WHERE Student_registrationNumber = ?;");
+			PreparedStatement stmt = con
+					.prepareStatement("SELECT label FROM Period WHERE Student_registrationNumber = ?;");
 			stmt.setString(1, info.split(" ")[0]);
 			ResultSet set = stmt.executeQuery();
-			
-			while(set.next()) {
-				switch(set.getString(1)) {
+
+			while (set.next()) {
+				switch (set.getString(1)) {
 				case "CER":
 					output = 1;
 					break;
@@ -702,44 +706,47 @@ public class Database {
 				case "MASO":
 					output = 5;
 				}
-				
-			}	
-		
+
+			}
+
 			set.close();
 			con.close();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return output;
 	}
-	
+
 	public static void verifyStudent(String selectedStudentInfo) {
-		
+
 	}
 
 	public static ArrayList<String> getModules(String studentInfo) {
-		
+
 		String[] info = studentInfo.split(" ");
 		ArrayList<String> moduleInfo = new ArrayList<>();
-		
-		
+
 		Connection con = null;
 		try {
-			
-			//get module ids
+
+			// get module ids
 			con = DriverManager.getConnection(CONNECTION_ARG);
-			PreparedStatement stmt = con.prepareStatement("SELECT initialGrade, resitGrade, passed, Module_moduleId FROM StudentModule WHERE Student_registrationNumber = ?");
+			PreparedStatement stmt = con.prepareStatement(
+					"SELECT initialGrade, resitGrade, passed, Module_moduleId FROM StudentModule WHERE Student_registrationNumber = ?");
 			stmt.setInt(1, Integer.valueOf(info[0]));
 			ResultSet set = stmt.executeQuery();
-			while(set.next()) {
+			while (set.next()) {
 				String i = "";
-				PreparedStatement stmt2 = con.prepareStatement("SELECT name, code, credits, studyLevel FROM Module WHERE moduleId = ?");
-				i = String.valueOf(set.getInt(1)) + " " + String.valueOf(set.getInt(2)) + " " + String.valueOf(set.getInt(3));
+				PreparedStatement stmt2 = con
+						.prepareStatement("SELECT name, code, credits, studyLevel FROM Module WHERE moduleId = ?");
+				i = String.valueOf(set.getInt(1)) + " " + String.valueOf(set.getInt(2)) + " "
+						+ String.valueOf(set.getInt(3));
 				stmt2.setInt(1, set.getInt(4));
 				ResultSet set2 = stmt2.executeQuery();
 				while (set2.next()) {
-					moduleInfo.add(String.valueOf(set.getInt(4)) + " " + set2.getString(1) + " " + set2.getString(2) + " " + i + " " + set2.getString(3) + " " + set2.getString(4));
+					moduleInfo.add(String.valueOf(set.getInt(4)) + " " + set2.getString(1) + " " + set2.getString(2)
+							+ " " + i + " " + set2.getString(3) + " " + set2.getString(4));
 				}
 				set2.close();
 			}
@@ -756,44 +763,168 @@ public class Database {
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			con.setAutoCommit(false);
-			PreparedStatement stmt = con.prepareStatement("UPDATE StudentModule SET initialGrade = ?, resitGrade = ?, passed = ? WHERE Module_moduleId = ?");
+			PreparedStatement stmt = con.prepareStatement(
+					"UPDATE StudentModule SET initialGrade = ?, resitGrade = ?, passed = ? WHERE Module_moduleId = ?");
 			stmt.setInt(1, Integer.valueOf(init));
 			stmt.setInt(2, Integer.valueOf(resit));
 			stmt.setInt(3, Integer.valueOf(passed));
 			stmt.setInt(4, moduleId);
-			
-			
+
 			con.commit();
 			con.setAutoCommit(true);
 			con.close();
 
-		} catch (SQLException e ) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	//get overall grade for a student
+
+	// get overall grade for a student
 	public static float getGrade(int regId) {
 		float output = 0;
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
-			PreparedStatement stmt = con.prepareStatement("SELECT grade FROM Period WHERE Student_registrationNumber = ?");
+			PreparedStatement stmt = con
+					.prepareStatement("SELECT grade FROM Period WHERE Student_registrationNumber = ?");
 			stmt.setInt(1, regId);
-			
+
 			ResultSet set = stmt.executeQuery();
-			
+
 			while (set.next()) {
 				output = set.getFloat(1);
 			}
+
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return output;
+	}
+
+	public static List<String> loadUsers() {
+		Connection con = null;
+		List<String> m = new ArrayList<>();
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			Statement stmt = con.createStatement();
+			ResultSet set = stmt.executeQuery("SELECT id, username, permission FROM Users;");
+			while (set.next()) {
+				m.add(String.valueOf(set.getInt(1)) + " " + set.getString(2) + " " + set.getString(3));
+			}
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return m;
+	}
+
+	public static boolean addUser(String username, String password, String selectedPermission) {
+		boolean done = false;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			con.setAutoCommit(false);
+			PreparedStatement stmt = con
+					.prepareStatement("INSERT INTO Users(id, username, password, permission, key) VALUES (?, ?, ?, ?)");
+			// get next id
+			PreparedStatement idStmt = con.prepareStatement("SELECT MAX(id) AS largestId FROM Users");
+			ResultSet idSet = idStmt.executeQuery();
+			idSet.next();
+
+			int nextId = idSet.getInt(1) + 1;
+
+			stmt.setInt(1, nextId);
+			stmt.setString(2, username);
+			stmt.setString(3, password);
+			stmt.setString(4, Authenticate.createKey(password, username));
+			switch (selectedPermission) {
+			case "Student":
+				stmt.setString(3, "S");
+				break;
+			case "Teacher":
+				stmt.setString(3, "T");
+				break;
+			case "Registrar":
+				stmt.setString(3, "R");
+				break;
+			case "Administrator":
+				stmt.setString(3, "A");
+				break;
+			default:
+				break;
+			}
+
+			done = stmt.execute();
+			con.commit();
+			con.setAutoCommit(true);
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return done;
+	}
+
+	public static boolean removeUser(String selectedValue) {
+		boolean done = false;
+		Connection con = null;
+		try {
 			
+			con = DriverManager.getConnection(CONNECTION_ARG);
+
+			con.setAutoCommit(false);
+
+			PreparedStatement stmt = con.prepareStatement("DROP FROM Users WHERE id = ?");
+			stmt.setString(1, selectedValue.split(" ")[0]);
+			done = stmt.execute();
+			
+			con.commit();
+			con.setAutoCommit(true);
+		
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return output;
+		return done;
 	}
-	
+
+	public static boolean addModule(String name, int credits, String duration, String code, int core, int studyLevel) {
+		boolean done = false;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			con.setAutoCommit(false);
+			PreparedStatement stmt = con
+					.prepareStatement("INSERT INTO Module(moduleId, name, credits, duration, code, core, studyLevel) VALUES (?, ?, ?, ?, ?, ?, ?)");
+			PreparedStatement idStmt = con.prepareStatement("SELECT MAX(moduleId) AS largestId FROM Module");
+			ResultSet idSet = idStmt.executeQuery();
+			idSet.next();
+			
+			int nextId = idSet.getInt(1) + 1;
+			stmt.setInt(1, nextId);
+			stmt.setString(2, name);
+			stmt.setInt(3, credits);
+			stmt.setString(4, duration);
+			stmt.setString(5, code);
+			stmt.setInt(6, core);
+			stmt.setInt(7, studyLevel);
+			
+			
+			done = stmt.execute();
+			con.commit();
+			con.setAutoCommit(true);
+			
+			
+			con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return done;
+	}
+
 }

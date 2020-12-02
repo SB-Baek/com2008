@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
+import admins.AdminFrame;
 import database.Database;
 import registrars.RegistrarFrame;
 import teachers.TeacherFrame;
@@ -34,7 +35,7 @@ public class ApplicationWindow  {
 		
 		//new LoginFrame().display();
 		Database.initConnection();
-		new TeacherFrame("J");
+		new AdminFrame("J").display();
 		
 		
 		

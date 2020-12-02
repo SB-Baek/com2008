@@ -28,10 +28,6 @@ import java.awt.FlowLayout;
 
 /**
  * 
- * @author horn1
- *
- *         After every operation call revalidate() to update GUI elements
- *
  */
 
 public class BaseFrame extends JFrame {

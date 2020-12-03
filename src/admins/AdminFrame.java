@@ -28,18 +28,18 @@ public class AdminFrame extends BaseFrame  {
 		initBaseFrame(username);
 		
 		JPanel adminOptions = new JPanel();
-		adminOptions.setBounds(10, 466, 378, 74);
+		adminOptions.setBounds(10, 150, 378, 400);
 		getContentPane().add(adminOptions);
 		adminOptions.setLayout(null);
 		
 		
 		JLabel userAccountTitle = new JLabel("Admin controls");
-		userAccountTitle.setBounds(0, 0, 378, 32);
+		userAccountTitle.setBounds(0, 0, 200, 32);
 		userAccountTitle.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		adminOptions.add(userAccountTitle);
 		
 		JButton uatButton = new JButton("Add / remove user accounts");
-		uatButton.setBounds(0, 32, 200, 20);
+		uatButton.setBounds(0, 50,200, 30);
 		uatButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -49,7 +49,7 @@ public class AdminFrame extends BaseFrame  {
 		});
 		
 		JButton departmentButton = new JButton("Add / remove department");
-		departmentButton.setBounds(0, 80, 200, 20);
+		departmentButton.setBounds(0, 100, 200, 30);
 		departmentButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -59,7 +59,7 @@ public class AdminFrame extends BaseFrame  {
 		});
 		
 		JButton degreeButton = new JButton("Add / remove degree course");
-		degreeButton.setBounds(0, 100, 200, 20);
+		degreeButton.setBounds(0, 150, 200, 30);
 		degreeButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -70,7 +70,7 @@ public class AdminFrame extends BaseFrame  {
 		});
 		
 		JButton mButton = new JButton("Add / remove modules");
-		mButton.setBounds(0, 60, 200, 20);
+		mButton.setBounds(0, 200, 200, 30);
 		mButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

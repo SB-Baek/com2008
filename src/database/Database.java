@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.util.*;
 import javax.swing.JTextField;
 import security.Authenticate;
+import teachers.Teacher;
 
 /**
  * 
@@ -19,7 +20,7 @@ import security.Authenticate;
  */
 public class Database {
 
-	private static final String CONNECTION_ARG = "jdbc:mysql://localhost:3306/test?user=root&password=04be7a6d";
+	private static final String CONNECTION_ARG = "jdbc:mysql://localhost:3306/team052?user=root&password=04be7a6d";
 	// private static final String CONNECTION_ARG =
 	// "jdbc:mysql://stusql.dcs.shef.ac.uk:3306/team052?user=team052&password=04be7a6d";
 
@@ -880,9 +881,9 @@ public class Database {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			con.setAutoCommit(false);
 			PreparedStatement stmt = con
-					.prepareStatement("INSERT INTO Users(id, username, password, permission, key) VALUES (?, ?, ?, ?)");
+					.prepareStatement("INSERT INTO Users(`id`, `username`, `permission`, `key`) VALUES (?, ?, ?, ?);");
 			// get next id
-			PreparedStatement idStmt = con.prepareStatement("SELECT MAX(id) AS largestId FROM Users");
+			PreparedStatement idStmt = con.prepareStatement("SELECT MAX(id) FROM Users;");
 			ResultSet idSet = idStmt.executeQuery();
 			idSet.next();
 
@@ -890,8 +891,8 @@ public class Database {
 
 			stmt.setInt(1, nextId);
 			stmt.setString(2, username);
-			stmt.setString(3, password);
 			stmt.setString(4, Authenticate.createKey(password, username));
+			System.out.println(selectedPermission);
 			switch (selectedPermission) {
 			case "Student":
 				stmt.setString(3, "S");
@@ -928,7 +929,7 @@ public class Database {
 
 			con.setAutoCommit(false);
 
-			PreparedStatement stmt = con.prepareStatement("DROP FROM Users WHERE id = ?");
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM Users WHERE id = ?");
 			stmt.setString(1, selectedValue.split(" ")[0]);
 			done = stmt.execute();
 
@@ -1250,6 +1251,60 @@ public class Database {
 			e.printStackTrace();
 		}
 			
+	}
+
+	public static String progressStudent(String selectedStudentInfo) {
+		boolean canProgress = Teacher.canProgress(selectedStudentInfo);
+		boolean done = false;
+		Connection con = null;
+		String currentStudyLevel = ""; 	
+		if (canProgress) {
+			switch(getStudentStudyLevel(selectedStudentInfo)) {
+			case 1:
+				currentStudyLevel = "DIP1";
+				break;
+			case 2:
+				currentStudyLevel = "BAC1";
+				break;
+			case 3:
+				currentStudyLevel = "MAS1";
+				break;
+			case 4:
+				currentStudyLevel = "MAS1";
+				break;
+			case 5:
+				currentStudyLevel = "MASO1";
+				break;
+			default:
+				break;
+			
+			}
+			try {
+				
+				con = DriverManager.getConnection(CONNECTION_ARG);
+				con.setAutoCommit(false);
+				
+				
+				PreparedStatement stmt = con.prepareStatement("UPDATE Period SET label = ? WHERE Student_registrationNumber = ? ");
+				stmt.setString(1, currentStudyLevel);
+				stmt.setInt(2, Integer.valueOf(selectedStudentInfo.split(" ")[0]));
+				done = stmt.execute();
+				
+				con.commit();
+				con.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} else {
+			return "N/A";
+		}
+		
+		if (done) {
+			return null;
+		}
+		else {
+			return "N/A";
+		}
 	} 
 
 }

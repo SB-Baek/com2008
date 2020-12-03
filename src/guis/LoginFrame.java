@@ -195,9 +195,11 @@ public class LoginFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+			
 				String[] info = Database.getKey(usernameField.getText()).split(" ");
-
-				if (Authenticate.verify(String.valueOf(passwordField.getPassword()), info[2], info[0])) {
+				
+				if ((info.length > 1) &&!(usernameField.getText().equals("")) 
+						|| Authenticate.verify(String.valueOf(passwordField.getPassword()), info[2], info[0])) {
 					Launch.generateFrame(info[0], info[1]);
 					dispose();
 				} else {

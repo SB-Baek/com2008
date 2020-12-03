@@ -3,6 +3,7 @@ package app;
 import admins.AdminFrame;
 
 import database.Database;
+import guis.LoginFrame;
 import registrars.RegistrarFrame;
 import students.StudentFrame;
 import teachers.TeacherFrame;
@@ -24,11 +25,15 @@ public class Launch  {
 			break;
 		case "A":
 			new AdminFrame(username).setVisible(true);
+			break;
 		case "R":
 			new RegistrarFrame(username).setVisible(true);
 			break;
 		case "T":
 			new TeacherFrame(username).setVisible(true);
+			break;
+		default:
+			break;
 		
 		}
 	}
@@ -36,6 +41,6 @@ public class Launch  {
 	public static void main(String args[]) {
 		
 		Database.initConnection();
-		new RegistrarFrame("Test").setVisible(true);	
+		new LoginFrame().setVisible(true);	
 	}
 }

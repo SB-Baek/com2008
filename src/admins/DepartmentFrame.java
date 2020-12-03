@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
@@ -40,12 +41,22 @@ public class DepartmentFrame extends JFrame{
 	private JTextField abbreviationField;
 	private JLabel info = new JLabel("");
 	private String selectedField = "";
-	private DefaultListModel<String> model = new DefaultListModel<>();
 
-	public void loadListModel() {
-		for (String x : Database.getDepartments() ) {
-			model.addElement(x);
+	
+	
+	private String[] loadListModel() {
+		List<String> list = Database.getDepartments();
+		String[] items = new String[list.size()];
+		
+		for (int a = 0; a < list.size(); a++) {
+			items[a] = list.get(a);
 		}
+		return items;
+		
+	}
+	
+	public static void main(String[] args) {
+		new DepartmentFrame().setVisible(true);
 	}
 	
 	public DepartmentFrame() {
@@ -62,6 +73,9 @@ public class DepartmentFrame extends JFrame{
 		contentPane.add(panel);
 		panel.setLayout(null);
 
+		JList<String> departmentList = new JList<>();
+		departmentList.setListData(loadListModel());
+		
 		JLabel lblNewLabel = new JLabel("Add a new department");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel.setBounds(10, 11, 200, 17);
@@ -82,6 +96,7 @@ public class DepartmentFrame extends JFrame{
 				} else {
 					info.setText("Make sure all fields are filled");
 				}
+				departmentList.setListData(loadListModel());
 				revalidate();
 			}
 		});
@@ -110,7 +125,7 @@ public class DepartmentFrame extends JFrame{
 		scrollPane.setBounds(236, 30, 178, 163);
 		panel.add(scrollPane);
 
-		JList departmentList = new JList(model);
+		
 		departmentList.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
@@ -120,11 +135,6 @@ public class DepartmentFrame extends JFrame{
 			
 		});
 		scrollPane.setViewportView(departmentList);
-
-		JButton lblNewLabel_1 = new JButton("Remove Department");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1.setBounds(236, 13, 178, 14);
-		panel.add(lblNewLabel_1);
 		
 		JButton remove = new JButton("Remove");
 		remove.setBounds(236, 204, 89, 23);
@@ -134,6 +144,7 @@ public class DepartmentFrame extends JFrame{
 				if (!(selectedField.equals("")))  {
 					Database.removeDepartment(Integer.valueOf(selectedField.split(" ")[0]));
 					info.setText("Removed department");
+					departmentList.setListData(loadListModel());
 
 					
 				} else {

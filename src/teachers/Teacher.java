@@ -138,7 +138,7 @@ public class Teacher {
 			gradClass = grades[studyLevel - 3][0];
 		}
 		} else {
-			gradClass = "Not applicable";
+			gradClass = "Not applicable, student is not at correct study level";
 		}
 		System.out.println("Graduate grade: " + gradClass);
 		return gradClass;

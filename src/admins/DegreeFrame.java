@@ -180,7 +180,7 @@ public class DegreeFrame extends JFrame{
 		panel.add(linkTitle);
 		
 		JCheckBox lead = new JCheckBox("lead");
-		lead.setBounds(510, 204, 89, 23);
+		lead.setBounds(540, 204, 89, 23);
 		lead.addItemListener(new ItemListener() {
 
 			@Override

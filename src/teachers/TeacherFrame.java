@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import database.Database;
 import guis.BaseFrame;
 
 /**
@@ -27,6 +28,7 @@ public class TeacherFrame extends BaseFrame {
 	private JLabel checkProgression = new JLabel("");
 	private JLabel checkGradeString = new JLabel("");
 	private JLabel genInfo = new JLabel("");
+	private JLabel gradeInfo = new JLabel("");
 	
 	public TeacherFrame(String user) {
 		initBaseFrame(user);
@@ -38,7 +40,7 @@ public class TeacherFrame extends BaseFrame {
 		
 		checkGrade.setBounds(0, 50, 200, 20);
 		checkProgression.setBounds(0, 130, 200, 20);
-		checkGradeString.setBounds(0, 170, 200, 20);
+		checkGradeString.setBounds(0, 220, 200, 20);
 		genInfo.setBounds(0, 200, 200, 20);
 		
 		teacherOptions.add(checkGrade);
@@ -46,8 +48,8 @@ public class TeacherFrame extends BaseFrame {
 		teacherOptions.add(checkGradeString);
 		teacherOptions.add(genInfo);
 		
-		JButton gradButton = new JButton("Determine final grade");
-		gradButton.setBounds(0, 150, 200, 20);
+		JButton gradButton = new JButton("Graduate");
+		gradButton.setBounds(0, 200, 200, 20);
 		gradButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -74,36 +76,31 @@ public class TeacherFrame extends BaseFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (!selectedStudentInfo.equals("")) { 
 					genInfo.setText("");
-
 					new EditModuleFrame(selectedStudentInfo).setVisible(true);
 				}
 				else {
 					genInfo.setText("Please select a student");
-
 				}
-				
-				revalidate();
-				
+				revalidate();	
 			}
-			
 		});
 		teacherOptions.add(aUButton);
-		
 		JButton pButton = new JButton("Progress student");
 		pButton.setBounds(0, 110, 250, 20);
+		gradeInfo.setBounds(0, 150, 300, 20);
+		teacherOptions.add(gradeInfo);
 		pButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!selectedStudentInfo.equals("")) { 
 					genInfo.setText("");
-
 					 if (Teacher.canProgress(selectedStudentInfo)) {
-						 checkProgression.setText("Student can progress");
+						 checkProgression.setText("Student has passed") ;
+						 gradeInfo.setText("Study Level: " + Database.progressStudent(selectedStudentInfo));
 					 } else {
-						 checkProgression.setText("Student cannot progress");
+						 checkProgression.setText("Student has failed, cannot progress");
 					 }
-					 revalidate();
 				} else {
 					genInfo.setText("Please select a student ");
 

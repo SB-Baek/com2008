@@ -82,7 +82,7 @@ public class Authenticate {
 	
 	//store keys and salts.
 	public static void main(String[] args) {
-		System.out.println(encrypt("spam", "bob"));
+		System.out.println(encrypt("admin", "password"));
 	}
 
 }

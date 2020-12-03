@@ -1,6 +1,7 @@
 package admins;
 
 import javax.swing.JFrame;
+
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -12,8 +13,6 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -37,17 +36,20 @@ public class UserAccountsFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField passwordField;
 	private JTextField usernameField;
-	private String selectedPermission;
+	private String selectedPermission = "S";
 	private JList<String> removalList;
 	private	JLabel message = new JLabel("");
 	
-	private DefaultListModel<String> model = new DefaultListModel<>();
 	
-	private void loadFields() {
-		List<String> elements = Database.loadUsers();
-		for (String e : elements) {
-			model.addElement(e);
+	private String[] loadFields() {
+		List<String> list = Database.loadUsers();
+		String[] items = new String[list.size()];
+		
+		for (int a = 0; a < list.size(); a++) {
+			items[a] = list.get(a);
 		}
+		return items;
+		
 	}
 	
 	public UserAccountsFrame() {
@@ -84,20 +86,13 @@ public class UserAccountsFrame extends JFrame {
 		JComboBox<String> permissionField = new JComboBox<>();
 		permissionField.setModel(new DefaultComboBoxModel<>(new String[] {"Student", "Teacher", "Registrar", "Administrator"}));
 		permissionField.setBounds(119, 86, 99, 20);
-		permissionField.addMouseListener(new MouseListener() {
-
+		permissionField.addActionListener(new ActionListener() {
+			
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) {
 				selectedPermission = (String) permissionField.getSelectedItem();
+				
 			}
-			@Override
-			public void mouseEntered(MouseEvent arg0) {}
-			@Override
-			public void mouseExited(MouseEvent arg0) {}
-			@Override
-			public void mousePressed(MouseEvent arg0) {}
-			@Override
-			public void mouseReleased(MouseEvent arg0) {}
 
 		});
 		addPanel.add(permissionField);
@@ -112,7 +107,7 @@ public class UserAccountsFrame extends JFrame {
 		addPanel.add(usernameField);
 		usernameField.setColumns(10);
 		
-		message.setBounds(100, 114, 200, 100);
+		message.setBounds(120, 100, 200, 100);
 		addPanel.add(message);
 		
 		JButton addButton = new JButton("Add user");
@@ -121,13 +116,19 @@ public class UserAccountsFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Database.addUser(usernameField.getText(), passwordField.getText(), selectedPermission)) {
-					message.setText("Added user");
+				
+				if (!usernameField.getText().equals("") && !passwordField.getText().equals("") && !(selectedPermission.equals(""))) {
+					if (!Database.addUser(usernameField.getText(), passwordField.getText(), selectedPermission)) {
+						message.setText("Added user");
+						removalList.setListData(loadFields());
+						
+					} else {
+						message.setText("Could not add user");
+					}
 				} else {
-					message.setText("Could not add user");
+					message.setText("Make sure all fields are filled");
 				}
-				model = new DefaultListModel<>();
-				loadFields();
+			
 				revalidate();
 			}
 			
@@ -153,10 +154,14 @@ public class UserAccountsFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (Database.removeUser((String) removalList.getSelectedValue())) {
 					message.setText("Removed student");
+					removalList.setListData(loadFields());
+
 				} else {
 					message.setText("Could not remove student");
 				}
+				
 				revalidate();
+
 			}
 		});
 		panel.add(removeButton);
@@ -165,9 +170,10 @@ public class UserAccountsFrame extends JFrame {
 		removeScrollPane.setBounds(10, 29, 287, 105);
 		panel.add(removeScrollPane);
 		
-		loadFields();
 		
-		removalList = new JList<>(model);
+		removalList.setListData(loadFields());
+
 		removeScrollPane.setViewportView(removalList);
 	}
+	
 }

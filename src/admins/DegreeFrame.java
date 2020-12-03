@@ -12,9 +12,13 @@ import database.Database;
 import javax.swing.JLabel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
@@ -38,7 +42,7 @@ public class DegreeFrame extends JFrame{
 	private String linkSelected = ""; //gets info from link list
 	private DefaultListModel<String> removeModel = new DefaultListModel<>();
 	private DefaultListModel<String> linkModel = new DefaultListModel<>();
-
+	private int leadChecked = 0;
 
 	public void loadRemoveModel() {
 		for (String x : Database.getDegrees().split(":")) {
@@ -52,6 +56,10 @@ public class DegreeFrame extends JFrame{
 		}
 	}
 
+	public static void main(String[] args) {
+		new DegreeFrame().setVisible(true);
+	}
+	
 	public DegreeFrame() {
 		
 		//load list model items
@@ -171,13 +179,25 @@ public class DegreeFrame extends JFrame{
 		linkTitle.setBounds(434, 12, 178, 14);
 		panel.add(linkTitle);
 		
+		JCheckBox lead = new JCheckBox("lead");
+		lead.setBounds(510, 204, 89, 23);
+		lead.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent arg0) {
+				leadChecked = arg0.getStateChange();
+			}
+			
+		});
+		panel.add(lead);
+		
 		JButton btnLink = new JButton("Link");
 		btnLink.setBounds(434, 204, 89, 23);
 		btnLink.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!(linkSelected.equals("")))  {
-					Database.linkDepartment(nameField.getText(), Integer.valueOf(linkSelected.split(" ")[0]));
+					Database.linkDepartment(nameField.getText(), Integer.valueOf(linkSelected.split(" ")[0]), leadChecked);
 					info.setText("Linked department");
 				} else {
 					info.setText("Please select a department");

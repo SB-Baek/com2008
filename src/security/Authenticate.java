@@ -1,6 +1,5 @@
 package security;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -15,24 +14,13 @@ import javax.crypto.spec.PBEKeySpec;
  * 
  * Authenticate.java 13/11/2020
  * 
- * @author James Horn
+ * Provides password encryption for user's passwords
  *			
- *		   PRIVILEGE ESCALATION
+ *		   
  *
- *
- *		   SQL INJECTION
- *
- *
- *		   PASSWORD SECURITY
- *         Generates encrypted values for passwords and verifies user's
- *         passwords for user authentication during login phase.
- *
- *         Salt is some constant depending on user(e.g username), password is
- *         not stored per record. Database stores keys and salt for each user.
- *
- *         Credit to
- *         https://dev.to/awwsmm/how-to-encrypt-a-password-in-java-42dh and
- *         https://www.baeldung.com/java-password-hashing
+ * Credit to
+ * https://dev.to/awwsmm/how-to-encrypt-a-password-in-java-42dh and
+ * https://www.baeldung.com/java-password-hashing
  */
 public class Authenticate {
 
@@ -86,8 +74,6 @@ public class Authenticate {
 	public static boolean verify(String password, String key, String salt) {
 		Optional<String> optEncrypted = encrypt(password, salt);
 		if (!optEncrypted.isPresent()) {
-			System.out.println("asd");
-
 			return false;
 		}
 

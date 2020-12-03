@@ -1,40 +1,23 @@
 package registrars;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
-import javax.swing.BoxLayout;
+
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import java.awt.FlowLayout;
-import javax.swing.JToolBar;
-import java.awt.Color;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import database.Database;
 import guis.BaseFrame;
-import guis.ModuleFrame;
 
-import java.awt.CardLayout;
-import javax.swing.ScrollPaneConstants;
-import java.awt.BorderLayout;
 import javax.swing.JList;
-import java.awt.List;
+
 
 /**
  * RegistrarFrame.java 28/11/2020

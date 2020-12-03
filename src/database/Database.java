@@ -1217,7 +1217,7 @@ public class Database {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			
 			Statement stmt = con.createStatement();
-			ResultSet set = stmt.executeQuery("SELECT * FROM Departments");
+			ResultSet set = stmt.executeQuery("SELECT * FROM Department");
 			while (set.next()) {
 				elements.add(set.getInt(1) + " " + set.getString(2) + " " + set.getString(3));
 			}
@@ -1229,7 +1229,7 @@ public class Database {
 		return elements;
 	}
 
-	public static void linkDepartment(String degreeName, int deptId) {
+	public static void linkDepartment(String degreeName, int deptId, int lead) {
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
@@ -1237,9 +1237,10 @@ public class Database {
 			
 			//search
 			int degreeId = Database.getDegreeId(degreeName);
-			PreparedStatement stmt = con.prepareStatement("INSERT INTO DegreeDepartment(Degree_degreeId, Department_deptId) VALUES (?, ?)");
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO DegreeDepartment(Degree_degreeId, Department_deptId, isLead) VALUES (?, ?, ?)");
 			stmt.setInt(1, degreeId);
 			stmt.setInt(2, deptId);
+			stmt.setInt(3, lead);
 			stmt.execute();
 			
 			con.setAutoCommit(true);

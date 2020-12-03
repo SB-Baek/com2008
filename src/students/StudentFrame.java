@@ -1,44 +1,31 @@
 package students;
 
-import java.awt.EventQueue;
 import javax.swing.JFrame;
-import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JTextField;
-import javax.swing.JToolBar;
-import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+
 import java.awt.event.ActionEvent;
 import java.awt.Font;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import database.Database;
-import guis.BaseFrame;
+
 import guis.ModuleFrame;
 
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import java.awt.FlowLayout;
 
 /**
  * 
- * @author horn1
+ *  StudentFrame.java 14/11/2020
  *
- *	After every operation call revalidate() to update GUI elements
+ *	Show student information for students only
  *
  */
 
 public class StudentFrame extends JFrame {
 
-	
+	private static final long serialVersionUID = 1L;
 	public static String studentId = "";
 	public static JPanel genInfo;
 	private static JLabel ireg = new JLabel("");

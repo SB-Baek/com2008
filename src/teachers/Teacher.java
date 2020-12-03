@@ -4,9 +4,18 @@ import java.util.ArrayList;
 
 import database.Database;
 
+/**
+ * 
+ * Teacher.java 13/11/2020
+ * 
+ * Performs all the calculations for the teacher frame
+ * 
+ *
+ */
+
 public class Teacher {
 
-	// base weight of all modules they've taken
+	
 	public static float weightedMeanGrade(String selectedStudentInfo) {
 
 		ArrayList<String> info = Database.getModules(selectedStudentInfo);

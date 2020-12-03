@@ -1,21 +1,28 @@
 package teachers;
 
 import java.awt.Font;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import database.Database;
-import teachers.Teacher;
-
 import guis.BaseFrame;
+
+/**
+ * 
+ * TeacherFrame.java 13/11/2020
+ * 
+ * Allows teachers to calculate overall student grades,
+ * progress and graduate students
+ *
+ */
 
 public class TeacherFrame extends BaseFrame {
 	
+	private static final long serialVersionUID = 1L;
 	private JLabel checkGrade = new JLabel("");
 	private JLabel checkProgression = new JLabel("");
 	private JLabel checkGradeString = new JLabel("");

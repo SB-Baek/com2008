@@ -1,8 +1,4 @@
 package teachers;
-
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -15,7 +11,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+
 
 import javax.swing.JScrollPane;
 import javax.swing.JList;
@@ -23,8 +19,16 @@ import javax.swing.JTextField;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
+/**
+ * 
+ * EditModuleFrame.java 27/11/2020
+ * 
+ * Add a new module for a degree course
+ *
+ */
 public class EditModuleFrame extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField initField;
 	private JTextField resitField;

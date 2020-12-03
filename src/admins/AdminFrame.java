@@ -1,20 +1,28 @@
 package admins;
 
 import java.awt.Font;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import database.Database;
 import guis.BaseFrame;
-import teachers.Teacher;
 
+/**
+ * 
+ * AdminFrame.java 29/11/2020
+ * 
+ * Creates welcome frame for administrators. Admins can perform actions on all users 
+ * from this frame as well as view students.
+ *
+ */
 public class AdminFrame extends BaseFrame  {
 	
+	private static final long serialVersionUID = 1L;
+
 	public AdminFrame(String username) {
 		
 		initBaseFrame(username);
@@ -38,7 +46,6 @@ public class AdminFrame extends BaseFrame  {
 			public void actionPerformed(ActionEvent e) {
 				new UserAccountsFrame().setVisible(true);
 			}
-			
 		});
 		
 		JButton departmentButton = new JButton("Add / remove department");
@@ -49,7 +56,6 @@ public class AdminFrame extends BaseFrame  {
 			public void actionPerformed(ActionEvent arg0) {
 				new DepartmentFrame().setVisible(true);
 			}
-			
 		});
 		
 		JButton degreeButton = new JButton("Add / remove degree course");
@@ -58,7 +64,7 @@ public class AdminFrame extends BaseFrame  {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+				new DegreeFrame().setVisible(true);
 			}
 			
 		});
@@ -77,22 +83,7 @@ public class AdminFrame extends BaseFrame  {
 		adminOptions.add(degreeButton);
 		adminOptions.add(mButton);
 		getContentPane().add(adminOptions);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+			
 	}
-	
-	
-	
-	
-	
-	
+
 }

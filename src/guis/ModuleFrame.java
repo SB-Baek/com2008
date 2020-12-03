@@ -2,21 +2,25 @@ package guis;
 
 import java.awt.Font;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
 
 import database.Database;
 
+/**
+ * 
+ * ModuleFrame.java 18/11/2020
+ * 
+ * View modules that students have taken.
+ *
+ */
+
 public class ModuleFrame extends JFrame {
 
-
-	private String info;
+	private static final long serialVersionUID = 1L;
 	private String[] columnNames = {"Initial Grade", "Resit Grade", "Has passed", "Module Name", "Credits", "Duration", "Code", "Core", "Study Level"};
 	private static String[][] data;
 	
@@ -28,7 +32,7 @@ public class ModuleFrame extends JFrame {
 
 		setTitle("Module Viewer");
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 812, 552);
 		
 		getContentPane().setLayout(null);
@@ -67,8 +71,6 @@ public class ModuleFrame extends JFrame {
 		scroll.setViewportView(modules);
 
 		List.add(scroll);
-		
-
+	
 	}
-
 }

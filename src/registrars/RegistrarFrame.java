@@ -37,6 +37,8 @@ import javax.swing.JList;
 import java.awt.List;
 
 /**
+ * RegistrarFrame.java 28/11/2020
+ * 
  * Generates JFrame for registrars. Registrars can add/remove students,
  * add/remove optional modules for students, check whether a student
  * registration is valid and check whether a student is properly accredited.
@@ -45,11 +47,9 @@ import java.awt.List;
 
 public class RegistrarFrame extends BaseFrame {
 
-	private JTextField textField_1;
-	private static JLabel ireg = new JLabel("");
-	private static JLabel iname = new JLabel("");
-	private static JLabel iEmail = new JLabel("");
-	private static JLabel iTutor = new JLabel("");
+	private static final long serialVersionUID = 1L;
+	private JTextField emailField;
+	private JLabel reg = new JLabel("");
 
 	public void loadStudents(DefaultListModel<String> model) {
 		ArrayList<String> studentInfo = Database.getStudents();
@@ -69,6 +69,8 @@ public class RegistrarFrame extends BaseFrame {
 
 		info.setBounds(10, 350, 200, 30);
 		viewing.add(info);
+		
+		reg.setBounds(10, 150, 200, 30);
 
 		JButton addRemove = new JButton("Add/Remove Student");
 		addRemove.setBounds(10, 250, 162, 23);
@@ -86,13 +88,24 @@ public class RegistrarFrame extends BaseFrame {
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNewLabel_5.setBounds(10, 11, 162, 23);
 		viewing.add(lblNewLabel_5);
+		
+		emailField = new JTextField();
+		emailField.setBounds(57, 105, 152, 20);
+		viewing.add(emailField);
+		emailField.setColumns(10);
+		
 
 		JButton btnNewButton = new JButton("Check Registration");
 		btnNewButton.setBounds(10, 133, 200, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Database.verifyStudent(selectedStudentInfo);
+				if (!selectedStudentInfo.equals("")) { 
+					reg.setText(Database.verifyStudent(Integer.valueOf(selectedStudentInfo.split(" ")[0])));
+				} else {
+					reg.setText("Please select a student");
+				}
+				revalidate();
 			}
 
 		});
@@ -122,11 +135,6 @@ public class RegistrarFrame extends BaseFrame {
 
 		viewing.add(creditTotal);
 
-		textField_1 = new JTextField();
-		textField_1.setBounds(57, 105, 152, 20);
-		viewing.add(textField_1);
-		textField_1.setColumns(10);
-
 		JLabel lblNewLabel_6 = new JLabel("Registration");
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNewLabel_6.setBounds(10, 80, 152, 14);
@@ -142,7 +150,7 @@ public class RegistrarFrame extends BaseFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (!selectedStudentInfo.equals("")) {
 					info.setText("");
-					new OptionalModule(selectedStudentInfo).display();
+					new OptionalModule(selectedStudentInfo).setVisible(true);
 				} else {
 
 					info.setText("Please select a student");
@@ -173,9 +181,12 @@ public class RegistrarFrame extends BaseFrame {
 				selectedStudentInfo = list.getSelectedValue();
 				displayStudentInfo(Database.selectStudentInfo(list.getSelectedValue()));
 				revalidate();
-
 			}
 		});
-
+	}
+	
+	
+	public static void main(String[] args) {
+		new RegistrarFrame("Test").setVisible(true);
 	}
 }

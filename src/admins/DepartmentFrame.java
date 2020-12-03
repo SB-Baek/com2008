@@ -25,8 +25,16 @@ import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 
+/**
+ * 
+ * DepartmentFrame.java  28/11/2020
+ * Allows admins to add/remove departments from the system
+ *
+ */
+
 public class DepartmentFrame extends JFrame{
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField nameField;
 	private JTextField abbreviationField;
@@ -39,7 +47,6 @@ public class DepartmentFrame extends JFrame{
 			model.addElement(x);
 		}
 	}
-	
 	
 	public DepartmentFrame() {
 		loadListModel();

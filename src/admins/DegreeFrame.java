@@ -2,12 +2,6 @@
 package admins;
 
 import javax.swing.JFrame;
-
-
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -26,16 +20,24 @@ import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 
-	public class DegreeFrame extends JFrame{
+/**
+ * DegreeFrame.java 28/11/2020
+ * 
+ * Admins can add/remove degrees from this frame and link new degrees to a department
+ * 
+ */
 
-		private JPanel contentPane;
-		private JTextField nameField;
-		private JTextField codeField;
-		private JLabel info = new JLabel("");
-		private String removeSelected = "";
-		private String linkSelected = "";
-		private DefaultListModel<String> removeModel = new DefaultListModel<>();
-		private DefaultListModel<String> linkModel = new DefaultListModel<>();
+public class DegreeFrame extends JFrame{
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField nameField; //input name of degree
+	private JTextField codeField; //input code for degree
+	private JLabel info = new JLabel(""); //display information about processes
+	private String removeSelected = ""; //gets info from remove list
+	private String linkSelected = ""; //gets info from link list
+	private DefaultListModel<String> removeModel = new DefaultListModel<>();
+	private DefaultListModel<String> linkModel = new DefaultListModel<>();
 
 
 	public void loadRemoveModel() {
@@ -48,12 +50,11 @@ import javax.swing.JList;
 		for (String x : Database.getDepartments() ) {
 			linkModel.addElement(x);
 		}
-	
 	}
-	
-	
+
 	public DegreeFrame() {
 		
+		//load list model items
 		loadRemoveModel();
 		loadLinkModel();
 	
@@ -68,7 +69,6 @@ import javax.swing.JList;
 		panel.setBounds(5, 5, 643, 245);
 		contentPane.add(panel);
 		panel.setLayout(null);
-		
 		
 		info.setBounds(10, 100, 300, 100);
 		panel.add(info);
@@ -120,7 +120,7 @@ import javax.swing.JList;
 		scrollPane.setBounds(236, 30, 178, 163);
 		panel.add(scrollPane);
 		
-		JList degreeList = new JList(removeModel);
+		JList<String> degreeList = new JList<>(removeModel);
 		degreeList.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
@@ -144,8 +144,6 @@ import javax.swing.JList;
 				if (!(removeSelected.equals("")))  {
 					Database.removeDepartment(Integer.valueOf(removeSelected.split(" ")[0]));
 					info.setText("Removed degree");
-
-					
 				} else {
 					info.setText("Please select a degree");
 					}
@@ -158,14 +156,13 @@ import javax.swing.JList;
 		linkFrame.setBounds(434, 30, 199, 163);
 		panel.add(linkFrame);
 		
-		JList departmentList = new JList(linkModel);
+		JList<String> departmentList = new JList<>(linkModel);
 		departmentList.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
 				linkSelected = (String) departmentList.getSelectedValue();
 			}
-			
 		});
 		linkFrame.setViewportView(departmentList);
 		

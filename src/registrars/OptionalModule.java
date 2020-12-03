@@ -1,9 +1,6 @@
 
 package registrars;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -12,23 +9,28 @@ import javax.swing.event.ListSelectionListener;
 
 import database.Database;
 
-import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JList;
-import javax.swing.JButton;
-import javax.swing.SwingConstants;
-import javax.swing.JTextArea;
-import javax.swing.DefaultListModel;
-import javax.swing.DropMode;
 import java.awt.Color;
 
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+import javax.swing.DefaultListModel;
+
+/**
+ * 
+ * OptionalModule.java 25/11/2020
+ * 
+ * Allows registrars to add or remove optional modules for students, 
+ * making necessary background checks beforehand
+ *
+ */
 public class OptionalModule extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private String selectedModule = "";
 	private String selectedModuleR = "";
@@ -76,7 +78,7 @@ public class OptionalModule extends JFrame {
 		contentPane.add(delete);
 		delete.setLayout(null);
 		
-		JList removeModules = new JList(removeModel);
+		JList<String> removeModules = new JList<>(removeModel);
 		
 		removeModules.setBounds(195, 11, 207, 128);
 		removeModules.addListSelectionListener(new ListSelectionListener() {
@@ -126,7 +128,7 @@ public class OptionalModule extends JFrame {
 		contentPane.add(addTitle);
 		add.setLayout(null);
 		
-		JList optionalModules = new JList(addModel);
+		JList<String> optionalModules = new JList<>(addModel);
 		optionalModules.setBounds(188, 11, 214, 128);
 		optionalModules.addListSelectionListener(new ListSelectionListener() {
 
@@ -174,9 +176,4 @@ public class OptionalModule extends JFrame {
 		addText.setBounds(10, 7, 168, 98);
 		add.add(addText);
 	}
-
-	public void display() {
-		setVisible(true);
-	}
-
 }

@@ -1,59 +1,51 @@
 package registrars;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
-import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JTextField;
-import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import java.awt.FlowLayout;
-import javax.swing.JToolBar;
-import java.awt.Color;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.EtchedBorder;
+
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import database.Database;
 
-import java.awt.CardLayout;
-import javax.swing.ScrollPaneConstants;
-import java.awt.BorderLayout;
-import javax.swing.JList;
-import java.awt.List;
+/**
+ * 
+ * ARStudent.java 23/11/2020
+ *
+ * Allows registrars to add/remove students from the system
+ *
+ */
 
 public class ARStudent extends JFrame {
 
-	 JTextField textField;
+	private static final long serialVersionUID = 1L;
+	JTextField textField;
 	 JTextField textField_1;
 	 JTextField textField_3;
 	 JTextField textField_2;
 	 JTextField textField_4;
-	 JComboBox day1;
-	 JComboBox month1;
-	 JComboBox year1;
-	 JComboBox day2;
-	 JComboBox month2;
-	 JComboBox year2;
-	 JComboBox studyLevel;
-	 JList degreeList;
+	 JComboBox<String> day1;
+	 JComboBox<String> month1;
+	 JComboBox<String> year1;
+	 JComboBox<String> day2;
+	 JComboBox<String> month2;
+	 JComboBox<String> year2;
+	 JComboBox<String> studyLevel;
+	 JList<String> degreeList;
 	 String initDay= "01", initMonth = "01", initYear = "2020";
 	 String endDay = "01", endMonth = "01", endYear = "2020";
 	 String sl = "1";
@@ -131,8 +123,8 @@ public class ARStudent extends JFrame {
 		textField_4.setBounds(90, 117, 116, 14);
 		addForm.add(textField_4);
 		
-		day1 = new JComboBox();
-		day1.setModel(new DefaultComboBoxModel(new String[] {"2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027"}));
+		day1 = new JComboBox<>();
+		day1.setModel(new DefaultComboBoxModel<>(new String[] {"2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027"}));
 		day1.setBounds(90, 139, 56, 20);
 		day1.addActionListener(new ActionListener() {
 			@Override
@@ -142,8 +134,8 @@ public class ARStudent extends JFrame {
 		});
 		addForm.add(day1);
 		
-		month1 = new JComboBox();
-		month1.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
+		month1 = new JComboBox<>();
+		month1.setModel(new DefaultComboBoxModel<>(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		month1.setBounds(147, 139, 39, 20);
 		month1.addActionListener(new ActionListener() {
 			@Override
@@ -153,8 +145,8 @@ public class ARStudent extends JFrame {
 		});
 		addForm.add(month1);
 		
-		year1 = new JComboBox();
-		year1.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
+		year1 = new JComboBox<>();
+		year1.setModel(new DefaultComboBoxModel<>(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		year1.setBounds(189, 139, 39, 20);
 		year1.addActionListener(new ActionListener() {
 			@Override
@@ -164,8 +156,8 @@ public class ARStudent extends JFrame {
 		});
 		addForm.add(year1);
 		
-		day2 = new JComboBox();
-		day2.setModel(new DefaultComboBoxModel(new String[] {"2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027"}));
+		day2 = new JComboBox<>();
+		day2.setModel(new DefaultComboBoxModel<>(new String[] {"2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027"}));
 		day2.setBounds(90, 170, 56, 20);
 		day2.addActionListener(new ActionListener() {
 			@Override
@@ -175,8 +167,8 @@ public class ARStudent extends JFrame {
 		});
 		addForm.add(day2);
 		
-		month2 = new JComboBox();
-		month2.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
+		month2 = new JComboBox<>();
+		month2.setModel(new DefaultComboBoxModel<>(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		month2.setBounds(147, 170, 39, 20);
 		month2.addActionListener(new ActionListener() {
 			@Override
@@ -186,8 +178,8 @@ public class ARStudent extends JFrame {
 		});
 		addForm.add(month2);
 		
-		year2 = new JComboBox();
-		year2.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
+		year2 = new JComboBox<>();
+		year2.setModel(new DefaultComboBoxModel<>(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		year2.setBounds(189, 170, 39, 20);
 		year2.addActionListener(new ActionListener() {
 			@Override
@@ -197,8 +189,8 @@ public class ARStudent extends JFrame {
 		});
 		addForm.add(year2);
 		
-		studyLevel = new JComboBox();
-		studyLevel.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "p"}));
+		studyLevel = new JComboBox<>();
+		studyLevel.setModel(new DefaultComboBoxModel<>(new String[] {"1", "2", "3", "4", "p"}));
 		studyLevel.setBounds(107, 201, 39, 20);
 		studyLevel.addActionListener(new ActionListener() {
 			@Override
@@ -212,7 +204,7 @@ public class ARStudent extends JFrame {
 		scrollPane.setBounds(238, 59, 180, 148);
 		addForm.add(scrollPane);
 		
-		degreeList = new JList(model);
+		degreeList = new JList<>(model);
 		degreeList.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
@@ -233,7 +225,8 @@ public class ARStudent extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				 
 				String batch = textField_4.getText() + ":" + initYear + ":" + initMonth + ":" + initDay + ":" + endYear + ":" + endMonth + ":" + endDay + ":" + sl;
-				if (batch.length() > 24) {// length of batch excluding length of degree, make sure that batch info is valid 
+				if (batch.length() > 24) {
+					// length of batch excluding length of degree, make sure that batch info is valid 
 					//check batch length for valid student addition
 					Database.addStudent(textField.getText(), textField_1.getText(), textField_3.getText(), batch, degreeName);
 					addStatus.setText("Adding new student");
@@ -306,7 +299,4 @@ public class ARStudent extends JFrame {
 	
 	}
 	
-	public void display() {
-		setVisible(true);
-	}
 }

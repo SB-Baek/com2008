@@ -1,9 +1,7 @@
 package guis;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,8 +10,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import app.Launch;
 import database.Database;
 import security.Authenticate;
 
@@ -80,7 +77,7 @@ public class LoginFrame extends JFrame {
 					String[] info = Database.getKey(usernameField.getText()).split(" ");
 
 					if (Authenticate.verify(String.valueOf(passwordField.getPassword()), info[2], info[0])) {
-						ApplicationWindow.generateFrame(info[0], info[1]);
+						Launch.generateFrame(info[0], info[1]);
 						dispose();
 					} else {
 						errMsg.setText("Invalid login");
@@ -135,7 +132,7 @@ public class LoginFrame extends JFrame {
 					String[] info = Database.getKey(usernameField.getText()).split(" ");
 
 					if (Authenticate.verify(String.valueOf(passwordField.getPassword()), info[2], info[0])) {
-						ApplicationWindow.generateFrame(info[0], info[1]);
+						Launch.generateFrame(info[0], info[1]);
 						dispose();
 					} else {
 						errMsg.setText("Invalid login");
@@ -201,7 +198,7 @@ public class LoginFrame extends JFrame {
 				String[] info = Database.getKey(usernameField.getText()).split(" ");
 
 				if (Authenticate.verify(String.valueOf(passwordField.getPassword()), info[2], info[0])) {
-					ApplicationWindow.generateFrame(info[0], info[1]);
+					Launch.generateFrame(info[0], info[1]);
 					dispose();
 				} else {
 					errMsg.setText("Invalid login");

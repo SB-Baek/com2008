@@ -3,25 +3,22 @@ package database;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
-
 import javax.swing.JTextField;
-
-import guis.BaseFrame;
 import security.Authenticate;
 
 /**
  * 
- * 
- * 
- * @author James Horn
+ * Database.java 01/11/2020
  *
- *         For all information retrieved from database, separate results from
- *         sets using " " delimiter
+ * Provides all the database functionality for other classes that require operations on 
+ * database tables.
+ * 
+ * For all information retrieved from database, separate results from
+ * sets using " " delimiter
  *
  */
 public class Database {
 
-	// for testing purposes
 	private static final String CONNECTION_ARG = "jdbc:mysql://localhost:3306/test?user=root&password=04be7a6d";
 	// private static final String CONNECTION_ARG =
 	// "jdbc:mysql://stusql.dcs.shef.ac.uk:3306/team052?user=team052&password=04be7a6d";
@@ -738,8 +735,42 @@ public class Database {
 		return output;
 	}
 
-	public static void verifyStudent(String selectedStudentInfo) {
-
+	public static String verifyStudent(int studentId) {
+		int creditTotal = 0;
+		int outOfCredits = 0;
+		Connection con = null;
+		try {
+		
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			PreparedStatement stmt = con.prepareStatement("SELECT creditTotal FROM Period WHERE Student_registrationNumber = ?");
+			stmt.setInt(1, studentId);
+			ResultSet set = stmt.executeQuery();
+			set.next();
+			
+			outOfCredits = set.getInt(1);
+			PreparedStatement stmt2 = con.prepareStatement("SELECT Module_moduleId FROM StudentModule WHERE Student_registrationNumber = ?");
+			stmt2.setInt(1, studentId);
+			
+			ResultSet set2 = stmt2.executeQuery();
+			while(set2.next()) {
+				PreparedStatement stmt3 = con.prepareStatement("SELECT credits FROM Module WHERE moduleId = ?");
+				stmt3.setInt(1, set2.getInt(1));
+				ResultSet set3 = stmt3.executeQuery();
+				
+				while (set3.next()) {
+					creditTotal += set3.getInt(1);
+				}	
+			}
+			con.close();
+		}
+		 catch (SQLException e) {
+			 e.printStackTrace();
+		 }
+		if (creditTotal == outOfCredits) {
+			return "Student registration valid";
+		} else {
+			return "Student does not have enough credits: " + creditTotal + "/" + outOfCredits;
+		}
 	}
 
 	public static ArrayList<String> getModules(String studentInfo) {

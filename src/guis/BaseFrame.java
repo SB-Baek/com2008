@@ -1,37 +1,37 @@
 package guis;
 
-import java.awt.EventQueue;
 import javax.swing.JFrame;
-import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTextField;
-import javax.swing.JToolBar;
-import javax.swing.JPasswordField;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
+
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import database.Database;
 
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
-import java.awt.FlowLayout;
+
 
 /**
- * 
+ *	BaseFrame.java 15/11/2020
+ *
+ *  Provides the welcome screen for all actors in the system and
+ *  allows other frames to build on the welcome screen by extending 
+ *  from this class and adding widgets.
  */
 
 public class BaseFrame extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private static JTextField searchField;
 	private static String searchQuery = "";
 	public static String selectedStudentInfo = "";

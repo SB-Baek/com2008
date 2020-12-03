@@ -1,10 +1,8 @@
-package guis;
-
-
+package app;
 
 import admins.AdminFrame;
+
 import database.Database;
-import registrars.OptionalModule;
 import registrars.RegistrarFrame;
 import students.StudentFrame;
 import teachers.TeacherFrame;
@@ -17,7 +15,7 @@ import teachers.TeacherFrame;
  * 
  */
 
-public class ApplicationWindow  {
+public class Launch  {
 
 	public static void generateFrame(String username, String permission) {
 		switch(permission) {
@@ -38,9 +36,6 @@ public class ApplicationWindow  {
 	public static void main(String args[]) {
 		
 		Database.initConnection();
-		new RegistrarFrame("Test").setVisible(true);
-		
-		
-		
+		new RegistrarFrame("Test").setVisible(true);	
 	}
 }

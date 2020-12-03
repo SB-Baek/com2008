@@ -41,6 +41,28 @@ public class AdminFrame extends BaseFrame  {
 			
 		});
 		
+		JButton departmentButton = new JButton("Add / remove department");
+		departmentButton.setBounds(0, 80, 200, 20);
+		departmentButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new DepartmentFrame().setVisible(true);
+			}
+			
+		});
+		
+		JButton degreeButton = new JButton("Add / remove degree course");
+		degreeButton.setBounds(0, 100, 200, 20);
+		degreeButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+			
+		});
+		
 		JButton mButton = new JButton("Add / remove modules");
 		mButton.setBounds(0, 60, 200, 20);
 		mButton.addActionListener(new ActionListener() {
@@ -50,13 +72,10 @@ public class AdminFrame extends BaseFrame  {
 			}			
 		});
 		
-		
-		
-		
-		
-		
-		
 		adminOptions.add(uatButton);
+		adminOptions.add(departmentButton);
+		adminOptions.add(degreeButton);
+		adminOptions.add(mButton);
 		getContentPane().add(adminOptions);
 		
 		

@@ -4,6 +4,8 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
+import javax.swing.JTextField;
+
 import guis.BaseFrame;
 import security.Authenticate;
 
@@ -1065,5 +1067,157 @@ public class Database {
 
 		return done;
 	}
+
+	public static boolean addDepartment(JTextField nameField, JTextField abbreviationField) {
+		boolean done = false;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			con.setAutoCommit(false);
+				
+			PreparedStatement idStmt = con.prepareStatement("SELECT MAX(deptId) FROM Department");
+			ResultSet idSet = idStmt.executeQuery();
+			idSet.next();
+
+			int nextId = idSet.getInt(1) + 1;
+
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO Department(deptId, name, abbreviation) VALUES (?, ?, ?)");
+			stmt.setInt(1, nextId);
+			stmt.setString(2, nameField.getText());
+			stmt.setString(3, abbreviationField.getText());
+			done = stmt.execute();
+			
+			
+			con.commit();
+			con.setAutoCommit(true);
+			
+			idSet.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return done;
+	}
+	
+	public static boolean addDegree(JTextField nameField, JTextField codeField) {
+		boolean done = false;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			con.setAutoCommit(false);
+				
+			PreparedStatement idStmt = con.prepareStatement("SELECT MAX(degreeId) FROM Degree");
+			ResultSet idSet = idStmt.executeQuery();
+			idSet.next();
+
+			int nextId = idSet.getInt(1) + 1;
+			
+			
+			
+			
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO Degree(degreeId, name, code) VALUES (?, ?, ?)");
+			stmt.setInt(1, nextId);
+			stmt.setString(2, nameField.getText());
+			stmt.setString(3, codeField.getText());
+			done = stmt.execute();
+			
+			
+			con.commit();
+			con.setAutoCommit(true);
+			
+			idSet.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return done;
+	}
+	
+	
+	public static boolean removeDepartment(int deptId) {
+		boolean done = false;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			con.setAutoCommit(false);
+			
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM Department WHERE deptId = ?;");
+			stmt.setInt(1, deptId);
+			done = stmt.execute();
+			
+			
+			con.commit();
+			con.setAutoCommit(true );
+			con.close();
+				
+		} catch (SQLException e) {
+			
+		}
+		return done;
+	}
+	
+
+	public static boolean removeDegree(int degreeId) {
+		boolean done = false;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			con.setAutoCommit(false);
+			
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM Degree WHERE degreeId = ?;");
+			stmt.setInt(1, degreeId);
+			done = stmt.execute();
+			
+			
+			con.commit();
+			con.setAutoCommit(true );
+			con.close();
+				
+		} catch (SQLException e) {
+			
+		}
+		return done;
+	}
+
+	public static List<String> getDepartments() {
+		List<String> elements = new ArrayList<>();
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			
+			Statement stmt = con.createStatement();
+			ResultSet set = stmt.executeQuery("SELECT * FROM Departments");
+			while (set.next()) {
+				elements.add(set.getInt(1) + " " + set.getString(2) + " " + set.getString(3));
+			}
+			set.close();
+			con.close();
+		} catch (SQLException e ) {
+			e.printStackTrace();
+		}
+		return elements;
+	}
+
+	public static void linkDepartment(String degreeName, int deptId) {
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			con.setAutoCommit(false);
+			
+			//search
+			int degreeId = Database.getDegreeId(degreeName);
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO DegreeDepartment(Degree_degreeId, Department_deptId) VALUES (?, ?)");
+			stmt.setInt(1, degreeId);
+			stmt.setInt(2, deptId);
+			stmt.execute();
+			
+			con.setAutoCommit(true);
+			con.close();
+		}	
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+			
+	} 
 
 }

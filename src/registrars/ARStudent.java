@@ -103,7 +103,7 @@ public class ARStudent extends JFrame {
 		
 		JLabel addTitle = new JLabel("Register a new student");
 		addTitle.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		addTitle.setBounds(10, 11, 176, 14);
+		addTitle.setBounds(10, 11, 400, 14);
 		addForm.add(addTitle);
 		
 		textField = new JTextField();
@@ -123,7 +123,7 @@ public class ARStudent extends JFrame {
 		
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
-		textField_2.setBounds(47, 325, 116, 14);
+		textField_2.setBounds(90, 325, 116, 14);
 		addForm.add(textField_2);
 		
 		textField_4 = new JTextField();
@@ -233,7 +233,7 @@ public class ARStudent extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				 
 				String batch = textField_4.getText() + ":" + initYear + ":" + initMonth + ":" + initDay + ":" + endYear + ":" + endMonth + ":" + endDay + ":" + sl;
-				if (batch.length() > 25) {// length of batch excluding length of degree, make sure that batch info is valid 
+				if (batch.length() > 24) {// length of batch excluding length of degree, make sure that batch info is valid 
 					//check batch length for valid student addition
 					Database.addStudent(textField.getText(), textField_1.getText(), textField_3.getText(), batch, degreeName);
 					addStatus.setText("Adding new student");
@@ -288,11 +288,11 @@ public class ARStudent extends JFrame {
 		grade.setBounds(22, 118, 102, 14);
 		addForm.add(grade);
 		
-		JLabel lblStartDate = new JLabel("Start Date: ");
+		JLabel lblStartDate = new JLabel("Start:");
 		lblStartDate.setBounds(22, 145, 57, 14);
 		addForm.add(lblStartDate);
 		
-		JLabel lblEndDate = new JLabel("End Date:");
+		JLabel lblEndDate = new JLabel("End:");
 		lblEndDate.setBounds(22, 170, 57, 14);
 		addForm.add(lblEndDate);
 		

@@ -37,19 +37,23 @@ public class ModuleFrame extends JFrame {
 	private JTextField codeField;
 	private JTextField degree;
 	private JLabel info = new JLabel("");
-	private DefaultListModel<String> items;
 		
-	private DefaultListModel<String> loadList() {
-		DefaultListModel<String> model = new DefaultListModel<>();
+	private String[] loadList() {
 		List<String> elements = Database.getModuleElements();
-		for (String elem : elements) {
-			model.addElement(elem);
+		String[] elems = new String[elements.size()];
+		for (int a = 0; a < elements.size(); a++) {
+			elems[a] = elements.get(a);
 		}
-		return model;
+		return elems;
 	}
+	
+	public static void main(String[] args) {
+		new ModuleFrame().setVisible(true);
+	}
+	
 
 	public ModuleFrame() {
-		items = loadList();
+		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 658, 403);
 		contentPane = new JPanel();
@@ -76,7 +80,7 @@ public class ModuleFrame extends JFrame {
 		panel.add(credits);
 		
 		JLabel duration = new JLabel("Duration:");
-		duration.setBounds(10, 96, 46, 14);
+		duration.setBounds(10, 96, 60, 14);
 		panel.add(duration);
 		
 		nameField = new JTextField();
@@ -91,7 +95,7 @@ public class ModuleFrame extends JFrame {
 		
 		durationComboBox = new JComboBox<>();
 		durationComboBox.setModel(new DefaultComboBoxModel<>(new String[] {"AUTUMN", "SPRING", "YEAR"}));
-		durationComboBox.setBounds(75, 93, 117, 20);
+		durationComboBox.setBounds(100, 93, 117, 20);
 		panel.add(durationComboBox);
 		
 		codeField = new JTextField();
@@ -118,22 +122,29 @@ public class ModuleFrame extends JFrame {
 		
 		JComboBox<String> studyLevelComboBox = new JComboBox<>();
 		studyLevelComboBox.setModel(new DefaultComboBoxModel<>(new String[] {"Certificate", "Diploma", "Bachelors", "Masters"}));
-		studyLevelComboBox.setBounds(75, 174, 94, 20);
+		studyLevelComboBox.setBounds(90, 174, 94, 20);
 		panel.add(studyLevelComboBox);
 		
-		info.setBounds(0, 0, 200, 200);
+		info.setBounds(291, 290, 200, 23);
 		panel.add(info);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(291, 46, 331, 208);
+		panel.add(scrollPane);
+		
+		JList<String> listModules = new JList<>();
+		listModules.setListData(loadList());
+		scrollPane.setViewportView(listModules);
 		
 		JButton addModuleButton = new JButton("Add module");
 		addModuleButton.setBounds(7, 208, 150, 23);
 		addModuleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int optional = (int) optionalComboBox.getSelectedItem();
-				switch(optional) {
-					case 0:
+				int optional = 0;
+				switch((String) optionalComboBox.getSelectedItem()) {
+					case "Optional":
 						optional = 0; break;
-					case 1:
+					case "Core":
 						optional = 1; break;
 					default: break;
 				}
@@ -145,21 +156,16 @@ public class ModuleFrame extends JFrame {
 					case "Bachelors" : study = 3; break;
 					case "Masters" : study = 4; break;
 				}
-				if (Database.addModule(nameField.getText(), Integer.valueOf(creditsField.getText()), (String) durationComboBox.getSelectedItem(), codeField.getText(), optional, study)) {
+				if (!Database.addModule(nameField.getText(), Integer.valueOf(creditsField.getText()), (String) durationComboBox.getSelectedItem(), codeField.getText(), optional, study)) {
 					info.setText("Added module ");
 				} else {
 					info.setText("Could not add module");
 				}
+				listModules.setListData(loadList());
+				revalidate();
 			}
 		});
 		panel.add(addModuleButton);
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(291, 46, 331, 208);
-		panel.add(scrollPane);
-		
-		JList listModules = new JList(items);
-		scrollPane.setViewportView(listModules);
-		
 		
 		JLabel removeTitle = new JLabel("Remove Module");
 		removeTitle.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -172,16 +178,18 @@ public class ModuleFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (Database.removeModule((int) listModules.getSelectedValue())) {
+				if (!Database.removeModule(Integer.valueOf(listModules.getSelectedValue().split(" ")[0]))) {
 					info.setText("Removed module");
 				} else {
 					info.setText("Could not remove module");
 				}
+				listModules.setListData(loadList());
+				revalidate();
 			}
 		});
 		panel.add(removeButton);
 		
-		JLabel linkToDegree = new JLabel("Link module to degree");
+		JLabel linkToDegree = new JLabel("Link to degree (select from list)");
 		linkToDegree.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		linkToDegree.setBounds(10, 280, 200, 14);
 		panel.add(linkToDegree);
@@ -191,14 +199,20 @@ public class ModuleFrame extends JFrame {
 		panel.add(degree);
 		degree.setColumns(10);
 		
+		JLabel type = new JLabel("Type degree name");
+		type.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		type.setBounds(140, 300, 200, 14);
+		panel.add(type);
+		
 		JButton linkButton = new JButton("Link");
 		linkButton.setBounds(10, 325, 117, 20);
 		linkButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Database.addDegreeModule((int) listModules.getSelectedValue(), degree.getText());
-				
+				Database.addDegreeModule(Integer.valueOf(listModules.getSelectedValue().split(" ")[0]), degree.getText());
+				listModules.setListData(loadList());
+				revalidate();	
 			}				
 		});
 		panel.add(linkButton);

@@ -1009,6 +1009,7 @@ public class Database {
 
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM Module WHERE moduleId = ?;");
+			System.out.println(moduleId);
 			stmt.setInt(1, moduleId);
 			done = stmt.execute();
 		} catch (SQLException e) {

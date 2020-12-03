@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.List;
 
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
@@ -40,20 +41,21 @@ public class DegreeFrame extends JFrame{
 	private JLabel info = new JLabel(""); //display information about processes
 	private String removeSelected = ""; //gets info from remove list
 	private String linkSelected = ""; //gets info from link list
-	private DefaultListModel<String> removeModel = new DefaultListModel<>();
-	private DefaultListModel<String> linkModel = new DefaultListModel<>();
+
 	private int leadChecked = 0;
 
-	public void loadRemoveModel() {
-		for (String x : Database.getDegrees().split(":")) {
-			removeModel.addElement(x);
-		}
+	public String[] loadRemoveModel() {
+		return Database.getDegrees().split(":");
 	}
 	
-	public void loadLinkModel() {
-		for (String x : Database.getDepartments() ) {
-			linkModel.addElement(x);
+	public String[] loadLinkModel() {
+		List<String> list = Database.getDepartments();
+		String[] items = new String[list.size()];
+		
+		for (int a = 0; a < list.size(); a++) {
+			items[a] = list.get(a);
 		}
+		return items;
 	}
 
 	public static void main(String[] args) {
@@ -86,6 +88,12 @@ public class DegreeFrame extends JFrame{
 		title.setBounds(10, 11, 200, 17);
 		panel.add(title);
 		
+		JList<String> departmentList = new JList<>();
+		departmentList.setListData(loadLinkModel());
+		
+		JList<String> degreeList = new JList<>();
+		degreeList.setListData(loadRemoveModel());
+		
 		JButton addButton = new JButton("Add");
 		addButton.setBounds(10, 96, 89, 23);
 		addButton.addActionListener(new ActionListener() {
@@ -93,8 +101,10 @@ public class DegreeFrame extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!(nameField.equals("") || codeField.equals("")))  {
-					if (Database.addDepartment(nameField, codeField)) {
+					if (!Database.addDegree(nameField, codeField)) {
 						info.setText("Added degree");
+						degreeList.setListData(loadRemoveModel());
+
 					} else {
 						info.setText("Could not add degree");
 					}
@@ -128,7 +138,7 @@ public class DegreeFrame extends JFrame{
 		scrollPane.setBounds(236, 30, 178, 163);
 		panel.add(scrollPane);
 		
-		JList<String> degreeList = new JList<>(removeModel);
+	
 		degreeList.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
@@ -150,8 +160,10 @@ public class DegreeFrame extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!(removeSelected.equals("")))  {
-					Database.removeDepartment(Integer.valueOf(removeSelected.split(" ")[0]));
+					Database.removeDegree(Integer.valueOf(removeSelected.split(" ")[0]));
 					info.setText("Removed degree");
+					degreeList.setListData(loadRemoveModel());
+
 				} else {
 					info.setText("Please select a degree");
 					}
@@ -163,8 +175,7 @@ public class DegreeFrame extends JFrame{
 		JScrollPane linkFrame = new JScrollPane();
 		linkFrame.setBounds(434, 30, 199, 163);
 		panel.add(linkFrame);
-		
-		JList<String> departmentList = new JList<>(linkModel);
+	
 		departmentList.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
@@ -196,15 +207,19 @@ public class DegreeFrame extends JFrame{
 		btnLink.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (!(linkSelected.equals("")))  {
+				if (!(linkSelected.equals("") && !(nameField.getText().equals(""))))  {
 					Database.linkDepartment(nameField.getText(), Integer.valueOf(linkSelected.split(" ")[0]), leadChecked);
 					info.setText("Linked department");
+					departmentList.setListData(loadLinkModel());
+
 				} else {
-					info.setText("Please select a department");
+					info.setText("Please fill all fields");
 					}
 					revalidate();
 				}
 			});
 		panel.add(btnLink);
 	}
+	
+	
 }

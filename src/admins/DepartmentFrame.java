@@ -41,8 +41,6 @@ public class DepartmentFrame extends JFrame{
 	private JTextField abbreviationField;
 	private JLabel info = new JLabel("");
 	private String selectedField = "";
-
-	
 	
 	private String[] loadListModel() {
 		List<String> list = Database.getDepartments();
@@ -55,9 +53,6 @@ public class DepartmentFrame extends JFrame{
 		
 	}
 	
-	public static void main(String[] args) {
-		new DepartmentFrame().setVisible(true);
-	}
 	
 	public DepartmentFrame() {
 		loadListModel();

@@ -21,7 +21,8 @@ public class Database {
 
 	// for testing purposes
 	private static final String CONNECTION_ARG = "jdbc:mysql://localhost:3306/test?user=root&password=04be7a6d";
-	//private static final String CONNECTION_ARG = "jdbc:mysql://stusql.dcs.shef.ac.uk:3306/team052?user=team052&password=04be7a6d";
+	// private static final String CONNECTION_ARG =
+	// "jdbc:mysql://stusql.dcs.shef.ac.uk:3306/team052?user=team052&password=04be7a6d";
 
 	public static void initConnection() {
 
@@ -99,8 +100,8 @@ public class Database {
 						+ set.getString(3) + " " // credits
 						+ set.getString(4) + " " // duration
 						+ set.getString(5) + " " // code
-						+ ((Integer.valueOf(set.getString(6)) == 1) ? "Core" : "Optional"); 
-				switch(Integer.valueOf(set.getString(6))) {
+						+ ((Integer.valueOf(set.getString(6)) == 1) ? "Core" : "Optional");
+				switch (Integer.valueOf(set.getString(6))) {
 				case 1:
 					output += " CERTIFICATE:";
 					break;
@@ -116,9 +117,6 @@ public class Database {
 				default:
 					break;
 				}
-						
-						
-						
 
 			}
 			set.close();
@@ -500,16 +498,15 @@ public class Database {
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			int id = getDegreeId(degree);
-			System.out.println("degree name optioanl: " + degree);
-			System.out.println("degree id optional: " + id);
+
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM DegreeModule WHERE Degree_degreeId = ?");
 			stmt.setInt(1, id);
 			ResultSet set = stmt.executeQuery();
 			while (set.next()) {
-				PreparedStatement st = con.prepareStatement("SELECT name FROM Module WHERE moduleId = ? AND core = 1");
+				PreparedStatement st = con.prepareStatement("SELECT name FROM Module WHERE moduleId = ? AND core = 0");
+				System.out.println("Degree id: " + set.getInt(1));
 				st.setInt(1, set.getInt(1));
 				ResultSet set2 = st.executeQuery();
-
 				while (set2.next()) {
 					System.out.println("Found optional module: " + set2.getString(1));
 					models.add(set2.getString(1));
@@ -529,9 +526,10 @@ public class Database {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 
 			PreparedStatement stmt = con
-					.prepareStatement("SELECT Module_moduleId FROM DegreeModule WHERE Degree_degreeId = ?");
+					.prepareStatement("SELECT Module_moduleId FROM StudentModule WHERE Student_registrationNumber = ?");
 			stmt.setInt(1, studentId);
 			ResultSet set = stmt.executeQuery();
+
 			while (set.next()) {
 				PreparedStatement st = con.prepareStatement("SELECT name FROM Module WHERE moduleId = ? AND core = 0");
 				st.setInt(1, set.getInt(1));
@@ -541,10 +539,11 @@ public class Database {
 					models.add(set2.getString(1));
 				}
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return models;
 	}
 
 	public static boolean addOptionalModule(String selectedModule, int studentId) {
@@ -891,7 +890,7 @@ public class Database {
 		boolean done = false;
 		Connection con = null;
 		try {
-			
+
 			con = DriverManager.getConnection(CONNECTION_ARG);
 
 			con.setAutoCommit(false);
@@ -899,15 +898,15 @@ public class Database {
 			PreparedStatement stmt = con.prepareStatement("DROP FROM Users WHERE id = ?");
 			stmt.setString(1, selectedValue.split(" ")[0]);
 			done = stmt.execute();
-			
+
 			con.commit();
 			con.setAutoCommit(true);
-		
+
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return done;
 	}
 
@@ -917,12 +916,12 @@ public class Database {
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			con.setAutoCommit(false);
-			PreparedStatement stmt = con
-					.prepareStatement("INSERT INTO Module(moduleId, name, credits, duration, code, core, studyLevel) VALUES (?, ?, ?, ?, ?, ?, ?)");
+			PreparedStatement stmt = con.prepareStatement(
+					"INSERT INTO Module(moduleId, name, credits, duration, code, core, studyLevel) VALUES (?, ?, ?, ?, ?, ?, ?)");
 			PreparedStatement idStmt = con.prepareStatement("SELECT MAX(moduleId) AS largestId FROM Module");
 			ResultSet idSet = idStmt.executeQuery();
 			idSet.next();
-			
+
 			int nextId = idSet.getInt(1) + 1;
 			stmt.setInt(1, nextId);
 			stmt.setString(2, name);
@@ -931,78 +930,75 @@ public class Database {
 			stmt.setString(5, code);
 			stmt.setInt(6, core);
 			stmt.setInt(7, studyLevel);
-			
-			
+
 			done = stmt.execute();
 			con.commit();
 			con.setAutoCommit(true);
-			
-			
+
 			con.close();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return done;
 	}
-	
+
 	public static List<String> getModuleElements() {
 		List<String> items = new ArrayList<>();
 		String selectQuery = "SELECT * FROM Module;";
-	
+
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			Statement stmt = con.createStatement();
 			ResultSet set = stmt.executeQuery(selectQuery);
-	
-			
-			while(set.next()) {
-				items.add(set.getInt(1) + " " + set.getString(2)+ " " + set.getInt(3) + " " + set.getString(4) + " " + set.getString(5) + " " + set.getInt(6) + " " + set.getInt(7));
+
+			while (set.next()) {
+				items.add(set.getInt(1) + " " + set.getString(2) + " " + set.getInt(3) + " " + set.getString(4) + " "
+						+ set.getString(5) + " " + set.getInt(6) + " " + set.getInt(7));
 			}
-			
-			
+
 			con.close();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-			
+
 		return items;
-		
+
 	}
-	
+
 	public static boolean removeModule(int moduleId) {
 		Connection con = null;
 		boolean done = false;
 		try {
-		
-		con = DriverManager.getConnection(CONNECTION_ARG);
-		PreparedStatement stmt = con.prepareStatement("DELETE FROM Module WHERE moduleId = ?;");
-		stmt.setInt(1, moduleId);
-		done = stmt.execute();
+
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM Module WHERE moduleId = ?;");
+			stmt.setInt(1, moduleId);
+			done = stmt.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return done;
-		
+
 	}
-	
+
 	public static void addDegreeModule(int moduleId, String degreeName) {
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
-			
+
 			con.setAutoCommit(false);
-			PreparedStatement stmt = con.prepareStatement("INSERT INTO Degree(Module_moduleId, Degree_degreeId) VALUES (?, ?);");
+			PreparedStatement stmt = con
+					.prepareStatement("INSERT INTO Degree(Module_moduleId, Degree_degreeId) VALUES (?, ?);");
 			stmt.setInt(1, moduleId);
 			stmt.setInt(2, Database.getDegreeId(degreeName));
 			stmt.execute();
-			
-			
+
 			con.commit();
 			con.setAutoCommit(true);
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -1015,13 +1011,14 @@ public class Database {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Student WHERE forename = ?");
 			PreparedStatement tutorInfo;
-			
+
 			stmt.setString(1, user);
 			ResultSet set = stmt.executeQuery();
 			ResultSet tutorRes;
 			set.next();
-			output = String.valueOf(set.getInt(1)) + " " +  set.getString(2) + " " + set.getString(3) + " " + set.getString(4) + " " + set.getString(5); 
-		
+			output = String.valueOf(set.getInt(1)) + " " + set.getString(2) + " " + set.getString(3) + " "
+					+ set.getString(4) + " " + set.getString(5);
+
 			tutorInfo = con.prepareStatement("SELECT * FROM Tutor WHERE tutorId=?");
 			tutorInfo.setInt(1, set.getInt(1)); // supply tutorId
 			tutorRes = tutorInfo.executeQuery();
@@ -1029,17 +1026,44 @@ public class Database {
 			// point to tutor name
 			while (tutorRes.next())
 				output += " " + tutorRes.getString(2); // tutor name
-			
+
 			set.close();
 			tutorRes.close();
 			con.close();
-			
-		}
-		catch (SQLException e) {
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return output;
-		
+
+	}
+
+	public static boolean removeOptionalModule(String selectedModule) {
+		boolean done = false;
+		Connection con = null;
+		try {
+			System.out.println(selectedModule);
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			con.setAutoCommit(false);
+			PreparedStatement selectModuleIdStmt = con.prepareStatement("SELECT moduleId FROM Module WHERE name = ?");
+			selectModuleIdStmt.setString(1, selectedModule);
+			ResultSet set = selectModuleIdStmt.executeQuery();
+			set.next();
+			int id = set.getInt(1);
+			System.out.println(id);
+
+			PreparedStatement deleteStmt = con.prepareStatement("DELETE FROM StudentModule WHERE Module_moduleId = ?");
+			deleteStmt.setInt(1, id);
+			done = deleteStmt.execute();
+
+			con.commit();
+			con.setAutoCommit(true);
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return done;
 	}
 
 }

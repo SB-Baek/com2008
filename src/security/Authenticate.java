@@ -96,7 +96,7 @@ public class Authenticate {
 	
 	//store keys and salts.
 	public static void main(String[] args) {
-		System.out.println(encrypt("password", "tom"));
+		System.out.println(encrypt("spam", "bob"));
 	}
 
 }

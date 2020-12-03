@@ -46,9 +46,6 @@ import java.awt.List;
 public class RegistrarFrame extends BaseFrame {
 
 	private JTextField textField_1;
-	private static String selectedStudentInfo = "";
-	private static JTextField searchField;
-	private static String searchQuery = "";
 	private static JLabel ireg = new JLabel("");
 	private static JLabel iname = new JLabel("");
 	private static JLabel iEmail = new JLabel("");
@@ -62,27 +59,24 @@ public class RegistrarFrame extends BaseFrame {
 	}
 
 	public RegistrarFrame(String username) {
-		
+
 		initBaseFrame(username);
-		
-	
-
-
-
 
 		JPanel viewing = new JPanel();
-		viewing.setBounds(10, 88, 378, 267);
+		viewing.setBounds(10, 88, 378, 400);
 		getContentPane().add(viewing);
 		viewing.setLayout(null);
 
+		info.setBounds(10, 350, 200, 30);
+		viewing.add(info);
+
 		JButton addRemove = new JButton("Add/Remove Student");
-		addRemove.setIcon(null);
-		addRemove.setBounds(10, 34, 162, 23);
+		addRemove.setBounds(10, 250, 162, 23);
 		addRemove.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new ARStudent().display();
+				new ARStudent().setVisible(true);
 			}
 		});
 
@@ -94,7 +88,7 @@ public class RegistrarFrame extends BaseFrame {
 		viewing.add(lblNewLabel_5);
 
 		JButton btnNewButton = new JButton("Check Registration");
-		btnNewButton.setBounds(10, 133, 131, 23);
+		btnNewButton.setBounds(10, 133, 200, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -106,17 +100,21 @@ public class RegistrarFrame extends BaseFrame {
 		viewing.add(btnNewButton);
 
 		JLabel creditLabel = new JLabel();
-		creditLabel.setBounds(10, 179, 250, 23);
+		creditLabel.setBounds(10, 230, 250, 23);
 		creditLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		viewing.add(creditLabel);
 
 		JButton creditTotal = new JButton("Check Credit Total");
-		creditTotal.setBounds(10, 156, 150, 23);
+		creditTotal.setBounds(10, 200, 275, 23);
 		creditTotal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (!selectedStudentInfo.equals(""))
+				if (!selectedStudentInfo.equals("")) {
+					info.setText("");
 					creditLabel.setText(Database.checkCreditTotal(selectedStudentInfo));
+				} else {
+					info.setText("Please select a student");
+				}
 				revalidate();
 			}
 
@@ -139,33 +137,26 @@ public class RegistrarFrame extends BaseFrame {
 		lblNewLabel_7.setBounds(10, 108, 108, 14);
 		viewing.add(lblNewLabel_7);
 
-		JLabel lblNewLabel_8 = new JLabel("Optional Modules");
-		lblNewLabel_8.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_8.setBounds(10, 167, 131, 14);
-		viewing.add(lblNewLabel_8);
-
 		JButton btnAddremoveOptionalModules = new JButton("Add/Remove Optional Modules");
 		btnAddremoveOptionalModules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (!selectedStudentInfo.equals("")) {
+					info.setText("");
 					new OptionalModule(selectedStudentInfo).display();
+				} else {
+
+					info.setText("Please select a student");
 				}
+				revalidate();
 			}
 		});
-		btnAddremoveOptionalModules.setBounds(10, 192, 275, 23);
+		btnAddremoveOptionalModules.setBounds(10, 300, 275, 23);
 		viewing.add(btnAddremoveOptionalModules);
 
-		JLabel optionalInfo = new JLabel("Select a student from the list before editing student information.");
-		optionalInfo.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		optionalInfo.setBounds(10, 10, 100, 100);
-		genInfo.add(optionalInfo);
-
-		JToolBar toolBar = new JToolBar();
-		toolBar.setBounds(398, 22, 600, 25);
-		getContentPane().add(toolBar);
-
-		JButton student = new JButton("Student");
-		toolBar.add(student);
+		JLabel optionalInfo = new JLabel("Select a student from the list.");
+		optionalInfo.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		optionalInfo.setBounds(10, 165, 200, 40);
+		viewing.add(optionalInfo);
 
 		DefaultListModel<String> listModel = new DefaultListModel<>();
 		JList<String> list = new JList<>(listModel);
@@ -186,66 +177,5 @@ public class RegistrarFrame extends BaseFrame {
 			}
 		});
 
-
-
-		JButton moduleViewer = new JButton("View Modules");
-		moduleViewer.setBounds(10, 189, 89, 23);
-		genInfo.add(moduleViewer);
-
-		moduleViewer.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!searchQuery.equals("")) {
-					System.out.println(selectedStudentInfo);
-					new ModuleFrame(selectedStudentInfo.split(" ")[0]);
-				}
-			}
-		});
-
-		getContentPane().add(genInfo);
-
-		JLabel infoStudyLevel = new JLabel("Study Level:");
-		infoStudyLevel.setBounds(10, 150, 85, 14);
-		genInfo.add(infoStudyLevel);
-
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setBounds(49, 50, 46, 14);
-		genInfo.add(lblNewLabel);
-
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setBounds(49, 75, 46, 14);
-		genInfo.add(lblNewLabel_1);
-
-		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setBounds(49, 100, 46, 14);
-		genInfo.add(lblNewLabel_2);
-
-		JLabel lblNewLabel_3 = new JLabel("");
-		lblNewLabel_3.setBounds(59, 125, 46, 14);
-		genInfo.add(lblNewLabel_3);
-
-		JLabel lblNewLabel_4 = new JLabel("");
-		lblNewLabel_4.setBounds(83, 150, 46, 14);
-		genInfo.add(lblNewLabel_4);
-
-		JList list_1 = new JList();
-		list_1.setBounds(398, 466, 600, 407);
-		getContentPane().add(list_1);
-	}
-
-	public void displayStudentInfo(String i) {
-		System.out.println(i);
-		String[] info = i.split(" ");
-		ireg.setText(info[0]);
-		iname.setText(info[1] + " " + info[2] + " " + info[3]);
-		iEmail.setText(info[4]);
-		iTutor.setText(info[5]);
-
-		revalidate();
-	}
-
-	public void display() {
-		setVisible(true);
 	}
 }

@@ -40,16 +40,16 @@ public class BaseFrame extends JFrame {
 	private static JLabel iname = new JLabel("");
 	private static JLabel iEmail = new JLabel("");
 	private static JLabel iTutor = new JLabel("");
+	public static JLabel info = new JLabel("");
 	public DefaultListModel<String> listModel = new DefaultListModel<>();
 
-	
 	public void loadStudents() {
 		ArrayList<String> students = Database.getStudents();
 		for (String student : students) {
 			listModel.addElement(student);
 		}
 	}
-	
+
 	public void initBaseFrame(String user) {
 		new JFrame();
 		setTitle("University Project");
@@ -69,6 +69,15 @@ public class BaseFrame extends JFrame {
 
 		JButton logout = new JButton("Logout");
 		logout.setBounds(182, 11, 89, 23);
+		logout.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new LoginFrame().setVisible(true);
+			}
+
+		});
 		info.add(logout);
 
 		JLabel nameTemp = new JLabel(user);
@@ -113,7 +122,7 @@ public class BaseFrame extends JFrame {
 
 			}
 		});
-		
+
 		genInfo = new JPanel();
 		genInfo.setBounds(398, 472, 600, 246);
 		getContentPane().add(genInfo);
@@ -158,7 +167,6 @@ public class BaseFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println(searchQuery);
 				if (!searchQuery.equals("")) {
-					System.out.println(selectedStudentInfo);
 					new ModuleFrame(selectedStudentInfo.split(" ")[0]).setVisible(true);
 				}
 			}
@@ -175,7 +183,7 @@ public class BaseFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				searchQuery = searchField.getText();
-
+				listModel = new DefaultListModel<>();
 				for (String name : Database.studentSearch(searchQuery)) {
 					listModel.addElement(name);
 				}
@@ -189,21 +197,8 @@ public class BaseFrame extends JFrame {
 
 		JLabel records = new JLabel("View Student Records (type username)");
 		records.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		records.setBounds(10, 11, 170, 23);
+		records.setBounds(10, 11, 250, 23);
 		viewing.add(records);
-
-		JToolBar toolBar = new JToolBar();
-		toolBar.setBounds(398, 22, 600, 25);
-		getContentPane().add(toolBar);
-
-		JButton student = new JButton("Student");
-		toolBar.add(student);
-
-		JButton degree = new JButton("Degree");
-		toolBar.add(degree);
-
-		JButton department = new JButton("Department");
-		toolBar.add(department);
 
 	}
 
@@ -256,7 +251,7 @@ public class BaseFrame extends JFrame {
 		});
 		revalidate();
 	}
-	
+
 	public static void main(String args[]) {
 		BaseFrame a = new BaseFrame();
 		a.initBaseFrame("Test");

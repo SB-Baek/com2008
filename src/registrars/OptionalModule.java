@@ -31,25 +31,27 @@ public class OptionalModule extends JFrame {
 
 	private JPanel contentPane;
 	private String selectedModule = "";
+	private String selectedModuleR = "";
 	private DefaultListModel<String> addModel = new DefaultListModel<>();
 	private DefaultListModel<String> removeModel = new DefaultListModel<>();
 
-	
 	public void loadAddModels(String degree) {
+
 		for (String x : Database.loadOptionals(degree)) {
 			System.out.println("Loaded optional: " + x);
 			addModel.addElement(x);
 		}
 	}
-	
+
 	public void loadRemoveModels(int studentId) {
+	
 		if (!(Database.removeOptional(studentId) == null)) {
-		for (String x : Database.removeOptional(studentId)) {
-			removeModel.addElement(x);
-		}
+			for (String x : Database.removeOptional(studentId)) {
+				removeModel.addElement(x);
+			}
 		}
 	}
-	
+
 	public OptionalModule(String studentInfo) {
 		
 		String[] info = studentInfo.split(" ");
@@ -58,7 +60,7 @@ public class OptionalModule extends JFrame {
 		
 		
 		setTitle("University Project");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 448, 565);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -77,7 +79,14 @@ public class OptionalModule extends JFrame {
 		JList removeModules = new JList(removeModel);
 		
 		removeModules.setBounds(195, 11, 207, 128);
-		
+		removeModules.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				selectedModuleR = (String) removeModules.getSelectedValue();
+			}
+			
+		});
 		delete.add(removeModules);
 		
 		JTextArea txtrDeleteModulesBy = new JTextArea();
@@ -92,6 +101,23 @@ public class OptionalModule extends JFrame {
 		
 		JButton btnRemove = new JButton("Remove");
 		btnRemove.setBounds(10, 116, 89, 23);
+		btnRemove.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!(selectedModuleR.equals(""))) {
+					Database.removeOptionalModule(selectedModuleR);
+				} else {
+					System.out.println("Could not remove module");
+				}
+				addModel = new DefaultListModel<>();
+				removeModel = new DefaultListModel<>();
+				loadAddModels(Database.getDegreeName(Integer.valueOf(info[0])));
+				loadRemoveModels(Integer.valueOf(info[0]));
+				revalidate();
+			}
+				
+		});
 		delete.add(btnRemove);
 		
 		JLabel addTitle = new JLabel("Add optional modules");
@@ -123,11 +149,17 @@ public class OptionalModule extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!selectedModule.equals("")) {
+					System.out.println(" Selected Module: " + selectedModule);
 					Database.addOptionalModule(selectedModule, Integer.valueOf(info[0]));
 							
 				} else {
-					System.out.println("Could not optioanl module, nothing selected!");
+					System.out.println("Could not add optional module, nothing selected!");
 				}
+				addModel = new DefaultListModel<>();
+				removeModel = new DefaultListModel<>();
+				loadAddModels(Database.getDegreeName(Integer.valueOf(info[0])));
+				loadRemoveModels(Integer.valueOf(info[0]));
+				revalidate();
 			}}
 		);
 		add.add(btnNewButton);
@@ -142,11 +174,9 @@ public class OptionalModule extends JFrame {
 		addText.setBounds(10, 7, 168, 98);
 		add.add(addText);
 	}
-	
+
 	public void display() {
 		setVisible(true);
 	}
-	
-	
-	
+
 }

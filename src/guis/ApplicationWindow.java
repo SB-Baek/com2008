@@ -4,6 +4,7 @@ package guis;
 
 import admins.AdminFrame;
 import database.Database;
+import registrars.OptionalModule;
 import registrars.RegistrarFrame;
 import students.StudentFrame;
 import teachers.TeacherFrame;
@@ -37,7 +38,7 @@ public class ApplicationWindow  {
 	public static void main(String args[]) {
 		
 		Database.initConnection();
-		new LoginFrame().setVisible(true);
+		new RegistrarFrame("Test").setVisible(true);
 		
 		
 		

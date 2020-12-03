@@ -82,7 +82,7 @@ public class ARStudent extends JFrame {
 		setResizable(false);
 		setTitle("University Project");
 		setBounds(100, 100, 434, 419);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		JPanel addForm = new JPanel();
 		getContentPane().add(addForm);

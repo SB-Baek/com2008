@@ -16,6 +16,11 @@ import guis.BaseFrame;
 
 public class TeacherFrame extends BaseFrame {
 	
+	private JLabel checkGrade = new JLabel("");
+	private JLabel checkProgression = new JLabel("");
+	private JLabel checkGradeString = new JLabel("");
+	private JLabel genInfo = new JLabel("");
+	
 	public TeacherFrame(String user) {
 		initBaseFrame(user);
 		
@@ -24,21 +29,84 @@ public class TeacherFrame extends BaseFrame {
 		getContentPane().add(teacherOptions);
 		teacherOptions.setLayout(null);
 		
-	
+		checkGrade.setBounds(0, 50, 200, 20);
+		checkProgression.setBounds(0, 130, 200, 20);
+		checkGradeString.setBounds(0, 170, 200, 20);
+		genInfo.setBounds(0, 200, 200, 20);
+		
+		teacherOptions.add(checkGrade);
+		teacherOptions.add(checkProgression);
+		teacherOptions.add(checkGradeString);
+		teacherOptions.add(genInfo);
+		
+		JButton gradButton = new JButton("Determine final grade");
+		gradButton.setBounds(0, 150, 200, 20);
+		gradButton.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!(selectedStudentInfo.equals(""))) {
+					genInfo.setText("");
+					checkGradeString.setText("Grade acheived: " + Teacher.graduate(selectedStudentInfo));
+
+				} else {
+					genInfo.setText("Please select a student");
+				}
+				revalidate();
+			}
+			
+		});
+		teacherOptions.add(gradButton);
+		
+		
 		JButton aUButton = new JButton("Add or update student grades");
-		aUButton.setBounds(0, 60, 250, 20);
+		aUButton.setBounds(0, 70, 250, 20);
 		aUButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!selectedStudentInfo.equals("")) { 
+					genInfo.setText("");
+
 					new EditModuleFrame(selectedStudentInfo).setVisible(true);
 				}
+				else {
+					genInfo.setText("Please select a student");
+
+				}
+				
+				revalidate();
+				
 			}
 			
 		});
 		teacherOptions.add(aUButton);
+		
+		JButton pButton = new JButton("Progress student");
+		pButton.setBounds(0, 110, 250, 20);
+		pButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!selectedStudentInfo.equals("")) { 
+					genInfo.setText("");
+
+					 if (Teacher.canProgress(selectedStudentInfo)) {
+						 checkProgression.setText("Student can progress");
+					 } else {
+						 checkProgression.setText("Student cannot progress");
+					 }
+					 revalidate();
+				} else {
+					genInfo.setText("Please select a student ");
+
+				}
+				revalidate();
+			}
+			
+		});
+		teacherOptions.add(pButton);
+		
 		
 		JLabel weightedGradeLabel = new JLabel("Click on the list of students to edit details");
 		weightedGradeLabel.setBounds(0, 0, 378, 32);
@@ -46,14 +114,20 @@ public class TeacherFrame extends BaseFrame {
 		teacherOptions.add(weightedGradeLabel);
 		
 		JButton wGButton = new JButton("Calculate Overall Grade");
-		wGButton.setBounds(0, 32, 200, 20);
+		wGButton.setBounds(0, 30, 200, 20);
 		wGButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!selectedStudentInfo.equals("")) { 
-					Teacher.weightedMeanGrade(selectedStudentInfo);
+					genInfo.setText("");
+
+					checkGrade.setText("Overall grade achieved: " + Teacher.weightedMeanGrade(selectedStudentInfo));
+				} else {
+					genInfo.setText("Please select a student");
+
 				}
+				revalidate();
 			}
 			
 		});

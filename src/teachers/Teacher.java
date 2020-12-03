@@ -28,13 +28,18 @@ public class Teacher {
 
 		for (int a = 0; a < initGrades.size(); a++) {
 			initGradesF[a] = initGrades.get(a);
+			System.out.println(initGradesF[a]);
 		}
 		for (int a = 0; a < resitGrades.size(); a++) {
 			resitGradesF[a] = resitGrades.get(a);
+			System.out.println(resitGradesF[a]);
+
 		}
-		// get credits
+		
 		for (int a = 0; a < creditsF.length; a++) {
 			creditsF[a] = credits.get(a);
+			System.out.println(creditsF[a]);
+
 		}
 
 		float overallGrade = 0f;
@@ -104,6 +109,7 @@ public class Teacher {
 					  {"fail", "fail", "fail", "lower second", "upper second", "first class"},
 					  {"fail", "fail", "fail", "pass", "merit", "distinction"},
 					 };
+		if (studyLevel >= 3) {
 		if (overallGrade >= 69.5f) {
 			gradClass = grades[studyLevel - 3][5];
 		}
@@ -121,6 +127,9 @@ public class Teacher {
 		}
 		else if (  overallGrade < 39.5f) {
 			gradClass = grades[studyLevel - 3][0];
+		}
+		} else {
+			gradClass = "Not applicable";
 		}
 		System.out.println("Graduate grade: " + gradClass);
 		return gradClass;

@@ -68,7 +68,6 @@ public class ModuleFrame extends JFrame {
 
 		List.add(scroll);
 		
-		setVisible(true);
 
 	}
 

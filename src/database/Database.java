@@ -347,15 +347,11 @@ public class Database {
 			addition.setString(5, generateEmail(forename, surname));
 			addition.setInt(6, java.sql.Types.INTEGER);
 			addition.setInt(7, java.sql.Types.INTEGER);
-			System.out.println(title);
-			System.out.println(forename);
-			System.out.println(surname);
-
+			
+			
 			// Add Period record
 			String[] bInfo = batchInfo.split(":");
-			for (String x : bInfo) {
-				System.out.println(x);
-			}
+		
 			pdAddition.setFloat(1, Float.valueOf(bInfo[0])); // grade
 			pdAddition.setDate(2, Date.valueOf(bInfo[1] + "-" + bInfo[2] + "-" + bInfo[3])); // start date
 			pdAddition.setDate(3, Date.valueOf(bInfo[4] + "-" + bInfo[5] + "-" + bInfo[6])); // end date
@@ -392,6 +388,8 @@ public class Database {
 			// degreeId
 			pdAddition.setInt(7, degreeId(degree));
 
+			Database.addCoreModules(studentId, degreeId(degree));
+			
 			System.out.println(" " + addition.execute());
 			System.out.println(" " + pdAddition.execute());
 
@@ -1019,16 +1017,16 @@ public class Database {
 
 	}
 
-	public static void addDegreeModule(int moduleId, String degreeName) {
+	public static void addDegreeModule(int moduleId, String code) {
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
 
 			con.setAutoCommit(false);
 			PreparedStatement stmt = con
-					.prepareStatement("INSERT INTO Degree(Module_moduleId, Degree_degreeId) VALUES (?, ?);");
+					.prepareStatement("INSERT INTO DegreeModule(Module_moduleId, Degree_degreeId) VALUES (?, ?);");
 			stmt.setInt(1, moduleId);
-			stmt.setInt(2, Database.getDegreeId(degreeName));
+			stmt.setInt(2, Database.getDegreeIdCode(code));
 			stmt.execute();
 
 			con.commit();
@@ -1037,6 +1035,29 @@ public class Database {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static int getDegreeIdCode(String code) {
+		Connection con = null;
+		int id = 0;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+
+			PreparedStatement stmt = con
+					.prepareStatement("SELECT degreeId FROM Degree WHERE code = ?;");
+			stmt.setString(1, code);
+			ResultSet set = stmt.executeQuery();
+			set.next();
+			id = set.getInt(1);
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return id;
 	}
 
 	public static String getStudentInfo(String user) {
@@ -1198,8 +1219,13 @@ public class Database {
 			con.setAutoCommit(false);
 			
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM Degree WHERE degreeId = ?;");
+			PreparedStatement stmt2 = con.prepareStatement("DELETE FROM DegreeDepartment WHERE Degree_degreeId = ?;");
+			PreparedStatement stmt3 = con.prepareStatement("DELETE FROM DegreeModule WHERE Degree_degreeId = ?;");
+
 			stmt.setInt(1, degreeId);
-			done = stmt.execute();
+			stmt2.setInt(1, degreeId);
+			stmt3.setInt(1, degreeId);
+			done = stmt.execute() && stmt2.execute() && stmt3.execute();
 			
 			
 			con.commit();
@@ -1306,6 +1332,35 @@ public class Database {
 		else {
 			return "N/A";
 		}
+	}
+
+	public static void addCoreModules(int studId, int degreeId) {
+		
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			System.out.println("ASDASDASD");
+			PreparedStatement modules = con.prepareStatement("SELECT * FROM DegreeModule WHERE Degree_degreeId = ?;");
+			modules.setInt(1, degreeId);
+			System.out.println(degreeId);
+			ResultSet set = modules.executeQuery();
+			while (set.next()) {
+				PreparedStatement student = con.prepareStatement("INSERT INTO StudentModule(Module_moduleId, Student_registrationNumber) VALUES (?, ?);");
+				student.setInt(1, set.getInt(1));
+				student.setInt(2, studId);
+				System.out.println(set.getInt(1));
+				student.execute();
+			}
+			
+			
+			set.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
 	} 
 
 }

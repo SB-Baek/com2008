@@ -37,7 +37,6 @@ public class ARStudent extends JFrame {
 	 JTextField textField_1;
 	 JTextField textField_3;
 	 JTextField textField_2;
-	 JTextField textField_4;
 	 JComboBox<String> day1;
 	 JComboBox<String> month1;
 	 JComboBox<String> year1;
@@ -56,20 +55,15 @@ public class ARStudent extends JFrame {
 	 
 	 Map<Integer, String> idname = new HashMap<>();
 	 
-	 DefaultListModel<String> model = new DefaultListModel<>();
-	 void updateDegreeList(String results) {
-		 System.out.println(results);
-		 
-		 String[] res = results.split(":");
-		 for (String x : res) {
-			 String[] info = x.split(" ");
-			 idname.put(Integer.valueOf(info[0]), info[1]);
-			 model.addElement(info[1] + " " + info[2]);
-		 }
-		 revalidate();
+	 String[] updateDegreeList(String results) {
+		return results.split(":");
 	 }
 	 
-	public ARStudent() {
+	 public static void main(String[] args) {
+		 new ARStudent().setVisible(true);
+	 }
+	 
+	 public ARStudent() {
 	
 		setResizable(false);
 		setTitle("University Project");
@@ -117,11 +111,6 @@ public class ARStudent extends JFrame {
 		textField_2.setColumns(10);
 		textField_2.setBounds(90, 325, 116, 14);
 		addForm.add(textField_2);
-		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setBounds(90, 117, 116, 14);
-		addForm.add(textField_4);
 		
 		day1 = new JComboBox<>();
 		day1.setModel(new DefaultComboBoxModel<>(new String[] {"2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027"}));
@@ -189,22 +178,13 @@ public class ARStudent extends JFrame {
 		});
 		addForm.add(year2);
 		
-		studyLevel = new JComboBox<>();
-		studyLevel.setModel(new DefaultComboBoxModel<>(new String[] {"1", "2", "3", "4", "p"}));
-		studyLevel.setBounds(107, 201, 39, 20);
-		studyLevel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				sl = (String) studyLevel.getSelectedItem();
-			}
-		});
-		addForm.add(studyLevel);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(238, 59, 180, 148);
 		addForm.add(scrollPane);
 		
-		degreeList = new JList<>(model);
+		degreeList = new JList<>();
+		degreeList.setListData(updateDegreeList(Database.getDegrees()));
 		degreeList.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
@@ -215,8 +195,6 @@ public class ARStudent extends JFrame {
 		});
 		scrollPane.setViewportView(degreeList);
 		
-		updateDegreeList(Database.getDegrees());
-		
 		JButton add = new JButton("Add");
 		add.setBounds(22, 238, 89, 23);
 		add.addActionListener(new ActionListener() {
@@ -224,8 +202,8 @@ public class ARStudent extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				 
-				String batch = textField_4.getText() + ":" + initYear + ":" + initMonth + ":" + initDay + ":" + endYear + ":" + endMonth + ":" + endDay + ":" + sl;
-				if (batch.length() > 24) {
+				String batch = "0" + ":" + initYear + ":" + initMonth + ":" + initDay + ":" + endYear + ":" + endMonth + ":" + endDay + ":" + "1";
+				if (batch.length() >= 24) {
 					// length of batch excluding length of degree, make sure that batch info is valid 
 					//check batch length for valid student addition
 					Database.addStudent(textField.getText(), textField_1.getText(), textField_3.getText(), batch, degreeName);
@@ -277,9 +255,7 @@ public class ARStudent extends JFrame {
 		deleteStatus.setBounds(132, 352, 85, 31);
 		addForm.add(deleteStatus);
 		
-		JLabel grade = new JLabel("Initial Grade: ");
-		grade.setBounds(22, 118, 102, 14);
-		addForm.add(grade);
+
 		
 		JLabel lblStartDate = new JLabel("Start:");
 		lblStartDate.setBounds(22, 145, 57, 14);

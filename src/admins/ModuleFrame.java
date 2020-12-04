@@ -173,7 +173,7 @@ public class ModuleFrame extends JFrame {
 		panel.add(removeTitle);
 		
 		JButton removeButton = new JButton("Remove Module");
-		removeButton.setBounds(291, 264, 200, 23);
+		removeButton.setBounds(320, 264, 175, 23);
 		removeButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -189,9 +189,9 @@ public class ModuleFrame extends JFrame {
 		});
 		panel.add(removeButton);
 		
-		JLabel linkToDegree = new JLabel("Link to degree (select from list)");
+		JLabel linkToDegree = new JLabel("Link to degree, select from list before adding");
 		linkToDegree.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		linkToDegree.setBounds(10, 280, 200, 14);
+		linkToDegree.setBounds(10, 280, 300, 14);
 		panel.add(linkToDegree);
 		
 		degree = new JTextField(); 
@@ -199,7 +199,7 @@ public class ModuleFrame extends JFrame {
 		panel.add(degree);
 		degree.setColumns(10);
 		
-		JLabel type = new JLabel("Type degree name");
+		JLabel type = new JLabel("Type degree code");
 		type.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		type.setBounds(140, 300, 200, 14);
 		panel.add(type);

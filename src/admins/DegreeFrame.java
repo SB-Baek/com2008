@@ -80,13 +80,18 @@ public class DegreeFrame extends JFrame{
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		info.setBounds(10, 100, 300, 100);
+		info.setBounds(10, 220, 300, 20);
 		panel.add(info);
 		
 		JLabel title = new JLabel("Add a new Degree");
 		title.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		title.setBounds(10, 11, 200, 17);
 		panel.add(title);
+		
+		JLabel infoTitle = new JLabel("link to degree before adding");
+		infoTitle.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		infoTitle.setBounds(10, 160, 200, 17);
+		panel.add(infoTitle);
 		
 		JList<String> departmentList = new JList<>();
 		departmentList.setListData(loadLinkModel());
@@ -95,7 +100,7 @@ public class DegreeFrame extends JFrame{
 		degreeList.setListData(loadRemoveModel());
 		
 		JButton addButton = new JButton("Add");
-		addButton.setBounds(10, 96, 89, 23);
+		addButton.setBounds(10, 190, 89, 23);
 		addButton.addActionListener(new ActionListener() {
 
 			@Override

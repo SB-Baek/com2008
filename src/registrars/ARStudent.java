@@ -48,7 +48,7 @@ public class ARStudent extends JFrame {
 	 String initDay= "01", initMonth = "01", initYear = "2020";
 	 String endDay = "01", endMonth = "01", endYear = "2020";
 	 String sl = "1";
-	 String degreeName = "BSC Computer Science";
+	 String degreeName = "";
 	 JLabel addStatus;
 	 JLabel deleteStatus;
 	 String email= "";
@@ -203,15 +203,15 @@ public class ARStudent extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				 
 				String batch = "0" + ":" + initYear + ":" + initMonth + ":" + initDay + ":" + endYear + ":" + endMonth + ":" + endDay + ":" + "1";
-				if (batch.length() >= 24) {
+				if (!(degreeName.equals("")) && batch.length() >= 24) {
 					// length of batch excluding length of degree, make sure that batch info is valid 
 					//check batch length for valid student addition
-					Database.addStudent(textField.getText(), textField_1.getText(), textField_3.getText(), batch, degreeName);
+					Database.addStudent(textField.getText(), textField_1.getText(), textField_3.getText(), batch, Integer.valueOf(degreeName.split(" ")[0]));
 					addStatus.setText("Adding new student");
 
 				} else {
 					System.out.println(batch);
-					addStatus.setText("Make sure all fields are filled !");
+					addStatus.setText("Make sure all fields are filled");
 				}
 				revalidate();
 			}			

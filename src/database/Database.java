@@ -324,7 +324,7 @@ public class Database {
 		return output;
 	}
 
-	public static void addStudent(String title, String forename, String surname, String batchInfo, String degree) {
+	public static void addStudent(String title, String forename, String surname, String batchInfo, int degreeId) {
 
 		System.out.print("Added student: ");
 		Connection con = null;
@@ -386,9 +386,9 @@ public class Database {
 			pdAddition.setInt(6, studentId);
 
 			// degreeId
-			pdAddition.setInt(7, degreeId(degree));
+			pdAddition.setInt(7, degreeId);
 
-			Database.addCoreModules(studentId, degreeId(degree));
+			Database.addCoreModules(studentId, degreeId);
 			
 			System.out.println(" " + addition.execute());
 			System.out.println(" " + pdAddition.execute());
@@ -1339,21 +1339,34 @@ public class Database {
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
-			System.out.println("ASDASDASD");
+			System.out.println(degreeId);
 			PreparedStatement modules = con.prepareStatement("SELECT * FROM DegreeModule WHERE Degree_degreeId = ?;");
 			modules.setInt(1, degreeId);
-			System.out.println(degreeId);
-			ResultSet set = modules.executeQuery();
-			while (set.next()) {
-				PreparedStatement student = con.prepareStatement("INSERT INTO StudentModule(Module_moduleId, Student_registrationNumber) VALUES (?, ?);");
-				student.setInt(1, set.getInt(1));
-				student.setInt(2, studId);
-				System.out.println(set.getInt(1));
-				student.execute();
+			ResultSet moduleIds = modules.executeQuery();
+			while(moduleIds.next()) {
+				PreparedStatement stmt = con.prepareStatement("SELECT * FROM Module WHERE core = 1 AND moduleId = ?");
+				stmt.setInt(1, moduleIds.getInt(1));
+				System.out.println(moduleIds.getInt(1));
+				System.out.println("Working1");
+
+				ResultSet coreModules = stmt.executeQuery();
+				while (coreModules.next()) {
+					System.out.println("Working2");
+					PreparedStatement stmt2 = con.prepareStatement("INSERT INTO StudentModule(initialGrade, resitGrade, passed, Module_moduleId, Student_registrationNumber)"
+							+ "VALUES (?, ?, ?, ?, ?)");
+					stmt2.setFloat(1, java.sql.Types.FLOAT);
+					stmt2.setFloat(2, java.sql.Types.FLOAT);
+					stmt2.setFloat(3, java.sql.Types.FLOAT);
+					stmt2.setInt(4, coreModules.getInt(1));
+					stmt2.setInt(5, studId);
+					stmt2.execute();
+				}
+				
 			}
 			
 			
-			set.close();
+			
+			moduleIds.close();
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

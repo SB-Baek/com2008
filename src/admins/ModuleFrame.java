@@ -46,11 +46,6 @@ public class ModuleFrame extends JFrame {
 		}
 		return elems;
 	}
-	
-	public static void main(String[] args) {
-		new ModuleFrame().setVisible(true);
-	}
-	
 
 	public ModuleFrame() {
 		

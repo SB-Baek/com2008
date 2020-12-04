@@ -53,18 +53,19 @@ public class Teacher {
 
 		float overallGrade = 0f;
 		for (int x = 0; x < initGradesF.length; x++) {
-			if (initGradesF[x] <= resitGradesF[x]) {
-				overallGrade += initGradesF[x] * creditsF[x];
+			if (initGradesF[x] >= resitGradesF[x]) {
+				overallGrade += (initGradesF[x] / 100f) * creditsF[x];
 			} else {
 				float cappedGrade = ((studyLevel % 4 == 0) ? 50 : 40);
 				if (resitGradesF[x] >= cappedGrade) {
-					overallGrade += cappedGrade * creditsF[x];
+					overallGrade += (cappedGrade / 100f) * creditsF[x];
 
 				} else {
-					overallGrade += resitGradesF[x] * creditsF[x];
+					overallGrade += (resitGradesF[x] / 100f) * creditsF[x];
 				}
 			}
 		}
+		Database.updateOverallGrade(Integer.valueOf(selectedStudentInfo.split(" ")[0]), overallGrade);
 		System.out.print("Overall grade: " + overallGrade);
 		return overallGrade;
 	}
@@ -74,8 +75,11 @@ public class Teacher {
 		float studentGrade = Database.getGrade(Integer.valueOf(studentInfo.split(" ")[0]));
 		int studyLevel = Database.getStudentStudyLevel(studentInfo);
 		boolean progress = false;
+		System.out.println("Student grade: " + studentGrade);
+		System.out.println("Student level: " + studyLevel);
 
 		switch (studyLevel) {
+		case 0:
 		case 1:
 		case 2:
 		case 3:
@@ -84,6 +88,11 @@ public class Teacher {
 			}
 			break;
 		case 4:
+			if (studentGrade >= 49.5f) {
+				progress = true;
+			}
+			break;
+		case 5:
 			if (studentGrade >= 49.5f) {
 				progress = true;
 			}

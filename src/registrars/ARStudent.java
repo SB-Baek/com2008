@@ -47,7 +47,7 @@ public class ARStudent extends JFrame {
 	 JList<String> degreeList;
 	 String initDay= "01", initMonth = "01", initYear = "2020";
 	 String endDay = "01", endMonth = "01", endYear = "2020";
-	 String sl = "1";
+	 int sl = 0;
 	 String degreeName = "";
 	 JLabel addStatus;
 	 JLabel deleteStatus;
@@ -111,6 +111,29 @@ public class ARStudent extends JFrame {
 		textField_2.setColumns(10);
 		textField_2.setBounds(90, 325, 116, 14);
 		addForm.add(textField_2);
+		
+		studyLevel = new JComboBox<>();
+		studyLevel.setModel(new DefaultComboBoxModel<>(new String[] {"Bachelors / Masters", "Masters (1 year)", "B / M with industry"}));
+		studyLevel.setBounds(100, 220, 300, 20);
+		studyLevel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				switch((String) studyLevel.getSelectedItem()) {
+				case "Bachelors / Masters":
+					sl = 0;
+					break;
+				case "Masters (1 year)":
+					sl = 1;
+					break;
+				case "B / M with industry":
+					sl = 0;
+					break;
+				default:
+					break;
+				}
+			}
+		});
+		addForm.add(studyLevel);
 		
 		day1 = new JComboBox<>();
 		day1.setModel(new DefaultComboBoxModel<>(new String[] {"2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027"}));
@@ -206,7 +229,7 @@ public class ARStudent extends JFrame {
 				if (!(degreeName.equals("")) && batch.length() >= 24) {
 					// length of batch excluding length of degree, make sure that batch info is valid 
 					//check batch length for valid student addition
-					Database.addStudent(textField.getText(), textField_1.getText(), textField_3.getText(), batch, Integer.valueOf(degreeName.split(" ")[0]));
+					Database.addStudent(textField.getText(), textField_1.getText(), textField_3.getText(), batch, Integer.valueOf(degreeName.split(" ")[0]), sl);
 					addStatus.setText("Adding new student");
 
 				} else {
@@ -266,8 +289,10 @@ public class ARStudent extends JFrame {
 		addForm.add(lblEndDate);
 		
 		JLabel year = new JLabel("Study Level:");
-		year.setBounds(22, 204, 77, 14);
+		year.setBounds(22, 220, 77, 14);
 		addForm.add(year);
+		
+		
 		
 		JLabel degree = new JLabel("Degree:");
 		degree.setBounds(238, 43, 46, 14);

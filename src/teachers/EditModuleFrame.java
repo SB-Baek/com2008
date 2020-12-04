@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
 import javax.swing.JList;
@@ -32,20 +32,21 @@ public class EditModuleFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField initField;
 	private JTextField resitField;
-	private JTextField passedField;
 	private int moduleId = 0;
 
-	private DefaultListModel<String> model = new DefaultListModel<>();
-
-	private void loadModel(String studentInfo) {
-		for (String x : Database.getModules(studentInfo)) {
-			model.addElement(x);
+	
+	
+	private String[] loadModel(String studentInfo) {
+		ArrayList<String> items = Database.getModules(studentInfo);
+		String[] output = new String[items.size()];
+		for (int a = 0; a < items.size(); a++) {
+			output[a] = items.get(a);
 		}
+		return output;
 	}
 
 	public EditModuleFrame(String studentInfo) {
 
-		loadModel(studentInfo);
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 605, 222);
@@ -61,17 +62,24 @@ public class EditModuleFrame extends JFrame {
 
 		JLabel title = new JLabel("Edit module details:");
 		title.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		title.setBounds(10, 11, 187, 22);
+		title.setBounds(10, 0, 187, 22);
 		panel.add(title);
+		
+		JLabel explain = new JLabel("Select module from list");
+		explain.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		explain.setBounds(10, 20, 187, 22);
+		panel.add(explain);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(223, 0, 345, 161);
 		panel.add(scrollPane);
 
-		JList<String> list = new JList<>(model);
+		JList<String> list = new JList<>();
+		list.setListData( loadModel(studentInfo));
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
+				System.out.println(list.getSelectedValue().split(" ")[0]);
 				moduleId = Integer.valueOf(list.getSelectedValue().split(" ")[0]);
 			}
 		});
@@ -85,32 +93,26 @@ public class EditModuleFrame extends JFrame {
 		resitLabel.setBounds(10, 78, 92, 14);
 		panel.add(resitLabel);
 
-		JLabel passedLabel = new JLabel("Passed:");
-		passedLabel.setBounds(10, 92, 92, 14);
-		panel.add(passedLabel);
-
 		initField = new JTextField();
-		initField.setBounds(77, 44, 86, 20);
+		initField.setBounds(90, 44, 86, 20);
 		panel.add(initField);
 		initField.setColumns(10);
 
 		resitField = new JTextField();
-		resitField.setBounds(77, 75, 86, 20);
+		resitField.setBounds(90, 75, 86, 20);
 		panel.add(resitField);
 		resitField.setColumns(10);
 
-		passedField = new JTextField();
-		passedField.setBounds(77, 106, 86, 20);
-		panel.add(passedField);
-		passedField.setColumns(10);
 
 		JButton updateButton = new JButton("Update");
-		updateButton.setBounds(13, 120, 89, 23);
+		updateButton.setBounds(13, 130, 89, 23);
 		updateButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Database.updateModule(moduleId, initField.getText(), resitField.getText(), passedField.getText());
+				Database.updateModule(moduleId, initField.getText(), resitField.getText());
+				list.setListData(loadModel(studentInfo));
+
 			}
 
 		});

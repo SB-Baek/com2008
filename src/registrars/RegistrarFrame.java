@@ -167,9 +167,4 @@ public class RegistrarFrame extends BaseFrame {
 			}
 		});
 	}
-	
-	
-	public static void main(String[] args) {
-		new RegistrarFrame("Test").setVisible(true);
-	}
 }

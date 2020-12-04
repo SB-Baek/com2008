@@ -33,7 +33,7 @@ import javax.swing.JList;
  */
 
 public class DegreeFrame extends JFrame{
-
+	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField nameField; //input name of degree
@@ -41,11 +41,15 @@ public class DegreeFrame extends JFrame{
 	private JLabel info = new JLabel(""); //display information about processes
 	private String removeSelected = ""; //gets info from remove list
 	private String linkSelected = ""; //gets info from link list
-
+	private int placementChecked = 0;
 	private int leadChecked = 0;
 
 	public String[] loadRemoveModel() {
 		return Database.getDegrees().split(":");
+	}
+	
+	public static void main(String[] args) {
+		new DegreeFrame().setVisible(true);
 	}
 	
 	public String[] loadLinkModel() {
@@ -56,10 +60,6 @@ public class DegreeFrame extends JFrame{
 			items[a] = list.get(a);
 		}
 		return items;
-	}
-
-	public static void main(String[] args) {
-		new DegreeFrame().setVisible(true);
 	}
 	
 	public DegreeFrame() {
@@ -106,7 +106,7 @@ public class DegreeFrame extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!(nameField.equals("") || codeField.equals("")))  {
-					if (!Database.addDegree(nameField, codeField)) {
+					if (!Database.addDegree(nameField.getText(), codeField.getText() + (placementChecked == 1 ? "P" : "" ))) {
 						info.setText("Added degree");
 						degreeList.setListData(loadRemoveModel());
 
@@ -202,6 +202,18 @@ public class DegreeFrame extends JFrame{
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				leadChecked = arg0.getStateChange();
+			}
+			
+		});
+		panel.add(lead);
+		
+		JCheckBox withPlacement = new JCheckBox("placement");
+		withPlacement.setBounds(540, 224, 89, 23);
+		withPlacement.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent arg0) {
+				placementChecked = arg0.getStateChange();
 			}
 			
 		});

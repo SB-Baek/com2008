@@ -324,7 +324,7 @@ public class Database {
 		return output;
 	}
 
-	public static void addStudent(String title, String forename, String surname, String batchInfo, int degreeId) {
+	public static void addStudent(String title, String forename, String surname, String batchInfo, int degreeId, int influence) {
 
 		System.out.print("Added student: ");
 		Connection con = null;
@@ -355,27 +355,18 @@ public class Database {
 			pdAddition.setFloat(1, Float.valueOf(bInfo[0])); // grade
 			pdAddition.setDate(2, Date.valueOf(bInfo[1] + "-" + bInfo[2] + "-" + bInfo[3])); // start date
 			pdAddition.setDate(3, Date.valueOf(bInfo[4] + "-" + bInfo[5] + "-" + bInfo[6])); // end date
-			switch (bInfo[7]) {
-			case "1":
+			switch (influence) {
+			case 0:
 				pdAddition.setString(4, "CER1"); // label
 				break;
-			case "2":
-				pdAddition.setString(4, "DIP1"); // label
-				break;
-			case "3":
-				pdAddition.setString(4, "BAC1"); // label
-				break;
-			case "4":
-				pdAddition.setString(4, "MAS1"); // label
-				break;
-			case "P":
-				pdAddition.setString(4, "PLA"); // label
+			case 1:
+				pdAddition.setString(4, "MASO1"); // label
 				break;
 			default:
 				break;
 			}
 
-			if (bInfo[7] == "4") { // creditTotal
+			if (influence == 1) { // creditTotal
 				pdAddition.setInt(5, 180);
 
 			} else {
@@ -589,11 +580,6 @@ public class Database {
 			ResultSet set = stmt.executeQuery();
 			while (set.next()) {
 				// reg number - title - forename
-				System.out.println(set.getInt(1));
-				System.out.println(set.getString(2));
-				System.out.println(set.getString(3));
-				System.out.println(set.getString(4));
-				System.out.println(set.getString(5));
 
 				String out = set.getInt(1) + " " + set.getString(2) + " " + set.getString(3) +
 
@@ -706,18 +692,18 @@ public class Database {
 			ResultSet set = stmt.executeQuery();
 
 			while (set.next()) {
-				switch (set.getString(1)) {
+				switch (set.getString(1).substring(0, 3)) {
 				case "CER":
-					output = 1;
+					output = 0;
 					break;
 				case "DIP":
-					output = 2;
+					output = 1;
 					break;
 				case "BAC":
-					output = 3;
+					output = 2;
 					break;
 				case "MAS":
-					output = 4;
+					output = 3;
 					break;
 				case "MASO":
 					output = 5;
@@ -808,7 +794,7 @@ public class Database {
 		return moduleInfo;
 	}
 
-	public static void updateModule(int moduleId, String init, String resit, String passed) {
+	public static void updateModule(int moduleId, String init, String resit) {
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
@@ -817,9 +803,14 @@ public class Database {
 					"UPDATE StudentModule SET initialGrade = ?, resitGrade = ?, passed = ? WHERE Module_moduleId = ?");
 			stmt.setInt(1, Integer.valueOf(init));
 			stmt.setInt(2, Integer.valueOf(resit));
-			stmt.setInt(3, Integer.valueOf(passed));
+			if (Integer.valueOf(init) >= 50 || Integer.valueOf(resit) >= 50) {
+				stmt.setInt(3, 1);
+			} else {
+				stmt.setInt(3, 0);
+			}
 			stmt.setInt(4, moduleId);
-
+			stmt.execute();
+			
 			con.commit();
 			con.setAutoCommit(true);
 			con.close();
@@ -1153,7 +1144,7 @@ public class Database {
 		return done;
 	}
 	
-	public static boolean addDegree(JTextField nameField, JTextField codeField) {
+	public static boolean addDegree(String nameField, String codeField) {
 		boolean done = false;
 		Connection con = null;
 		try {
@@ -1171,8 +1162,8 @@ public class Database {
 			
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO Degree(degreeId, name, code) VALUES (?, ?, ?)");
 			stmt.setInt(1, nextId);
-			stmt.setString(2, nameField.getText());
-			stmt.setString(3, codeField.getText());
+			stmt.setString(2, nameField);
+			stmt.setString(3, codeField);
 			done = stmt.execute();
 			
 			
@@ -1287,16 +1278,16 @@ public class Database {
 		String currentStudyLevel = ""; 	
 		if (canProgress) {
 			switch(getStudentStudyLevel(selectedStudentInfo)) {
-			case 1:
+			case 0:
 				currentStudyLevel = "DIP1";
 				break;
-			case 2:
+			case 1:
 				currentStudyLevel = "BAC1";
 				break;
-			case 3:
+			case 2:
 				currentStudyLevel = "MAS1";
 				break;
-			case 4:
+			case 3:
 				currentStudyLevel = "MAS1";
 				break;
 			case 5:
@@ -1313,12 +1304,14 @@ public class Database {
 				
 				
 				PreparedStatement stmt = con.prepareStatement("UPDATE Period SET label = ? WHERE Student_registrationNumber = ? ");
+				System.out.println(currentStudyLevel);
 				stmt.setString(1, currentStudyLevel);
 				stmt.setInt(2, Integer.valueOf(selectedStudentInfo.split(" ")[0]));
-				done = stmt.execute();
+				stmt.execute();
 				
 				con.commit();
 				con.setAutoCommit(true);
+				con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -1339,15 +1332,13 @@ public class Database {
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(CONNECTION_ARG);
-			System.out.println(degreeId);
 			PreparedStatement modules = con.prepareStatement("SELECT * FROM DegreeModule WHERE Degree_degreeId = ?;");
 			modules.setInt(1, degreeId);
 			ResultSet moduleIds = modules.executeQuery();
 			while(moduleIds.next()) {
 				PreparedStatement stmt = con.prepareStatement("SELECT * FROM Module WHERE core = 1 AND moduleId = ?");
 				stmt.setInt(1, moduleIds.getInt(1));
-				System.out.println(moduleIds.getInt(1));
-				System.out.println("Working1");
+			
 
 				ResultSet coreModules = stmt.executeQuery();
 				while (coreModules.next()) {
@@ -1374,6 +1365,23 @@ public class Database {
 		
 		
 		
+	}
+
+	public static void updateOverallGrade(Integer id, float overallGrade) {
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(CONNECTION_ARG);
+			con.setAutoCommit(false);
+			PreparedStatement stmt = con.prepareStatement("UPDATE Period SET grade = ? WHERE Student_registrationNumber = ?");
+			stmt.setFloat(1, overallGrade);
+			stmt.setInt(2, id);
+			stmt.execute();
+			con.commit();
+			con.setAutoCommit(true);
+		} catch (SQLException e ) {
+			e.printStackTrace();
+		}
+			
 	} 
 
 }

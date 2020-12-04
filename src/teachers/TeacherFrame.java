@@ -29,7 +29,9 @@ public class TeacherFrame extends BaseFrame {
 	private JLabel checkGradeString = new JLabel("");
 	private JLabel genInfo = new JLabel("");
 	private JLabel gradeInfo = new JLabel("");
-	
+	public static void main(String[] args) {
+		new TeacherFrame("").setVisible(true);
+	}
 	public TeacherFrame(String user) {
 		initBaseFrame(user);
 		
@@ -38,10 +40,10 @@ public class TeacherFrame extends BaseFrame {
 		getContentPane().add(teacherOptions);
 		teacherOptions.setLayout(null);
 		
-		checkGrade.setBounds(0, 50, 200, 20);
-		checkProgression.setBounds(0, 130, 200, 20);
-		checkGradeString.setBounds(0, 220, 200, 20);
-		genInfo.setBounds(0, 200, 200, 20);
+		checkGrade.setBounds(0, 50, 400, 20);
+		checkProgression.setBounds(0, 130, 400, 20);
+		checkGradeString.setBounds(0, 190, 400, 20);
+		genInfo.setBounds(0, 270, 400, 20);
 		
 		teacherOptions.add(checkGrade);
 		teacherOptions.add(checkProgression);
@@ -49,7 +51,7 @@ public class TeacherFrame extends BaseFrame {
 		teacherOptions.add(genInfo);
 		
 		JButton gradButton = new JButton("Graduate");
-		gradButton.setBounds(0, 200, 200, 20);
+		gradButton.setBounds(0, 170, 240, 20);
 		gradButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -97,7 +99,8 @@ public class TeacherFrame extends BaseFrame {
 					genInfo.setText("");
 					 if (Teacher.canProgress(selectedStudentInfo)) {
 						 checkProgression.setText("Student has passed") ;
-						 gradeInfo.setText("Study Level: " + Database.progressStudent(selectedStudentInfo));
+						 Database.progressStudent(selectedStudentInfo);
+						 gradeInfo.setText("Progress to next level");
 					 } else {
 						 checkProgression.setText("Student has failed, cannot progress");
 					 }
@@ -112,7 +115,7 @@ public class TeacherFrame extends BaseFrame {
 		teacherOptions.add(pButton);
 		
 		
-		JLabel weightedGradeLabel = new JLabel("Click on the list of students to edit details");
+		JLabel weightedGradeLabel = new JLabel("Calculate overall grade before progressing ");
 		weightedGradeLabel.setBounds(0, 0, 378, 32);
 		weightedGradeLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		teacherOptions.add(weightedGradeLabel);
@@ -126,7 +129,7 @@ public class TeacherFrame extends BaseFrame {
 				if (!selectedStudentInfo.equals("")) { 
 					genInfo.setText("");
 
-					checkGrade.setText("Overall grade achieved: " + Teacher.weightedMeanGrade(selectedStudentInfo));
+					checkGrade.setText("Overall grade achieved: " + Teacher.weightedMeanGrade(selectedStudentInfo) + "%");
 				} else {
 					genInfo.setText("Please select a student");
 

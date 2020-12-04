@@ -37,7 +37,7 @@ public class UserAccountsFrame extends JFrame {
 	private JTextField passwordField;
 	private JTextField usernameField;
 	private String selectedPermission = "S";
-	private JList<String> removalList;
+	private JList<String> removalList = new JList<>();
 	private	JLabel message = new JLabel("");
 	
 	
@@ -152,7 +152,7 @@ public class UserAccountsFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (Database.removeUser((String) removalList.getSelectedValue())) {
+				if (!Database.removeUser((String) removalList.getSelectedValue())) {
 					message.setText("Removed student");
 					removalList.setListData(loadFields());
 
